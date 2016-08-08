@@ -1,7 +1,7 @@
 
 /mob
 	density = 1
-	layer = 4.0
+	layer = MOB_LAYER
 	animate_movement = 2
 
 	w_type = RECYK_BIOLOGICAL
@@ -170,8 +170,6 @@
 	var/in_throw_mode = 0
 
 	var/coughedtime = null
-
-	var/inertia_dir = 0
 
 	var/job = null//Living
 

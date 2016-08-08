@@ -2,7 +2,7 @@
 #define MOB_MINDBREAKER_HALLUCINATING 100
 
 /mob
-	plane = PLANE_MOB
+	plane = MOB_PLANE
 
 /obj/screen/fuckstat
 	name = "Toggle Stat"
@@ -341,32 +341,29 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 	..(message, blind_message, drugged_message, blind_drugged_message)
 
+/mob/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
+	if(see_invisible < A.invisibility || src == A)
+		return
+	var/hallucination = hallucinating()
+	var/msg = message
+	var/msg2 = blind_message
+	if(hallucination)
+		if(drugged_message)
+			msg = drugged_message
+		if(blind_drugged_message)
+			msg2 = blind_drugged_message
+	show_message( msg, 1, msg2, 2)
+	
 // Show a message to all mobs in sight of this atom
 // Use for objects performing visible actions
 // message is output to anyone who can see, e.g. "The [src] does something!"
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
+
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
-	if(world.time>resethearers) sethearing()
+	if(world.time>resethearers)
+		sethearing()
 	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
-		if(istype(hearer.attached, /mob))
-			var/mob/M = hearer.attached
-			if(M.see_invisible < invisibility || M == src)
-				continue
-			var/hallucination = M.hallucinating()
-			var/msg = message
-			var/msg2 = blind_message
-
-			if(hallucination)
-				if(drugged_message)
-					msg = drugged_message
-				if(blind_drugged_message)
-					msg2 = blind_drugged_message
-			M.show_message( msg, 1, msg2, 2)
-
-		else if(istype(hearer.attached, /obj/machinery/hologram/holopad))
-			var/obj/machinery/hologram/holopad/holo = hearer.attached
-			if(holo.master)
-				holo.master.show_message( message, 1, blind_message, 2)
+		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
 	for(var/mob/M in mob_list)
@@ -398,7 +395,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 			narsimage = image('icons/obj/narsie.dmi',src.loc,"narsie",9,1)
 			narsimage.mouse_opacity = 0
 		if(!narglow) //Create narglow
-			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", LIGHTING_LAYER + 2, 1)
+			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", NARSIE_GLOW, 1)
+			narglow.plane = LIGHTING_PLANE
 			narglow.mouse_opacity = 0
 /* Animating narsie works like shit thanks to fucking byond
 		if(!N.old_x || !N.old_y)
@@ -442,8 +440,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 			animate(narglow, pixel_x = old_pixel_x+x_diff, pixel_y = old_pixel_y+y_diff, time = 8)
 */
 		//Else if no dir is given, simply send them the image of narsie
-		var/new_x = 32 * (N.x - src.x) + N.pixel_x
-		var/new_y = 32 * (N.y - src.y) + N.pixel_y
+		var/new_x = WORLD_ICON_SIZE * (N.x - src.x) + N.pixel_x
+		var/new_y = WORLD_ICON_SIZE * (N.y - src.y) + N.pixel_y
 		narsimage.pixel_x = new_x
 		narsimage.pixel_y = new_y
 		narglow.pixel_x = new_x
@@ -462,11 +460,12 @@ var/global/obj/screen/fuckstat/FUCK = new
 	var/turf/T_mob = get_turf(src)
 	if((R.z == T_mob.z) && (get_dist(R,T_mob) <= (R.consume_range+10)) && !(R in view(T_mob)))
 		if(!riftimage)
-			riftimage = image('icons/obj/rift.dmi',T_mob,"rift", LIGHTING_LAYER + 2, 1)
+			riftimage = image('icons/obj/rift.dmi',T_mob,"rift", SUPER_PORTAL_LAYER, 1)
+			riftimage.plane = LIGHTING_PLANE
 			riftimage.mouse_opacity = 0
 
-		var/new_x = 32 * (R.x - T_mob.x) + R.pixel_x
-		var/new_y = 32 * (R.y - T_mob.y) + R.pixel_y
+		var/new_x = WORLD_ICON_SIZE * (R.x - T_mob.x) + R.pixel_x
+		var/new_y = WORLD_ICON_SIZE * (R.y - T_mob.y) + R.pixel_y
 		riftimage.pixel_x = new_x
 		riftimage.pixel_y = new_y
 		riftimage.loc = T_mob

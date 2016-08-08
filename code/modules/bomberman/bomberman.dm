@@ -262,7 +262,7 @@ var/global/list/bombermangear = list()
 	icon_state = "explosion_core"
 	density = 0
 	anchored = 1
-	layer = LIGHTING_LAYER + 1
+	plane = EFFECTS_PLANE
 	var/destroy_environnement = 0
 	var/hurt_players = 0
 
@@ -311,7 +311,7 @@ obj/structure/bomberflame/Destroy()
 
 	for(var/obj/item/weapon/bomberman/dispenser in T)
 		dispenser.lost()
-		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = PLANE_MOB)
+		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = MOB_PLANE)
 
 	for(var/mob/living/L in T)
 		for(var/obj/item/weapon/bomberman/dispenser in L)
@@ -319,7 +319,7 @@ obj/structure/bomberflame/Destroy()
 			dispenser.loc = L.loc
 			//dispenser.dropped(C)
 			dispenser.lost()
-			T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = PLANE_MOB)
+			T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = MOB_PLANE)
 
 	if(hurt_players)
 		for(var/mob/living/L in T)
@@ -923,8 +923,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		pencil.y = y+h
 		T = pencil.loc
-		T.maptext = name
-		T.maptext_width = 256
+		T.maptext = "<font size = 4>name"
+		T.maptext_width = 256*PIXEL_MULTIPLIER
 		//T.maptext_y = 20
 
 		qdel(pencil)	//RIP sweet prince
@@ -1425,9 +1425,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		var/second = currentcount%10
 		var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
 		var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
-		I1.pixel_x += 10
-		I2.pixel_x += 17
-		I1.pixel_y -= 11
-		I2.pixel_y -= 11
+		I1.pixel_x += 10 * PIXEL_MULTIPLIER
+		I2.pixel_x += 17 * PIXEL_MULTIPLIER
+		I1.pixel_y -= 11 * PIXEL_MULTIPLIER
+		I2.pixel_y -= 11 * PIXEL_MULTIPLIER
 		overlays += I1
 		overlays += I2

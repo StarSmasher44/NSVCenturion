@@ -6,16 +6,20 @@
 	anchored      = TRUE
 	ignoreinvert  = TRUE
 
-	icon          = LIGHTING_ICON
-	color         = LIGHTING_BASE_MATRIX
-	plane         = PLANE_LIGHTING
-	mouse_opacity = 0
-	layer         = LIGHTING_LAYER
-	invisibility  = INVISIBILITY_LIGHTING
+	icon             = LIGHTING_ICON
+	color            = LIGHTING_BASE_MATRIX
+	plane            = LIGHTING_PLANE
+	mouse_opacity    = 0
+	layer            = LIGHTING_LAYER
+	invisibility     = INVISIBILITY_LIGHTING
 
 	blend_mode    = BLEND_MULTIPLY
 
 	var/needs_update = FALSE
+
+	#if WORLD_ICON_SIZE != 32
+	transform = matrix(WORLD_ICON_SIZE / 32, 0, (WORLD_ICON_SIZE - 32) / 2, 0, WORLD_ICON_SIZE / 32, (WORLD_ICON_SIZE - 32) / 2)
+	#endif
 
 /atom/movable/lighting_overlay/New(var/atom/loc, var/no_update = FALSE)
 	. = ..()

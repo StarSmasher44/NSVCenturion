@@ -29,7 +29,7 @@
 	if(istype(O))
 		A = O
 
-	var/investigate_text = "<small>[time2text(world.timeofday,"hh:mm:ss")] \ref[A] ([T.x],[T.y],[T.z])</small> || "
+	var/investigate_text = "<small>[time_stamp()] \ref[A] ([formatJumpTo(T)])</small> || "
 
 	if(result)
 		investigate_text += "[amt]u of [result] have been created"
@@ -1756,7 +1756,8 @@
 						blueeffect.screen_loc = "WEST,SOUTH to EAST,NORTH"
 						blueeffect.icon = 'icons/effects/effects.dmi'
 						blueeffect.icon_state = "shieldsparkles"
-						blueeffect.layer = 17
+						blueeffect.plane = HUD_PLANE
+						blueeffect.layer = UNDER_HUD_LAYER
 						blueeffect.mouse_opacity = 0
 						M.client.screen += blueeffect
 						sleep(20)

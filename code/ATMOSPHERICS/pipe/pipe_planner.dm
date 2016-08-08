@@ -10,7 +10,7 @@
 	var/datum/context_click/pipe_planner/planner
 
 	layer = OBJ_LAYER + (PIPING_LAYER_MIN - (PIPING_LAYER_DEFAULT + PIPING_LAYER_INCREMENT)) * PIPING_LAYER_LCHANGE
-	plane = PLANE_OBJ
+	plane = OBJ_PLANE
 
 /obj/item/pipe_planner/New()
 	..()
@@ -37,10 +37,10 @@
 		temp_dis = y_pos
 		temp_mod = PIPING_LAYER_P_Y
 
-	if(temp_dis - 16 == 0)
+	if(temp_dis - WORLD_ICON_SIZE/2 == 0)
 		return 0
 
-	found_id = Floor(abs(temp_dis - 16), abs(temp_mod)) / (temp_mod * sign(temp_dis - 16))
+	found_id = Floor(abs(temp_dis - WORLD_ICON_SIZE/2), abs(temp_mod)) / (temp_mod * sign(temp_dis - WORLD_ICON_SIZE/2))
 
 	return found_id
 

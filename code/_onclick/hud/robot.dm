@@ -14,7 +14,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "radio"
 	using.screen_loc = ui_movi
-	using.layer = 20
 	src.adding += using
 
 //Module select
@@ -25,7 +24,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "sight"
 	using.screen_loc = ui_borg_sight
-	using.layer = 20
 	src.adding += using
 	mymob:sensor = using
 
@@ -35,7 +33,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "inv1"
 	using.screen_loc = ui_inv1
-	using.layer = 20
 	src.adding += using
 	mymob:inv1 = using
 
@@ -45,7 +42,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "inv2"
 	using.screen_loc = ui_inv2
-	using.layer = 20
 	src.adding += using
 	mymob:inv2 = using
 
@@ -55,7 +51,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "inv3"
 	using.screen_loc = ui_inv3
-	using.layer = 20
 	src.adding += using
 	mymob:inv3 = using
 
@@ -63,7 +58,7 @@
 	using.dir = SOUTHWEST
 	using.icon = 'icons/mob/screen1.dmi'
 	using.icon_state = "block"
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 	mymob:robot_modules_background = using
 
@@ -76,7 +71,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
-	using.layer = 20
 	src.adding += using
 	action_intent = using
 
@@ -107,7 +101,7 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "panel"
 	using.screen_loc = ui_borg_panel
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 //Store
@@ -202,7 +196,7 @@
 			return
 
 		var/display_rows = round((r.module.modules.len) / 8) +1 //+1 because round() returns floor of number
-		r.robot_modules_background.screen_loc = "CENTER-4:16,SOUTH+1:7 to CENTER+3:16,SOUTH+[display_rows]:7"
+		r.robot_modules_background.screen_loc = "CENTER-4:[WORLD_ICON_SIZE/2],SOUTH+1:[7*PIXEL_MULTIPLIER] to CENTER+3:[WORLD_ICON_SIZE/2],SOUTH+[display_rows]:[7*PIXEL_MULTIPLIER]"
 		r.client.screen += r.robot_modules_background
 
 		var/x = -4	//Start at CENTER-4,SOUTH+1
@@ -213,11 +207,11 @@
 				//Module is not currently active
 				r.client.screen += A
 				if(x < 0)
-					A.screen_loc = "CENTER[x]:16,SOUTH+[y]:7"
+					A.screen_loc = "CENTER[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
 				else
-					A.screen_loc = "CENTER+[x]:16,SOUTH+[y]:7"
-				A.layer = 20
-				A.plane = PLANE_HUD
+					A.screen_loc = "CENTER+[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
+				A.layer = HUD_ITEM_LAYER
+				A.plane = HUD_PLANE
 
 				x++
 				if(x == 4)

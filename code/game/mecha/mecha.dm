@@ -20,7 +20,7 @@
 	anchored = 1 //no pulling around.
 	unacidable = 1 //and no deleting hoomans inside
 	layer = MOB_LAYER //icon draw layer
-	plane = PLANE_MOB
+	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged.
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
@@ -111,6 +111,9 @@
 	mechas_list -= src //global mech list
 	..()
 	return
+
+/obj/mecha/can_apply_inertia()
+	return 1 //No anchored check - so that mechas can fly off into space
 
 /obj/mecha/is_airtight()
 	return !use_internal_tank

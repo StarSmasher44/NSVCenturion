@@ -18,7 +18,7 @@
 	icon_state = "table"
 	density = 1
 	anchored = 1.0
-	layer = 2.8
+	layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite it's density.")
 	var/parts = /obj/item/weapon/table_parts
 	var/icon/clicked
@@ -311,10 +311,8 @@
 			return 1
 	return 0
 
-/obj/structure/table/Bumped(atom/AM)
-	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
-		destroy()
-	return ..()
+/obj/structure/table/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+	destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
@@ -493,7 +491,7 @@
 
 	dir = direction
 	if(dir != NORTH)
-		layer = 5
+		plane = ABOVE_HUMAN_PLANE
 	flipped = 1
 	flags |= ON_BORDER
 	for(var/D in list(turn(direction, 90), turn(direction, -90)))
@@ -509,8 +507,7 @@
 	verbs -=/obj/structure/table/proc/do_put
 	verbs +=/obj/structure/table/verb/do_flip
 
-	layer = initial(layer)
-	plane = initial(plane)
+	reset_plane_and_layer()
 	flipped = 0
 	flags &= ~ON_BORDER
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
@@ -717,10 +714,8 @@
 		return 1
 	return !density
 
-/obj/structure/rack/Bumped(atom/AM)
-	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
-		destroy()
-	return ..()
+/obj/structure/rack/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+	destroy()
 
 /obj/structure/rack/MouseDrop_T(obj/O as obj, mob/user as mob)
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
@@ -741,14 +736,14 @@
 		if(W.loc == src.loc)
 			switch(offset_step)
 				if(1)
-					W.pixel_x = -3
-					W.pixel_y = 3
+					W.pixel_x = -3 * PIXEL_MULTIPLIER
+					W.pixel_y = 3 * PIXEL_MULTIPLIER
 				if(2)
 					W.pixel_x = 0
 					W.pixel_y = 0
 				if(3)
-					W.pixel_x = 3
-					W.pixel_y = -3
+					W.pixel_x = 3 * PIXEL_MULTIPLIER
+					W.pixel_y = -3 * PIXEL_MULTIPLIER
 					offset_step = 0
 			offset_step++
 	return 1

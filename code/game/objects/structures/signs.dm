@@ -15,7 +15,8 @@
 	anchored = 1
 	opacity = 0
 	density = 0
-	layer = 3.5
+	layer = ABOVE_WINDOW_LAYER
+
 
 /obj/structure/sign/ex_act(severity)
 	switch(severity)
@@ -63,13 +64,13 @@
 		var/obj/structure/sign/S = new(user.loc)
 		switch(direction)
 			if("North")
-				S.pixel_y = 32
+				S.pixel_y = WORLD_ICON_SIZE
 			if("East")
-				S.pixel_x = 32
+				S.pixel_x = WORLD_ICON_SIZE
 			if("South")
-				S.pixel_y = -32
+				S.pixel_y = -WORLD_ICON_SIZE
 			if("West")
-				S.pixel_x = -32
+				S.pixel_x = -WORLD_ICON_SIZE
 			else return
 		S.name = name
 		S.desc = desc

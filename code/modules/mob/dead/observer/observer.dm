@@ -7,7 +7,6 @@
 	desc = "It's a g-g-g-g-ghooooost!" //jinkies!
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "ghost1"
-	layer = 8
 	stat = DEAD
 	density = 0
 	lockflags = 0 //Neither dense when locking or dense when locked to something
@@ -19,7 +18,8 @@
 	universal_understand = 1
 	universal_speak = 1
 	//languages = ALL
-	plane = PLANE_LIGHTING
+	plane = LIGHTING_PLANE
+	layer = GHOST_LAYER
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
 
@@ -34,9 +34,9 @@
 	var/medHUD = 0
 	var/antagHUD = 0
 	var/atom/movable/following = null
-	var/mob/canclone = null
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
+	var/lastchairspin
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	sight |= SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF
@@ -111,7 +111,6 @@
 	..()
 	following = null
 	ghostMulti = null
-	canclone = null
 	observers.Remove(src)
 
 /mob/dead/observer/hasFullAccess()

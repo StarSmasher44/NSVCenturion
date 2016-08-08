@@ -37,7 +37,8 @@ Pipelines + Other Objects -> Pipe network
 	var/obj/machinery/atmospherics/mirror //not actually an object reference, but a type. The reflection of the current pipe
 	var/default_colour = null
 	var/image/pipe_image
-	plane = PLANE_TURF
+	plane = ABOVE_TURF_PLANE
+	layer = PIPE_LAYER
 	var/piping_layer = PIPING_LAYER_DEFAULT //used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
 
 	internal_gravity = 1 // Ventcrawlers can move in pipes without gravity since they have traction.
@@ -260,6 +261,7 @@ Pipelines + Other Objects -> Pipe network
 			"<span class='notice'>You have unfastened \the [src].</span>", \
 			"You hear a ratchet.")
 		getFromPool(/obj/item/pipe, loc, null, null, src)
+		investigation_log(I_ATMOS,"was removed by [user]/([user.ckey]) at [formatJumpTo(loc)].")
 		//P.New(loc, make_from=src) //new /obj/item/pipe(loc, make_from=src)
 		qdel(src)
 	return 1

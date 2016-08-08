@@ -4,7 +4,7 @@
 	desc = "Optical Meson Scanner with prescription lenses."
 	prescription = 1
 	eyeprot = -1
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/science
 	name = "Science Goggles"
@@ -21,7 +21,7 @@
 	origin_tech = "magnets=2"
 	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 	see_in_dark = 8
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
 
 /obj/item/clothing/glasses/eyepatch
@@ -57,6 +57,7 @@
 	S.Crossed()
 
 	qdel(src)
+	return SPECIAL_ATTACK_FAILED
 
 /obj/item/clothing/glasses/regular/hipster
 	name = "Prescription Glasses"
@@ -78,7 +79,7 @@
 	origin_tech = "combat=2"
 	darkness_view = -1
 	eyeprot = 1
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
@@ -88,6 +89,7 @@
 	S.Crossed()
 
 	qdel(src)
+	return SPECIAL_ATTACK_FAILED
 
 /obj/item/clothing/glasses/sunglasses/purple
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in purple."
@@ -122,7 +124,7 @@
 	action_button_name = "Toggle Welding Goggles"
 	var/up = 0
 	eyeprot = 3
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/welding/attack_self()
 	toggle()
@@ -174,7 +176,7 @@
 /obj/item/clothing/glasses/sunglasses/prescription
 	name = "prescription sunglasses"
 	prescription = 1
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/big
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Larger than average enhanced shielding blocks many flashes."
@@ -188,7 +190,7 @@
 	desc = "Sunglasses with a HUD."
 	icon_state = "sunhud"
 	var/obj/item/clothing/glasses/hud/security/hud = null
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 	New()
 		..()

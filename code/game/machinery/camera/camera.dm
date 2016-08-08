@@ -7,7 +7,7 @@ var/list/camera_names=list()
 	use_power = 2
 	idle_power_usage = 5
 	active_power_usage = 10
-	layer = 5
+	plane = ABOVE_HUMAN_PLANE
 
 	var/datum/wires/camera/wires = null // Wires datum
 	var/list/network = list("SS13")
@@ -438,7 +438,8 @@ var/list/camera_names=list()
 	use_power = 0
 	idle_power_usage = 0
 	active_power_usage = 0
-	layer = 2.1
+	layer = DECAL_LAYER
+	plane = ABOVE_TURF_PLANE
 
 /obj/machinery/camera/arena/New()
 	..()
@@ -484,3 +485,4 @@ var/list/camera_names=list()
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+	return SPECIAL_ATTACK_FAILED

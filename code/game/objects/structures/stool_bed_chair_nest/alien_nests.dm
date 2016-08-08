@@ -61,8 +61,8 @@
 			"<span class='notice'>You hear squelching...</span>")
 	lock_atom(M, /datum/locking_category/bed/nest)
 	src.add_fingerprint(user)
-	var/image/nest_covering = image(icon,"nest-covering",MOB_LAYER)
-	nest_covering.plane = PLANE_MOB
+	var/image/nest_covering = image(icon,"nest-covering")
+	nest_covering.plane = ABOVE_OBJ_PLANE
 	overlays += nest_covering
 	stabilize()
 
@@ -107,4 +107,4 @@
 #undef ALIEN_NEST_LOCKED_Y_OFFSET
 
 /datum/locking_category/bed/nest
-	pixel_y_offset = 6
+	pixel_y_offset = 6 * PIXEL_MULTIPLIER

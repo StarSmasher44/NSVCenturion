@@ -1,5 +1,5 @@
 #define CHARS_PER_LINE 5
-#define FONT_SIZE "5pt"
+#define FONT_SIZE "9pt"
 #define FONT_COLOR "#09f"
 #define FONT_STYLE "Arial Black"
 #define SCROLL_SPEED 2
@@ -46,8 +46,9 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 	var/spookymode=0 // Ghosts.
 
-	maptext_height = 26
-	maptext_width = 32
+	maptext_height = 26*PIXEL_MULTIPLIER
+	maptext_width = WORLD_ICON_SIZE
+	layer = ABOVE_WINDOW_LAYER
 
 // new display
 // register for radio system
@@ -259,8 +260,8 @@ var/global/list/status_displays = list() //This list contains both normal status
 			if(supply_display)
 				mode = 4
 
-/obj/machinery/status_display/spook()
-	if(..())
+/obj/machinery/status_display/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
 		spookymode = 1
 
 #undef MODE_BLANK
@@ -414,8 +415,9 @@ var/global/list/status_display_images = list(
 		overlays.len = 0
 	overlays += image('icons/obj/status_display.dmi', icon_state=picture_state)
 
-/obj/machinery/ai_status_display/spook()
-	spookymode = 1
+/obj/machinery/ai_status_display/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
+		spookymode = 1
 
 #undef MODE_BLANK
 #undef MODE_EMOTION

@@ -11,8 +11,6 @@ var/global/mulebot_count = 0
 	desc = "A Multiple Utility Load Effector bot."
 	icon_state = "mulebot0"
 	icon_initial = "mulebot"
-	layer = MOB_LAYER
-	plane = PLANE_MOB
 	density = 1
 	anchored = 1
 	animate_movement=1
@@ -443,7 +441,7 @@ var/global/mulebot_count = 0
 	C.loc = src
 	load = C
 
-	C.pixel_y += 9
+	C.pixel_y += 9 * PIXEL_MULTIPLIER
 	if(C.layer < layer)
 		C.layer = layer + 0.1
 	overlays += C
@@ -468,7 +466,7 @@ var/global/mulebot_count = 0
 	overlays.len = 0
 
 	load.loc = src.loc
-	load.pixel_y -= 9
+	load.pixel_y -= 9 * PIXEL_MULTIPLIER
 	load.layer = initial(load.layer)
 	if(ismob(load))
 		var/mob/M = load

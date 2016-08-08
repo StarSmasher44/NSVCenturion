@@ -236,8 +236,7 @@
 	return
 
 /obj/item/proc/dropped(mob/user as mob)
-	layer = initial(layer) //nothing bad can come from this right?
-	plane = initial(plane) //wrong
+	reset_plane_and_layer()
 	if(wielded)
 		unwield(user)
 
@@ -1023,7 +1022,7 @@ var/global/list/image/blood_overlays = list()
 	if(kick_power > 6) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
-			animate(src, pixel_y = original_pixel_y + 32, time = 10, easing = CUBIC_EASING)
+			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
 
 			while(loc)
 				if(!throwing)

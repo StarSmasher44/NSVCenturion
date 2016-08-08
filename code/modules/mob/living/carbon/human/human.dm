@@ -1308,8 +1308,8 @@
 		//if(src.species.language)	src.remove_language(species.language)
 		if(src.species.abilities)
 			src.verbs -= species.abilities
-		if(species.language)
-			remove_language(species.language)
+		for(var/L in species.known_languages)
+			remove_language(L)
 		species.clear_organs(src)
 
 	var/datum/species/S = all_species[new_species_name]
@@ -1317,8 +1317,8 @@
 	src.species = new S.type
 	src.species.myhuman = src
 
-	if(species.language)
-		add_language(species.language)
+	for(var/L in species.known_languages)
+		add_language(L)
 	if(species.default_language)
 		add_language(species.default_language)
 	if(src.species.abilities)
@@ -1548,8 +1548,9 @@
 
 	return 1
 
-/mob/living/carbon/human/spook()
-	if(!client) return
+/mob/living/carbon/human/spook(mob/dead/observer/ghost)
+	if(!..(ghost, TRUE) || !client)
+		return
 	if(!hallucinating())
 		to_chat(src, "<i>[pick(boo_phrases)]</i>")
 	else
@@ -1634,6 +1635,12 @@
 
 	return 0
 
+/mob/living/carbon/human/proc/after_special_attack(atom/target, attack_type, attack_result)
+	switch(attack_type)
+		if(ATTACK_KICK)
+			if(attack_result != SPECIAL_ATTACK_FAILED) //The kick landed successfully
+				apply_inertia(get_dir(target, src))
+
 /mob/living/carbon/human/proc/get_footprint_type()
 	var/obj/item/clothing/shoes/S = shoes //Why isn't shoes just typecast in the first place?
 	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.
@@ -1681,11 +1688,9 @@
 
 /mob/living/carbon/human/reset_layer()
 	if(lying)
-		plane = PLANE_OBJ
-		layer = MOB_LAYER - 0.1 //so we move under bedsheets
+		plane = LYING_HUMAN_PLANE
 	else
-		layer = MOB_LAYER
-		plane = PLANE_MOB
+		plane = HUMAN_PLANE
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
 	if(new_amount > held_items.len)
