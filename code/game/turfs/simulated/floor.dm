@@ -30,6 +30,7 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 	var/icon_plating = "plating"
 	thermal_conductivity = 0.040
 	heat_capacity = 10000
+	cliff_icon_state = "metal"
 	var/lava = 0
 	var/broken = 0
 	var/burnt = 0

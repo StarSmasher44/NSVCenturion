@@ -309,8 +309,8 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 		message = stutter(message)
 	return message
 
-/proc/shake_camera(mob/M, duration=0, strength=1)
-	spawn(1)
+/proc/shake_camera(mob/M, duration=0, strength=1, delay=0.2)
+/*	spawn(1)
 		if(!M || !M.client || M.shakecamera)
 			return
 
@@ -327,7 +327,23 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 		M.shakecamera = 0
 		M.client.pixel_x = 0
 		M.client.pixel_y = 0
+*/
+	set waitfor = 0 // Just to be on the safe side.
 
+	if(!M || !M.client || duration <= 0)
+		return
+
+	var/opx = M.client.pixel_x
+	var/opy = M.client.pixel_y
+	var/min = -(strength * world.icon_size)
+	var/max = strength * world.icon_size
+
+	for(var/i in 0 to duration - 1)
+		if(i == 0)
+			animate(M.client, pixel_x=rand(min, max),pixel_y=rand(min, max),time=delay, easing = EASE_IN)
+		else
+			animate(pixel_x=rand(min, max),pixel_y=rand(min, max),time=delay, easing = EASE_OUT)
+	animate(pixel_x=opx, pixel_y=opy, time=delay, easing = EASE_IN)
 
 /proc/findname(msg)
 	if(!istext(msg))

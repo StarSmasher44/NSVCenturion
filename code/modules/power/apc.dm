@@ -31,6 +31,17 @@
 
 #define APC_UPDATE_ICON_COOLDOWN 100 // 10 seconds
 
+// controls power to devices in that area
+// may be opened to change power cell
+// three different channels (lighting/equipment/environ) - may each be set to on, off, or auto
+#define POWERCHAN_OFF      0
+#define POWERCHAN_OFF_AUTO 1
+#define POWERCHAN_ON       2
+#define POWERCHAN_ON_AUTO  3
+
+//thresholds for channels going off automatically. ENVIRON channel stays on as long as possible, and doesn't have a threshold
+#define AUTO_THRESHOLD_LIGHTING  50
+#define AUTO_THRESHOLD_EQUIPMENT 25
 
 // the Area Power Controller (APC), formerly Power Distribution Unit (PDU)
 // one per area, needs wire conection to power network through a terminal
@@ -76,6 +87,7 @@
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
 //	luminosity = 1
+	var/autoflag= 0		// 0 = off, 1= eqp and lights off, 2 = eqp off, 3 = all on.
 	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
 	var/overload = 1 //used for the Blackout malf module
 	var/beenhit = 0 // used for counting how many times it has been hit, used for Aliens at the moment
@@ -360,7 +372,7 @@
 	if(!updating_icon)
 		updating_icon = 1
 		// Start the update
-		spawn(APC_UPDATE_ICON_COOLDOWN)
+		spawn(APC_UPDATE_ICON_COOLDOWN+rand(-20, 20))
 			update_icon()
 			updating_icon = 0
 
@@ -764,12 +776,14 @@
 
 /obj/machinery/power/apc/proc/update()
 	if(operating && !shorted)
-		areaMaster.power_light = (lighting > 1)
-		areaMaster.power_equip = (equipment > 1)
-		areaMaster.power_environ = (environ > 1)
-//		if (area.name == "AI Chamber")
-//			spawn(10)
-//				to_chat(world, " [area.name] [area.power_equip]")
+		//prevent unnecessary updates to emergency lighting
+		var/new_power_light = (lighting >= POWERCHAN_ON)
+		if(areaMaster.power_light != new_power_light)
+			areaMaster.power_light = new_power_light
+			areaMaster.set_emergency_lighting(lighting == POWERCHAN_OFF_AUTO) //if lights go auto-off, emergency lights go on
+
+		areaMaster.power_equip = (equipment >= POWERCHAN_ON)
+		areaMaster.power_environ = (environ >= POWERCHAN_ON)
 	else
 		areaMaster.power_light = 0
 		areaMaster.power_equip = 0
@@ -1110,40 +1124,8 @@
 				lighting = autoset(lighting, 0)
 				environ = autoset(environ, 0)
 
-
-		// set channels depending on how much charge we have left
-
-		// Allow the APC to operate as normal if the cell can charge
-		if(charging && longtermpower < 10)
-			longtermpower += 1
-		else if(longtermpower > -10)
-			longtermpower -= 2
-
-
-		if(cell.charge <= 0)					// zero charge, turn all off
-			equipment = autoset(equipment, 0)
-			lighting = autoset(lighting, 0)
-			environ = autoset(environ, 0)
-			if(areaMaster.poweralm && make_alerts)
-				areaMaster.poweralert(0, src)
-		else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
-			equipment = autoset(equipment, 2)
-			lighting = autoset(lighting, 2)
-			environ = autoset(environ, 1)
-			if(areaMaster.poweralm && make_alerts)
-				areaMaster.poweralert(0, src)
-		else if(cell.percent() < 30 && longtermpower < 0)			// <30%, turn off equipment
-			equipment = autoset(equipment, 2)
-			lighting = autoset(lighting, 1)
-			environ = autoset(environ, 1)
-			if(areaMaster.poweralm && make_alerts)
-				areaMaster.poweralert(0, src)
-		else									// otherwise all can be on
-			equipment = autoset(equipment, 1)
-			lighting = autoset(lighting, 1)
-			environ = autoset(environ, 1)
-			if(cell.percent() > 75 && !areaMaster.poweralm && !make_alerts)
-				areaMaster.poweralert(1, src)
+		// Set channels depending on how much charge we have left
+		update_channels()
 
 		// now trickle-charge the cell
 
@@ -1200,22 +1182,63 @@
 // val 0=off, 1=off(auto) 2=on 3=on(auto)
 // on 0=off, 1=on, 2=autooff
 
-obj/machinery/power/apc/proc/autoset(var/val, var/on)
-	if(on==0)
-		if(val==2)			// if on, return off
-			return 0
-		else if(val==3)		// if auto-on, return auto-off
-			return 1
+/obj/machinery/power/apc/proc/update_channels()
+	// Allow the APC to operate as normal if the cell can charge
+	if(charging && longtermpower < 10)
+		longtermpower += 1
+	else if(longtermpower > -10)
+		longtermpower -= 2
 
-	else if(on==1)
-		if(val==1)			// if auto-off, return auto-on
-			return 3
+	if((cell.percent() > AUTO_THRESHOLD_LIGHTING) || longtermpower > 0)              // Put most likely at the top so we don't check it last, effeciency 101
+		if(autoflag != 3)
+			equipment = autoset(equipment, 1)
+			lighting = autoset(lighting, 1)
+			environ = autoset(environ, 1)
+			autoflag = 3
+			if(areaMaster.poweralm && make_alerts)
+				areaMaster.poweralert(1, src)
+	else if((cell.percent() <= AUTO_THRESHOLD_LIGHTING) && (cell.percent() > AUTO_THRESHOLD_EQUIPMENT) && longtermpower < 0)                       // <50%, turn off lighting
+		if(autoflag != 2)
+			equipment = autoset(equipment, 1)
+			lighting = autoset(lighting, 2)
+			environ = autoset(environ, 1)
+			if(areaMaster.poweralm && make_alerts)
+				areaMaster.poweralert(0, src)
+			autoflag = 2
+	else if(cell.percent() <= AUTO_THRESHOLD_EQUIPMENT)        // <25%, turn off lighting & equipment
+		if((autoflag > 1 && longtermpower < 0) || (autoflag > 1 && longtermpower >= 0))
+			equipment = autoset(equipment, 2)
+			lighting = autoset(lighting, 2)
+			environ = autoset(environ, 1)
+			if(areaMaster.poweralm && make_alerts)
+				areaMaster.poweralert(0, src)
+			autoflag = 1
+	else                                   // zero charge, turn all off
+		if(autoflag != 0)
+			equipment = autoset(equipment, 0)
+			lighting = autoset(lighting, 0)
+			environ = autoset(environ, 0)
+			if(areaMaster.poweralm && make_alerts)
+				areaMaster.poweralert(0, src)
+			autoflag = 0
 
-	else if(on==2)
-		if(val==3)			// if auto-on, return auto-off
-			return 1
+// val 0=off, 1=off(auto) 2=on 3=on(auto)
+// on 0=off, 1=on, 2=autooff
+// defines a state machine, returns the new state
+/obj/machinery/power/apc/proc/autoset(var/cur_state, var/on)
+	switch(cur_state)
+		if(POWERCHAN_OFF); //autoset will never turn on a channel set to off
+		if(POWERCHAN_OFF_AUTO)
+			if(on == 1)
+				return POWERCHAN_ON_AUTO
+		if(POWERCHAN_ON)
+			if(on == 0)
+				return POWERCHAN_OFF
+		if(POWERCHAN_ON_AUTO)
+			if(on == 0 || on == 2)
+				return POWERCHAN_OFF_AUTO
 
-	return val
+	return cur_state //leave unchanged
 
 // damage and destruction acts
 

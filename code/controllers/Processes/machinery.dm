@@ -45,4 +45,4 @@ var/global/list/machines = list()
 				M.inMachineList = 0
 			if(!machines.Remove(M))
 				machines.Cut(i,i+1)
-		if(!(i%20)) scheck()
+		if(!(i%40)) scheck()

@@ -62,6 +62,7 @@ var/list/soulstone_sound = list('sound/hallucinations/far_noise.ogg', 'sound/hal
 	var/Dist = world.view + extrarange
 
 	// Looping through the player list has the added bonus of working for mobs inside containers
+	var/sound/S = sound(soundin)
 	for (var/mob/player in player_list)
 		if(!player || !player.client)
 			continue
@@ -70,13 +71,13 @@ var/list/soulstone_sound = list('sound/hallucinations/far_noise.ogg', 'sound/hal
 
 		if (player_turf && turf_source && player_turf.z == turf_source.z)
 			if(get_dist(player_turf, turf_source) <= Dist)
-				player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel)
+				player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel, S)
 
 var/const/FALLOFF_SOUNDS = 1
 var/const/SURROUND_CAP = 7
 
 #define MIN_SOUND_PRESSURE	2 //2 kPa of pressure required to at least hear sound
-/mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0)
+/mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0, sound/S)
 	if(!src.client)
 		return
 
@@ -102,7 +103,8 @@ var/const/SURROUND_CAP = 7
 
 	soundin = get_sfx(soundin)
 
-	var/sound/S = sound(soundin, 0, 0, channel, vol)
+	if(!S)
+		S = sound(get_sfx(soundin), 0, 0, channel, vol)
 
 	if (vary)
 		if(frequency)

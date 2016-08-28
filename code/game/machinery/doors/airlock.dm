@@ -457,7 +457,7 @@ About the new airlock wires panel:
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(5, 1, src)
 	s.start() //sparks always.
-	if(electrocute_mob(user, get_area(src), src))
+	if(electrocute_mob(user, MyArea, src))
 		hasShocked = 1
 		spawn(10)
 			hasShocked = 0

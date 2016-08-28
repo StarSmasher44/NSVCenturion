@@ -37,6 +37,9 @@ var/global/list/ghdel_profiling = list()
 
 	var/list/beams
 
+	//overlays that should remain on top and not normally be removed, like c4.
+	var/list/priority_overlays
+
 	// EVENTS
 	/////////////////////////////
 	// On Destroy()

@@ -25,9 +25,9 @@
 	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor)
 
 /turf/simulated/Entered(atom/A, atom/OL)
+	..()
 	if(movement_disabled && usr.ckey != movement_disabled_exception)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
-
 		return
 
 	if (istype(A,/mob/living/carbon))
@@ -107,7 +107,6 @@
 					step(M, M.dir)
 					M.visible_message("<span class='warning'>[M] slips on the icy floor!</span>", \
 					"<span class='warning'>You slip on the icy floor!</span>")
-	..()
 
 //returns 1 if made bloody, returns 0 otherwise
 /turf/simulated/add_blood(mob/living/carbon/human/M as mob)

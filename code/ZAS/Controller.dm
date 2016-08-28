@@ -92,12 +92,8 @@ Class Procs:
 	//Inputs: None.
 	//Outputs: None.
 
-	#ifndef ZASDBG
-	set background = 1
-	#endif
-
 	to_chat(world, "<span class='danger'>Processing Geometry...</span>")
-	sleep(-1)
+//	sleep(-1)
 
 	var/start_time = world.timeofday
 
@@ -105,7 +101,7 @@ Class Procs:
 
 	for(var/turf/simulated/S in turfs)
 		simulated_turf_count++
-		if(!(simulated_turf_count % 50000)) sleep(world.tick_lag)
+		if(!(simulated_turf_count % 10000))	CHECK_TICK
 		S.update_air_properties()
 
 	to_chat(world, {"<font color='red'><b>Geometry initialized in [round(0.1*(world.timeofday-start_time),0.1)] seconds.</b>
@@ -121,10 +117,6 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	//Called by: Master controller
 	//Inputs: None.
 	//Outputs: None.
-
-	#ifndef ZASDBG
-	set background = 1
-	#endif
 
 	while(1)
 		Tick()

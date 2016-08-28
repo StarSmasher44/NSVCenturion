@@ -28,7 +28,7 @@
 	var/list/numsToAssign=new()
 	for(var/i=1;i<DNA_SE_LENGTH;i++)
 		numsToAssign += i
-
+		CHECK_TICK
 	//testing("Assigning DNA blocks:")
 
 	// Standard muts

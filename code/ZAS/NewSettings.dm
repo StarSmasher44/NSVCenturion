@@ -58,37 +58,37 @@ var/global/ZAS_Settings/zas_settings = new
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_lightest_pressure
-	value = 20
+	value = 15
 	name = "Airflow - Small Movement Threshold %"
 	desc = "Percent of 1 Atm. at which items with the small weight classes will move."
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_light_pressure
-	value = 35
+	value = 30
 	name = "Airflow - Medium Movement Threshold %"
 	desc = "Percent of 1 Atm. at which items with the medium weight classes will move."
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_medium_pressure
-	value = 50
+	value = 45
 	name = "Airflow - Heavy Movement Threshold %"
 	desc = "Percent of 1 Atm. at which items with the largest weight classes will move."
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_heavy_pressure
-	value = 65
+	value = 55
 	name = "Airflow - Mob Movement Threshold %"
 	desc = "Percent of 1 Atm. at which mobs will move."
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_dense_pressure
-	value = 85
+	value = 75
 	name = "Airflow - Dense Movement Threshold %"
 	desc = "Percent of 1 Atm. at which items with canisters and closets will move."
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_stun_pressure
-	value = 60
+	value = 50
 	name = "Airflow - Mob Stunning Threshold %"
 	desc = "Percent of 1 Atm. at which mobs will be stunned by airflow."
 	valtype=ZAS_TYPE_NUMERIC
@@ -106,13 +106,13 @@ var/global/ZAS_Settings/zas_settings = new
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_damage
-	value = 2
+	value = 2.5
 	name = "Airflow Impact - Damage"
 	desc = "Damage from airflow impacts."
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_speed_decay
-	value = 1.5
+	value = 1.2
 	name = "Airflow Speed Decay"
 	desc = "How rapidly the speed gained from airflow decays."
 	valtype=ZAS_TYPE_NUMERIC
@@ -132,7 +132,7 @@ var/global/ZAS_Settings/zas_settings = new
 // N3X15 - Added back in so we can tweak performance.
 /datum/ZAS_Setting/airflow_push
 	name="Airflow - Push"
-	value = 0
+	value = 1
 	desc="1=yes please rape my server, 0=no"
 	valtype=ZAS_TYPE_BOOLEAN
 
@@ -189,7 +189,7 @@ var/global/ZAS_Settings/zas_settings = new
 /datum/ZAS_Setting/GENETIC_CORRUPTION
 	name = "Genetic Corruption Chance"
 	desc = "Chance of genetic corruption as well as toxic damage, X in 10,000."
-	value = 0
+	value = 0.5
 	valtype=ZAS_TYPE_BOOLEAN
 
 /datum/ZAS_Setting/SKIN_BURNS

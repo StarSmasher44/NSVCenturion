@@ -1,6 +1,6 @@
-#define GC_COLLECTIONS_PER_TICK 300 // Was 100.
+#define GC_COLLECTIONS_PER_TICK 200 // Was 100.
 #define GC_COLLECTION_TIMEOUT (30 SECONDS)
-#define GC_FORCE_DEL_PER_TICK 60
+#define GC_FORCE_DEL_PER_TICK 40
 //#define GC_DEBUG
 
 var/datum/garbage_collector/garbageCollector

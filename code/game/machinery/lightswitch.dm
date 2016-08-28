@@ -100,15 +100,11 @@
 /obj/machinery/light_switch/attack_hand(mob/user)
 	if(buildstage != 2) return
 	on = !on
-
-	areaMaster.lightswitch = on
-	areaMaster.updateicon()
+	areaMaster.set_lightswitch(on)
 
 	for(var/obj/machinery/light_switch/L in areaMaster)
 		L.on = on
 		L.updateicon()
-
-	areaMaster.power_change()
 
 /obj/machinery/light_switch/power_change()
 	if(powered(LIGHT))

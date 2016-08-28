@@ -1,7 +1,6 @@
-
 -- Table: players
 CREATE TABLE players ( 
-    ID                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    ID                  INTEGER PRIMARY KEY AUTO_INCREMENT,
     player_ckey         TEXT    NOT NULL,
     player_slot         INTEGER NOT NULL,
     ooc_notes           TEXT,
@@ -25,7 +24,7 @@ CREATE TABLE players (
 
 -- Table: body
 CREATE TABLE body ( 
-    ID                INTEGER PRIMARY KEY AUTOINCREMENT,
+    ID                INTEGER PRIMARY KEY AUTO_INCREMENT,
     player_ckey       TEXT    NOT NULL,
     player_slot       INTEGER NOT NULL,
     hair_red          INTEGER,
@@ -50,7 +49,7 @@ CREATE TABLE body (
 
 -- Table: jobs
 CREATE TABLE jobs ( 
-    ID                INTEGER PRIMARY KEY AUTOINCREMENT,
+    ID                INTEGER PRIMARY KEY AUTO_INCREMENT,
     player_ckey       TEXT    NOT NULL,
     player_slot       INTEGER NOT NULL,
     alternate_option  INTEGER,
@@ -70,7 +69,7 @@ CREATE TABLE jobs (
 
 -- Table: limbs
 CREATE TABLE limbs ( 
-    ID          INTEGER PRIMARY KEY AUTOINCREMENT,
+    ID          INTEGER PRIMARY KEY AUTO_INCREMENT,
     player_ckey TEXT    NOT NULL,
     player_slot INTEGER NOT NULL,
     l_arm       TEXT,
@@ -91,7 +90,7 @@ CREATE TABLE limbs (
 -- Table: client
 CREATE TABLE client ( 
     ID             INTEGER NOT NULL
-                           PRIMARY KEY AUTOINCREMENT,
+                           PRIMARY KEY AUTO_INCREMENT,
     ckey           INTEGER UNIQUE,
     ooc_color      TEXT,
     lastchangelog  TEXT,

@@ -127,6 +127,9 @@ var/global/list/obj/machinery/light/alllights = list()
 								// this is used to calc the probability the light burns out
 
 	var/rigged = 0				// true if rigged to explode
+	var/current_mode = null
+	var/list/lighting_modes
+	var/static_light = 1
 
 	// No ghost interaction.
 	ghost_read=0
@@ -170,6 +173,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	desc = "A small lighting fixture."
 	light_type = /obj/item/weapon/light/bulb
 
+/obj/machinery/light/small/emergency
+	light_type = /obj/item/weapon/light/bulb/red
+
+/obj/machinery/light/small/red
+	light_type = /obj/item/weapon/light/bulb/red
 
 /obj/machinery/light/spot
 	name = "spotlight"
@@ -229,7 +237,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			icon_state = "l[base_state]-broken"
 			on = 0
 	return
-
+/*
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(var/trigger = 1)
 
@@ -266,6 +274,39 @@ var/global/list/obj/machinery/light/alllights = list()
 			addStaticPower(static_power_used, STATIC_LIGHT)
 		else
 			removeStaticPower(static_power_used, STATIC_LIGHT)
+*/
+// update the icon_state and luminosity of the light depending on its state
+/obj/machinery/light/proc/update(var/trigger = 1)
+	update_icon()
+	if(on)
+		use_power = 2
+
+		var/changed = 0
+		if(current_mode && (current_mode in lighting_modes))
+			changed = set_light(arglist(lighting_modes[current_mode]))
+		else
+			changed = set_light(brightness_range, brightness_power, brightness_color)
+
+		if(trigger && changed)
+			switch_check()
+	else
+		use_power = 0
+		set_light(0)
+
+	active_power_usage = ((light_range * light_power) * 5)
+
+/obj/machinery/light/proc/switch_check()
+	if(status != LIGHT_OK)
+		return //already busted
+
+	switchcount++
+	if(rigged)
+		log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+		message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+
+		explode()
+	else if( prob( min(60, switchcount*switchcount*0.01) ) )
+		burn_out()
 
 
 /*
@@ -356,7 +397,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			if(on && (W.is_conductor()))
 				//if(!user.mutations & M_RESIST_COLD)
 				if (prob(12))
-					electrocute_mob(user, get_area(src), src, 0.3)
+					electrocute_mob(user, MyArea, src, 0.3)
 			broken()
 
 		else
@@ -393,16 +434,33 @@ var/global/list/obj/machinery/light/alllights = list()
 			s.start()
 			//if(!user.mutations & M_RESIST_COLD)
 			if (prob(75))
-				electrocute_mob(user, get_area(src), src, rand(0.7,1.0))
+				electrocute_mob(user, MyArea, src, rand(0.7,1.0))
+
+/obj/machinery/light/proc/set_mode(var/new_mode)
+	if(current_mode != new_mode)
+		current_mode = new_mode
+		update(0)
+
+/obj/machinery/light/proc/set_emergency_lighting(var/enable)
+	if(enable)
+		if("emergency_lighting" in lighting_modes)
+			set_mode("emergency_lighting")
+			power_channel = ENVIRON
+	else
+		if(current_mode == "emergency_lighting")
+			set_mode(null)
+			power_channel = initial(power_channel)
+
+
 
 /*
  * Returns whether this light has power
  * TRUE if area has power and lightswitch is on otherwise FALSE.
  */
 /obj/machinery/light/proc/has_power()
-	return areaMaster.lightswitch && areaMaster.power_light
+	return areaMaster.lightswitch && ..(power_channel)
 
-/obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
+/obj/machinery/light/proc/flicker(var/amount = rand(5, 10))
 	if(flickering) return
 	flickering = 1
 	spawn(0)
@@ -411,19 +469,19 @@ var/global/list/obj/machinery/light/alllights = list()
 				if(status != LIGHT_OK) break
 				on = !on
 				update(0)
-				sleep(rand(5, 15))
+				sleep(rand(1, 10))
 			on = (status == LIGHT_OK)
 			update(0)
 		flickering = 0
 		on = has_power()
 		update(0)
-
+/*
 /obj/machinery/light/attack_ghost(mob/user)
 	if(blessed) return
 	src.add_hiddenprint(user)
 	src.flicker(1)
 	return
-
+*/
 // ai attack - make lights flicker, because why not
 /obj/machinery/light/attack_ai(mob/user)
 	// attack_robot is flaky.
@@ -603,6 +661,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/brightness_color = null
 	var/cost = 2 //How much power does it consume in an idle state?
 	var/fitting = "tube"
+	var/list/lighting_modes = list()
 
 /obj/item/weapon/light/tube
 	name = "light tube"
@@ -615,6 +674,9 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_range = 8
 	brightness_power = 3
 	cost = 8
+	lighting_modes = list(
+		"emergency_lighting" = list(brightness_range = 4, brightness_power = 1, brightness_color = LIGHT_COLOR_EMERGENCY),
+		)
 
 /obj/item/weapon/light/tube/he
 	name = "high efficiency light tube"
@@ -644,6 +706,13 @@ var/global/list/obj/machinery/light/alllights = list()
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
 	cost = 5
 	w_type = RECYK_GLASS
+	lighting_modes = list(
+		"emergency_lighting" = list(brightness_range = 3, brightness_power = 1, brightness_color = LIGHT_COLOR_EMERGENCY),
+		)
+
+/obj/item/weapon/light/bulb/red
+	color = "#da0205"
+	brightness_color = LIGHT_COLOR_EMERGENCY
 
 /obj/item/weapon/light/bulb/he
 	name = "high efficiency light bulb"
@@ -732,3 +801,8 @@ var/global/list/obj/machinery/light/alllights = list()
 		force = 5
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 		update()
+
+/obj/machinery/light/proc/burn_out()
+	 status = LIGHT_BURNED
+	 update_icon()
+	 set_light(0)

@@ -1,0 +1,225 @@
+*** Begin Log: Tue Aug 02 02:41:05 2016 ***
+Tue Aug 02 02:41:07 2016
+World opened on network port 2506.
+Welcome BYOND! (5.0 Beta Version 511.1350)
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+runtime error: Cannot read null.error_cooldown
+proc name: Error (/world/Error)
+  source file: error_handler.dm,34
+  usr: null
+  src: world
+  call stack:
+world: Error(Cannot read .len (/exception))
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): update verbs()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+getFromPool(/obj/item/clothing/mask/cigare... (/obj/item/clothing/mask/cigarette/cigar))
+Cigar (/datum/rcd_schematic/rsf/cigar): New(the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf))
+the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf): init schematics()
+the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf): New()
+the Autolathe (/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe): ()
+runtime error: Cannot read null.error_cooldown
+proc name: Error (/world/Error)
+  source file: error_handler.dm,34
+  usr: null
+  src: world
+  call stack:
+world: Error(Cannot read .len (/exception))
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): update verbs()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+getFromPool(/obj/item/clothing/mask/cigare... (/obj/item/clothing/mask/cigarette/cigar))
+Cigar (/datum/rcd_schematic/rsf/cigar): New(the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf))
+the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf): init schematics()
+the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf): New(the floor (250,261,1) (/turf/simulated/floor/wood))
+runtime error: Cannot read null.error_cooldown
+proc name: Error (/world/Error)
+  source file: error_handler.dm,34
+  usr: null
+  src: world
+  call stack:
+world: Error(Cannot read .len (/exception))
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): update verbs()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+getFromPool(/obj/item/clothing/mask/cigare... (/obj/item/clothing/mask/cigarette/cigar))
+Cigar (/datum/rcd_schematic/rsf/cigar): New(the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf))
+the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf): init schematics()
+the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf): New()
+the Autolathe (/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe): ()
+runtime error: Cannot read null.error_cooldown
+proc name: Error (/world/Error)
+  source file: error_handler.dm,34
+  usr: null
+  src: world
+  call stack:
+world: Error(Cannot read .len (/exception))
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): update verbs()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+getFromPool(/obj/item/clothing/mask/cigare... (/obj/item/clothing/mask/cigarette/cigar))
+Cigar (/datum/rcd_schematic/rsf/cigar): New(the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf))
+the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf): init schematics()
+the Rapid-Service-Fabricator (/obj/item/device/rcd/matter/rsf): New()
+the Autolathe (/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe): ()
+
+Database Error: 
+Your server failed to establish a connection with the feedback database.
+## TESTING: Something wrong with dbcon.
+[Migrations] (mysql): Setup() returned false, will not run migrations for this DBMS.
+[Migrations] Loaded 5 sqlite DB migrations from package ss13_prefs.
+[Migrations] ss13_prefs is up to date.
+
+Your server failed to establish a connection with the tgstation database.
+Job setup complete in 0s.
+DEBUG: TURFS LIST LENGTH 1.5e+006
+Database Error: 
+##WARNING: Error #:0 -  in code/modules/client/preferences_savefile.dm at line 61 src: /datum/preferences usr: .
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 255,225,1...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 255,229,1...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 148,187,2...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 158,228,3...
+Database Error: 
+Infinite loop suspected--switching proc to background.
+If it is not an infinite loop, either do 'set background=1' or set world.loop_checks=0.
+proc name: Setup (/datum/controller/air_system/proc/Setup)
+  source file: Controller.dm,105
+  usr: null
+  src: /datum/controller/air_system (/datum/controller/air_system)
+  call stack:
+/datum/controller/air_system (/datum/controller/air_system): Setup()
+air (/datum/controller/process/air): setup()
+/datum/controller/processSched... (/datum/controller/processScheduler): addProcess(air (/datum/controller/process/air))
+/datum/controller/processSched... (/datum/controller/processScheduler): setup()
+world: New()
+##WARNING: Type /obj/item/seeds/random does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 132 src: the packet of strange plant spores usr: .
+Attempting to generate an away mission...
+##WARNING: Type /turf/space does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 132 src: space usr: .
+## TESTING: DNA2: 0 blocks are unused: nothing
+Populating asset cache...
+[02:52:25] Runtime in clothing.dm,118: Cannot read .len
+  proc name: update verbs (/obj/item/clothing/proc/update_verbs)
+  src: Premium Cigar (/obj/item/clothing/mask/cigarette/cigar)
+  src.loc: null
+  call stack:
+  Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): update verbs()
+  Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+  Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+  Premium Cigar (/obj/item/clothing/mask/cigarette/cigar): New()
+  getFromPool(/obj/item/clothing/mask/cigare... (/obj/item/clothing/mask/cigarette/cigar))
+  Cigar (/datum/rcd_schematic/rsf/cigar): New()
+  /datum/html_interface/rcd (/datum/html_interface/rcd): registerResources()
+  /datum/asset/HTML_interface (/datum/asset/HTML_interface): register()
+  populate asset cache()
+  /datum/controller/game_control... (/datum/controller/game_controller): setup objects()
+  /datum/controller/game_control... (/datum/controller/game_controller): setup()
+  world: New()
+  Populated 969 assets in 0.3s.
+Placing random space structures...
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+##WARNING: Type /obj/effect/landmark/corpse/scientist does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 132 src: Scientist usr: .
+##WARNING: Type /obj/effect/landmark/corpse/doctor does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 132 src: Doctor usr: .
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+##WARNING: Type /obj/effect/landmark/corpse/tajaran does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 132 src: the tajaran usr: .
+  Finished placing structures in 2.3s.
+Building powernets...
+  Finished building powernets in 0.4s.
+Initializing objects...
+## TESTING: Autolinked Super Juke -> Radio Transmitter
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+## TESTING: Autolinked Jukebox -> Radio Transmitter
+  Initialized 122029 objects in 15.9s.
+Initializing pipe networks...
+  Initialized 6144 pipe networks in 0.1s.
+Initializing atmos machinery...
+  Initialized 620 atmos devices in 0.6s.
+Not generating minimaps - SKIP_MINIMAP_GENERATION found in config/config.txt
+Finished initializations in 19.6s.
+Caching damage icons...
+## TESTING: Generating Human, Blood()
+## TESTING: Generating Vox, Blood(#2299FC)
+## TESTING: Generating Diona, Blood(#004400)
+  Finished caching damage icons in 0.3s.
+Caching space parallax simulation...
+  Finished caching space parallax simulation in 1s.
+1 has 281 entries
+5 has 29 entries
+##WARNING: qdel() passed object of type /area/asteroid/artifactroom. qdel() cannot handle unmovable atoms. in code/controllers/garbage.dm at line 108 src:  usr: .
+##WARNING: qdel() passed object of type /area/asteroid/artifactroom. qdel() cannot handle unmovable atoms. in code/controllers/garbage.dm at line 108 src:  usr: .
+##WARNING: qdel() passed object of type /area/asteroid/artifactroom. qdel() cannot handle unmovable atoms. in code/controllers/garbage.dm at line 108 src:  usr: .
+##WARNING: qdel() passed object of type /area/asteroid/artifactroom. qdel() cannot handle unmovable atoms. in code/controllers/garbage.dm at line 108 src:  usr: .
+##WARNING: qdel() passed object of type /area/asteroid/artifactroom. qdel() cannot handle unmovable atoms. in code/controllers/garbage.dm at line 108 src:  usr: .
+## TESTING: Setting up genetics for Grey (needs REMOTETALK)
+## TESTING:   Found REMOTETALK (36)
+## TESTING: Setting up genetics for Muton (needs STRONGBLOCK, LOUDBLOCK and INCREASERUNBLOCK)
+Setting up all shuttles...
+11 shuttles initialized, of them 11 were initialized properly.
+Emergency shuttle has been successfully set up.
+##WARNING: Type /obj/effect/landmark/corpse/russian does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 132 src: Russian usr: .
+##WARNING: Type /obj/effect/landmark/corpse/clown does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 132 src: Clown usr: .
+Database Error: 
+## TESTING: Set Carl Waldron's gender to male, old gender male previous gender male
+## TESTING: [CustomItem] Checking for custom items for laser50 (Carl Waldron)...
+Database Error: 
+## WARNING: Invalid h_style for Tajaran: Bald
+## WARNING: Invalid h_style for Tajaran: Bald
+## TESTING: Updating Carl Waldron's mutations: 203
+Tue Aug 02 03:47:38 2016
+## TESTING: Set the unknown's gender to male, old gender male previous gender male
+##WARNING: Type /obj/effect/landmark/corpse/grey/space does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 132 src: the grey usr: .
+[04:03:12] Runtime in admin_investigate.dm,72: Cannot read null.x
+  proc name: format investigation text (/atom/proc/format_investigation_text)
+  src: Engineering (/area/engineering/engine)
+  call stack:
+  Engineering (/area/engineering/engine): format investigation text("has a power alarm!")
+  Engineering (/area/engineering/engine): investigation log("singulo", "has a power alarm!")
+  Engineering (/area/engineering/engine): poweralert(0, Engineering APC (/obj/machinery/power/apc))
+  Engineering APC (/obj/machinery/power/apc): process()
+  power (/datum/controller/process/power_machinery): doWork()
+  power (/datum/controller/process/power_machinery): process()
+  /datum/controller/processSched... (/datum/controller/processScheduler): runProcess(power (/datum/controller/process/power_machinery))
+Stopped server.

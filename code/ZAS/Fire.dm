@@ -138,7 +138,7 @@ Attach to transfer valve and open. BOOM.
 	for(var/atom/A in loc)
 		A.extinguish()
 
-	qdel(src)
+	returnToPool(src)
 
 
 /obj/fire/process()

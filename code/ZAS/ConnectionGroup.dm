@@ -389,6 +389,9 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 		return 0
 
 	unsim_heat_capacity = HEAT_CAPACITY_CALCULATION(unsim_oxygen, unsim_co2, unsim_nitrogen, unsim_plasma)
+	if (unsim_oxygen + unsim_co2 + unsim_nitrogen + unsim_plasma < 0.01) //space
+		unsim_heat_capacity = 100000 //hardcoded value instead of the default. space is just a global heat siphon. bigger space zone doesnt make it siphon any faster
+
 
 	var
 		ratio = sharing_lookup_table[6]

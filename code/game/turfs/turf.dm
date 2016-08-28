@@ -67,6 +67,9 @@
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
 
+	var/cliff_icon_state = "" //icon state for this turf's "cliff" in cliffs.dmi, displayed on the turf below this one (y-1)
+	var/static/list/cliff_images //cliff_icon_state = /image instance
+	var/draw_cliff = FALSE
 
 
 /turf/examine(mob/user)
@@ -83,12 +86,13 @@
 		var/area/A = loc
 		A.area_turfs += src
 	for(var/atom/movable/AM as mob|obj in src)
-		spawn( 0 )
-			src.Entered(AM)
-			return
+		src.Entered(AM)
+		return
+	update_cliff()
 
 /turf/proc/initialize()
-	return
+	update_cliff()
+	update_icon()
 
 /turf/DblClick()
 	if(istype(usr, /mob/living/silicon/ai))
@@ -300,12 +304,20 @@
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(src.intact)
+	update_cliff()
+	var/turf/T = get_step(src, SOUTH)
+	if(T)
+		T.update_cliff()
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(0)
+	update_cliff()
+	var/turf/T = get_step(src, SOUTH)
+	if(T)
+		T.update_cliff()
 
 // Removes all signs of lattice on the pos of the turf -Donkieyo
 /turf/proc/RemoveLattice()
@@ -437,6 +449,7 @@
 			lighting_clear_overlay()
 
 	holomap_data = old_holomap // Holomap persists through everything.
+	update_cliff()
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!decals)
@@ -705,3 +718,33 @@
 // Return high values to make movement slower
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
+/*
+/turf/proc/update_cliff()
+	if(cliff_images) //Not cut_overlays() because turf smoothing gets royally fugged.
+		var/list/L = list()
+		for(var/k in cliff_images)
+			L += cliff_images[k]
+		overlays -= L
+	if(draw_cliff)
+		var/turf/space/T = get_step(src, SOUTH)
+		if(T && T.cliff_icon_state)
+			if(!cliff_images)
+				cliff_images = list()
+			var/image/I = cliff_images[T.cliff_icon_state]
+			if(!I)
+				I = image(icon = 'icons/turf/cliffs.dmi', icon_state = T.cliff_icon_state, dir = T.dir, layer = TURF_LAYER+0.2)
+				cliff_images[T.cliff_icon_state] = I
+			update_icon()
+			add_overlay(I)
+*/
+/turf/update_icon()
+	..()
+	underlays.Cut()
+	overlays.Cut()
+	if(below)
+		var/image/I = image(icon = below.icon, icon_state = below.icon_state)
+		I.overlays = below.overlays
+		underlays += I
+	var/turf/simulated/T = get_step(src,NORTH)
+	if(istype(T) && (!istype(T,/turf/simulated/open) || T==ignore))
+		overlays += image(icon ='icons/turf/cliff.dmi', icon_state = "metal", layer = TURF_LAYER+0.1)

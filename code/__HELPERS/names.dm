@@ -107,9 +107,9 @@ var/religion_name = null
 
 
 	if (config && config.server_name)
-		world.name = "[config.server_name]: [name]"
-	else
-		world.name = station_name
+		world.name = "[config.server_name]" // Fuck off, station name.
+//	else
+//		world.name = station_name
 
 	return station_name
 

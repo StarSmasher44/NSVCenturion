@@ -111,7 +111,7 @@
 	// Internal pressure bound (screwed up calc, won't be used anyway)
 	//pressure_delta = min(pressure_delta, (internal_pressure - environment_pressure))
 
-	if(pressure_delta > 0.1)
+	if(pressure_delta > 0.3)
 		var/transfer_moles = pressure_delta*environment.volume/(pumping.temperature * R_IDEAL_GAS_EQUATION)
 
 		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)

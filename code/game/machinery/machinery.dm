@@ -140,6 +140,7 @@ Class Procs:
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
 
+	var/area/MyArea
 	/**
 	 * Machine construction/destruction/emag flags.
 	 */
@@ -165,6 +166,7 @@ Class Procs:
 /obj/machinery/New()
 	machines += src
 	//if(ticker) initialize()
+	MyArea = get_area(src) // Assigns the area value
 	return ..()
 
 /obj/machinery/initialize()
@@ -617,7 +619,7 @@ Class Procs:
 	s.start()
 	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
 		siemenspassed = 0.7
-	if (electrocute_mob(user, get_area(src), src, siemenspassed))
+	if (electrocute_mob(user, MyArea, src, siemenspassed))
 		return 1
 	else
 		return 0

@@ -25,7 +25,7 @@
 var/list/datum/explosion_turf/explosion_turfs = list()
 var/explosion_in_progress = 0
 
-proc/get_explosion_turf(var/turf/T)
+proc/get_explosion_turf(var/turf/simulated/T)
 	for( var/datum/explosion_turf/ET in explosion_turfs )
 		if( T == ET.turf )
 			return ET
@@ -34,15 +34,7 @@ proc/get_explosion_turf(var/turf/T)
 	explosion_turfs += ET
 	return ET
 
-proc/explosion_rec(turf/epicenter, power)
-
-
-	var/loopbreak = 0
-	while(explosion_in_progress)
-		if(loopbreak >= 15) return
-		sleep(10)
-		loopbreak++
-
+proc/explosion_rec(turf/epicenter, power, flame_range)
 	if(power <= 0) return
 	epicenter = get_turf(epicenter)
 	if(!epicenter) return
@@ -63,11 +55,26 @@ proc/explosion_rec(turf/epicenter, power)
 	for(var/direction in cardinal)
 		var/turf/T = get_step(epicenter, direction)
 		T.explosion_spread(power - epicenter.explosion_resistance, direction)
-
+		CHECK_TICK
 	//This step applies the ex_act effects for the explosion, as planned in the previous step.
 	for( var/datum/explosion_turf/ET in explosion_turfs )
 		if(ET.max_power <= 0) continue
 		if(!ET.turf) continue
+		var/tmp/turf/T = ET
+		var/dist = cheap_hypotenuse(T.x, T.y, epicenter.x, epicenter.y)
+
+		//TURF FIRESS
+		var/flame_dist = 0
+
+
+		if(dist < flame_range)
+			flame_dist = 1
+		//------- TURF FIRES -------
+		if(ET)
+			if(flame_dist && prob(40) && !istype(T, /turf/space) && !T:density)
+				getFromPool(/obj/fire, T) //Mostly for ambience!
+			if(dist > 0)
+				T.ex_act(dist)
 
 		//Wow severity looks confusing to calculate... Fret not, I didn't leave you with any additional instructions or help. (just kidding, see the line under the calculation)
 		var/severity = 4 - round(max(min( 3, ((ET.max_power - ET.turf.explosion_resistance) / (max(3,(power/3)))) ) ,1), 1)
@@ -82,7 +89,7 @@ proc/explosion_rec(turf/epicenter, power)
 			ET.turf = locate(x,y,z)
 		for( var/atom/A in ET.turf )
 			A.ex_act(severity)
-
+		CHECK_TICK
 	explosion_in_progress = 0
 
 /turf

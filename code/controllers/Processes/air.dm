@@ -1,5 +1,5 @@
 /datum/controller/process/air
-	schedule_interval = 31 // every 2 seconds
+	schedule_interval = 21 // every 2 seconds
 
 /datum/controller/process/air/setup()
 	name = "air"

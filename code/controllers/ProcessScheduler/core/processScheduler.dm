@@ -30,7 +30,7 @@ var/global/datum/controller/processScheduler/processScheduler
 	var/tmp/datum/controller/process/list/highest_run_time = new
 
 	// Sleep 1 tick -- This may be too aggressive.
-	var/tmp/scheduler_sleep_interval = 1
+	var/tmp/scheduler_sleep_interval
 
 	// Controls whether the scheduler is running or not
 	var/tmp/isRunning = 0
@@ -124,7 +124,13 @@ var/global/datum/controller/processScheduler/processScheduler
 
 /datum/controller/processScheduler/proc/runQueuedProcesses()
 	for(var/datum/controller/process/p in queued)
-		runProcess(p)
+		if(p.priority)
+			spawn(-1)	runProcess(p) // Run this one first before moving on
+		else
+			if(TICK_USAGE_HIGH)
+				p.priority = 1
+				continue // Skips the remaining processes but priority forces them to run first the next time.
+			runProcess(p)
 
 /datum/controller/processScheduler/proc/addProcess(var/datum/controller/process/process)
 	processes.Add(process)
@@ -324,3 +330,15 @@ var/global/datum/controller/processScheduler/processScheduler
 
 /datum/controller/processScheduler/proc/getIsRunning()
 	return isRunning
+
+
+/datum/controller/processScheduler/proc/statProcesses()
+	if(!isRunning)
+		stat("Processes", "Scheduler not running")
+		return
+	if(!statclick)
+		statclick = new (src)
+	stat("Processes", statclick.update("[processes.len] (R [running.len] / Q [queued.len] / I [idle.len])"))
+	stat(null, "[round(cpuAverage, 0.1)] CPU")
+	for(var/datum/controller/process/p in processes)
+		p.statProcess()

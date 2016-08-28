@@ -16,6 +16,9 @@
 	// 1 if process is running
 	var/tmp/running = 0
 
+	// 1 if process is prioritized, ignores lag checks.
+	var/tmp/priority = 0
+
 	// 1 if process is blocked up
 	var/tmp/hung = 0
 
@@ -119,7 +122,7 @@ datum/controller/process/proc/finished()
 	ticks++
 	idle()
 	main.processFinished(src)
-
+	if(priority)	priority = 0 // Reset priority
 	onFinish()
 
 datum/controller/process/proc/doWork()
@@ -192,14 +195,15 @@ datum/controller/process/proc/scheck(var/tickId = 0)
 		handleHung()
 		CRASH("Process [name] hung and was restarted.")
 
+	if(!MC_TICK_CHECK)
+		return
+	else
+		CHECK_TICK // If 85% tick used, sleep if needed
 	// For each tick the process defers, it increments the cpu_defer_count so we don't
 	// defer indefinitely
-	if (world.tick_usage > 100 || (world.tick_usage - tick_start) > tick_allowance)
-		sleep(world.tick_lag)
 		cpu_defer_count++
 		last_slept = TimeOfHour
 		tick_start = world.tick_usage
-
 		return 1
 
 	return 0
@@ -229,6 +233,15 @@ datum/controller/process/proc/tickDetail()
 
 datum/controller/process/proc/getContext()
 	return "<tr><td>[name]</td><td>[main.averageRunTime(src)]</td><td>[main.last_run_time[src]]</td><td>[main.highest_run_time[src]]</td><td>[ticks]</td></tr>\n"
+
+datum/controller/process/proc/statProcess()
+	var/averageRunTime = round(main.averageRunTime(src), 0.1)/10
+	var/lastRunTime = round(main.last_run_time[src], 0.1)/10
+	var/highestRunTime = round(main.highest_run_time[src], 0.1)/10
+	if(!statclick)
+		statclick = new (src)
+	stat("[name]", statclick.update("T#[getTicks()] | AR [averageRunTime] | LR [lastRunTime] | HR [highestRunTime] | D [cpu_defer_count] | ST [getStatusText()]"))
+
 
 datum/controller/process/proc/getContextData()
 	return list(

@@ -14,6 +14,9 @@ var/global/pipe_processing_killed = 0
 var/list/machine_profiling=list()
 #endif
 
+/datum/controller
+	var/obj/effect/statclick/debug/statclick
+
 /datum/controller/game_controller
 	var/breather_ticks = 2		//a somewhat crude attempt to iron over the 'bumps' caused by high-cpu use by letting the MC have a breather for this many ticks after every loop
 	var/minimum_ticks = 20		//The minimum length of time between MC ticks
@@ -94,9 +97,13 @@ datum/controller/game_controller/proc/setup()
 
 	setupgenetics()
 	setup_objects() // Most log_startup spam happens here
+	CHECK_TICK
 	setupfactions()
 	setup_economy()
+	CHECK_TICK
 	SetupXenoarch()
+//	travel.initialize()
+	CHECK_TICK
 	var/watch=start_watch()
 	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
@@ -209,6 +216,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 		//	last_init_type = object.type
 		object.initialize()
 		count++
+		CHECK_TICK
 	log_startup_progress("  Initialized [count] objects in [stop_watch(watch)]s.")
 
 	watch = start_watch()
@@ -218,6 +226,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 	for(var/obj/machinery/atmospherics/machine in atmos_machines)
 		machine.build_network()
 		count++
+		CHECK_TICK
 	log_startup_progress("  Initialized [count] pipe networks in [stop_watch(watch)]s.")
 
 	watch = start_watch()
@@ -233,6 +242,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 			var/obj/machinery/atmospherics/unary/vent_scrubber/T = U
 			T.broadcast_status()
 			count++
+			CHECK_TICK
 	log_startup_progress("  Initialized [count] atmos devices in [stop_watch(watch)]s.")
 
 	if(!config.skip_minimap_generation)

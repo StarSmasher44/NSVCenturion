@@ -1,9 +1,10 @@
 // Solves problems with lighting updates lagging shit
 // Max constraints on number of updates per doWork():
-#define MAX_LIGHT_UPDATES_PER_WORK   100
+#define MAX_LIGHT_UPDATES_PER_WORK   200
 #define MAX_CORNER_UPDATES_PER_WORK  1000
 #define MAX_OVERLAY_UPDATES_PER_WORK 2000
 
+/var/list/lighting_update_lights_static = list()	// List of lighting sources that are static.
 /var/list/lighting_update_lights    = list()    // List of lighting sources  queued for update.
 /var/list/lighting_update_corners   = list()    // List of lighting corners  queued for update.
 /var/list/lighting_update_overlays  = list()    // List of lighting overlays queued for update.
@@ -45,6 +46,31 @@
 		light_updates++
 
 		scheck()
+		CHECK_TICK
+	//Here we process static lights, a lot less often so a lot less CPU.
+	if(ticks % 4 == 0) // Once every 3 ticks, this could be tweaked, but I wouldn't go any higher.
+		var/list/lighting_update_lights_static_old = lighting_update_lights_static //We use a different list so any additions to the update lists during a delay from scheck() don't cause things to be cut from the list without being updated.
+		lighting_update_lights_static = list()
+		for(var/datum/light_source/L in lighting_update_lights_static_old)
+//			if(light_updates >= MAX_LIGHT_UPDATES_PER_WORK)
+//				lighting_update_lights += L
+//				continue // DON'T break, we're adding stuff back into the update queue.
+			if(L.check() || L.destroyed || L.force_update)
+				L.remove_lum()
+				if(!L.destroyed)
+					L.apply_lum()
+
+			else if(L.vis_update)	//We smartly update only tiles that became (in) visible to use.
+				L.smart_vis_update()
+
+			L.vis_update   = FALSE
+			L.force_update = FALSE
+			L.needs_update = FALSE
+
+//			light_updates++
+
+			scheck()
+			CHECK_TICK
 
 	var/list/lighting_update_corners_old = lighting_update_corners //Same as above.
 	lighting_update_corners = list()
@@ -73,6 +99,7 @@
 		O.needs_update = 0
 		overlay_updates++
 		scheck()
+		CHECK_TICK
 
 #undef MAX_LIGHT_UPDATES_PER_WORK
 #undef MAX_CORNER_UPDATES_PER_WORK

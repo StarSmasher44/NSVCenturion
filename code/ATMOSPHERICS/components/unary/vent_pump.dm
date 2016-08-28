@@ -11,6 +11,7 @@
 	var/id_tag = null
 
 	var/on = 0
+	var/hibernate = 0 //Do we even process?
 	var/pump_direction = 1 //0 = siphoning, 1 = releasing
 
 	var/external_pressure_bound = ONE_ATMOSPHERE
@@ -84,6 +85,9 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/process()
 	. = ..()
+
+	if (hibernate)
+		return 1
 	CHECK_DISABLED(vents)
 	if (!node)
 		return // Turning off the vent is a PITA. - N3X
@@ -104,45 +108,54 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_pressure = environment.return_pressure()
 
-	if(pump_direction) //internal -> external
-		var/pressure_delta = 10000
+	if(environment.temperature || air_contents.temperature)
+		if(pump_direction) //internal -> external
+			var/pressure_delta = 10000
 
-		if(pressure_checks&1)
-			pressure_delta = min(pressure_delta, (external_pressure_bound - environment_pressure))
-		if(pressure_checks&2)
-			pressure_delta = min(pressure_delta, (air_contents.return_pressure() - internal_pressure_bound))
+			if(pressure_checks&1)
+				pressure_delta = min(pressure_delta, (external_pressure_bound - environment_pressure))
+			if(pressure_checks&2)
+				pressure_delta = min(pressure_delta, (air_contents.return_pressure() - internal_pressure_bound))
 
-		if(pressure_delta > 0.1)
-			if(air_contents.temperature > 0)
-				var/transfer_moles = pressure_delta*environment.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
+			if(pressure_delta > 0.3)
+				if(air_contents.temperature > 0)
+					var/transfer_moles = pressure_delta*environment.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
-				var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
+					var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
-				loc.assume_air(removed)
+					loc.assume_air(removed)
 
-				if(network)
-					network.update = 1
+					if(network)
+						network.update = 1
 
-	else //external -> internal
-		var/pressure_delta = 10000
-		if(pressure_checks&1)
-			pressure_delta = min(pressure_delta, (environment_pressure - external_pressure_bound))
-		if(pressure_checks&2)
-			pressure_delta = min(pressure_delta, (internal_pressure_bound - air_contents.return_pressure()))
+		else //external -> internal
+			var/pressure_delta = 10000
+			if(pressure_checks&1)
+				pressure_delta = min(pressure_delta, (environment_pressure - external_pressure_bound))
+			if(pressure_checks&2)
+				pressure_delta = min(pressure_delta, (internal_pressure_bound - air_contents.return_pressure()))
 
-		if(pressure_delta > 0.1)
-			if(environment.temperature > 0)
-				var/transfer_moles = pressure_delta*air_contents.volume/(environment.temperature * R_IDEAL_GAS_EQUATION)
+			if(pressure_delta > 0.3)
+				if(environment.temperature > 0)
+					var/transfer_moles = pressure_delta*air_contents.volume/(environment.temperature * R_IDEAL_GAS_EQUATION)
 
-				var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
-				if (isnull(removed)) //in space
-					return
+					var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
+					if (isnull(removed)) //in space
+						return
 
-				air_contents.merge(removed)
+					air_contents.merge(removed)
 
-				if(network)
-					network.update = 1
+					if(network)
+						network.update = 1
+	else
+		//If we're in an area that is fucking ideal, and we don't have to do anything, chances are we won't next tick either so why redo these calculations?
+		//JESUS FUCK.  THERE ARE LITERALLY 250 OF YOU MOTHERFUCKERS ON ZLEVEL ONE AND YOU DO THIS SHIT EVERY TICK WHEN VERY OFTEN THERE IS NO REASON TO
 
+		if(pump_direction && pressure_checks == 1)	//99% of all vents
+			//Fucking hibernate because you ain't doing shit.
+			hibernate = 1
+			spawn(rand(100,200))	//hibernate for 10 or 20 seconds randomly
+				hibernate = 0
 	return 1
 
 	//Radio remote control

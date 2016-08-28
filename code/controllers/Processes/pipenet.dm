@@ -3,7 +3,7 @@ var/global/list/obj/machinery/atmospherics/atmos_machines = list()
 var/event/on_pipenet_tick = new()
 
 /datum/controller/process/pipenet
-	schedule_interval = 29 // every 2 seconds
+	schedule_interval = 20 // every 2 seconds
 
 /datum/controller/process/pipenet/setup()
 	name = "pipenet"
