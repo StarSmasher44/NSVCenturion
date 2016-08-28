@@ -1,5 +1,6 @@
 /mob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 
 	if(istype(mover) && mover.checkpass(PASSMOB))
 		return 1
@@ -67,7 +68,8 @@
 					var/list/borers_in_host = H.get_brain_worms()
 					if(borers_in_host && borers_in_host.len) //to allow a host to drop an item at-range mid-extension
 						for(var/mob/living/simple_animal/borer/B in borers_in_host)
-							if((B.hostlimb == LIMB_RIGHT_ARM && H.get_active_hand() == H.get_held_item_by_index(GRASP_RIGHT_HAND)) || (B.hostlimb == "l_arm" && H.get_active_hand() == H.get_held_item_by_index(GRASP_LEFT_HAND)))
+							var/datum/organ/external/OE = H.get_organ(B.hostlimb)
+							if(OE.grasp_id == H.active_hand)
 								var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
 								F.to_be_dropped = H.get_active_hand()
 								F.item_overlay = null
@@ -83,35 +85,26 @@
 				if(!R.module_active)
 					return
 				R.uneq_active()
+			else if(isborer(usr))
+				var/mob/living/simple_animal/borer/B = usr
+				if(B.host && ishuman(B.host))
+					var/mob/living/carbon/human/H = B.host
+					var/datum/organ/external/OE = H.get_organ(B.hostlimb) //Borer is occupying an arm
+					if(OE.grasp_id)
+						if(B.extend_o_arm)
+							var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
+							var/obj/item/held = H.get_held_item_by_index(OE.grasp_id)
+
+							if(held)
+								F.to_be_dropped = held
+								F.item_overlay = null
+
+							F.attack_self(H)
+							H.drop_item(held)
+							return
+						else
+							to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] [H.get_index_limb_name(OE.grasp_id)].</span>")
 			else
-				if(istype(usr, /mob/living/simple_animal/borer))
-					var/mob/living/simple_animal/borer/B = usr
-					if(B.host && ishuman(B.host))
-						var/mob/living/carbon/human/H = B.host
-						if(B.hostlimb == LIMB_RIGHT_ARM)
-							if(B.extend_o_arm)
-								var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
-								if(H.get_held_item_by_index(GRASP_RIGHT_HAND))
-									F.to_be_dropped = H.get_held_item_by_index(GRASP_RIGHT_HAND)
-									F.item_overlay = null
-								F.attack_self(H)
-								H.drop_item(H.get_held_item_by_index(GRASP_RIGHT_HAND))
-								return
-							else
-								to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] right hand.</span>")
-								return
-						else if(B.hostlimb == LIMB_LEFT_ARM)
-							if(B.extend_o_arm)
-								var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
-								if(H.get_held_item_by_index(GRASP_LEFT_HAND))
-									F.to_be_dropped = H.get_held_item_by_index(GRASP_LEFT_HAND)
-									F.item_overlay = null
-								F.attack_self(H)
-								H.drop_item(H.get_held_item_by_index(GRASP_LEFT_HAND))
-								return
-							else
-								to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] left hand.</span>")
-								return
 				to_chat(usr, "<span class='warning'>This mob type cannot drop items.</span>")
 
 //This gets called when you press the delete button.
@@ -237,7 +230,8 @@
 	if(mob && mob.control_object)
 		if(mob.control_object.density)
 			step(mob.control_object,direct)
-			if(!mob.control_object)	return
+			if(!mob.control_object)
+				return
 			mob.control_object.dir = direct
 		else
 			mob.control_object.loc = get_step(mob.control_object,direct)
@@ -404,16 +398,19 @@
 			grabbing += G.affecting
 
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
-			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))	del(G)
+			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))
+				del(G)
 			if(G.state == GRAB_AGGRESSIVE)
 				mob.delayNextMove(10)
-				if(!prob(25))	return 1
+				if(!prob(25))
+					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s grip!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s hug!</span>")
 				returnToPool(G)
 			if(G.state == GRAB_NECK)
 				mob.delayNextMove(10)
-				if(!prob(5))	return 1
+				if(!prob(5))
+					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s headlock!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s passionate hug!</span>")
 				returnToPool(G)
@@ -480,7 +477,8 @@
 					for(var/turf/T in getline(mobloc, mob.loc))
 						anim(T,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 						limit--
-						if(limit<=0)	break
+						if(limit<=0)
+							break
 			else
 				anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 				mob.forceEnter(get_step(mob, direct))
@@ -493,6 +491,7 @@
 				mob.dir = direct
 			else
 				to_chat(mob, "<span class='warning'>Some strange aura is blocking the way!</span>")
+			INVOKE_EVENT(mob.on_moved,list("dir"=direct))
 			mob.delayNextMove(2)
 			return 1
 	// Crossed is always a bit iffy

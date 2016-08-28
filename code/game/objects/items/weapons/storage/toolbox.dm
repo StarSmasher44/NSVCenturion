@@ -6,16 +6,16 @@
 	item_state = "toolbox_red"
 	flags = FPRINT
 	siemens_coefficient = 1
-	force = 12.0
+	force = 15
 	hitsound = 'sound/weapons/toolbox.ogg'
-	throwforce = 10.0
+	throwforce = 10
 	throw_speed = 1
 	throw_range = 7
 	starting_materials = list(MAT_IRON = 5000)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_LARGE
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "combat=1"
+	origin_tech = Tc_COMBAT + "=1"
 	attack_verb = list("robusts", "batters", "staves in")
 	fits_max_w_class = W_CLASS_MEDIUM
 	storage_slots = 14
@@ -98,8 +98,8 @@
 	name = "suspicious looking toolbox"
 	icon_state = "syndicate"
 	item_state = "toolbox_syndi"
-	origin_tech = "combat=1;syndicate=1"
-	force = 15.0
+	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
+	force = 20
 
 /obj/item/weapon/storage/toolbox/syndicate/New()
 	..()

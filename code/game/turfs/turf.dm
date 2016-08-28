@@ -2,7 +2,7 @@
 	icon = 'icons/turf/floors.dmi'
 	level = 1.0
 	plane = TURF_PLANE
-
+	layer = TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	luminosity = 0
 
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
@@ -140,7 +140,8 @@
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj as mob|obj|turf|area in range(1))
-			if(objects > loopsanity)	break
+			if(objects > loopsanity)
+				break
 			objects++
 			spawn( 0 )
 				if ((A && Obj) && Obj.flags & PROXMOVE)
@@ -154,7 +155,8 @@
 
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
 		// if(ticker.mode.name == "nuclear emergency")	return
-		if(A.z > 6) return
+		if(A.z > 6)
+			return
 		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE - 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE - 1))
 
 			var/list/contents_brought = list()
@@ -168,7 +170,7 @@
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
 			for(var/obj/item/weapon/disk/nuclear in contents_brought)
-				locked_to_current_z = 1
+				locked_to_current_z = map.zMainStation
 				break
 
 			//Check if it's a mob pulling an object
@@ -186,7 +188,7 @@
 			for(var/mob/living/silicon/robot/mommi in contents_brought)
 				if(mommi.locked_to_z != 0)
 					if(src.z == mommi.locked_to_z)
-						locked_to_current_z = 1
+						locked_to_current_z = map.zMainStation
 					else
 						to_chat(mommi, "<span class='warning'>You find your way back.</span>")
 						move_to_z = mommi.locked_to_z
@@ -252,7 +254,8 @@
 	return 0
 
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
-	if(!(A.last_move))	return
+	if(!(A.last_move))
+		return
 
 	if(src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy - 1))
 		A.process_inertia(src)
@@ -327,7 +330,8 @@
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
-	if(connections) connections.erase_all()
+	if(connections)
+		connections.erase_all()
 
 	if(istype(src,/turf/simulated))
 		//Yeah, we're just going to rebuild the whole thing.
@@ -335,7 +339,8 @@
 		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
 		env = S.air //Get the air before the change
-		if(S.zone) S.zone.rebuild()
+		if(S.zone)
+			S.zone.rebuild()
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
@@ -484,7 +489,8 @@
 /turf/proc/kill_creatures(mob/U = null)//Will kill people/creatures and damage mechs./N
 //Useful to batch-add creatures to the list.
 	for(var/mob/living/M in src)
-		if(M==U)	continue//Will not harm U. Since null != M, can be excluded to kill everyone.
+		if(M==U)
+			continue//Will not harm U. Since null != M, can be excluded to kill everyone.
 		spawn(0)
 			M.gib()
 	for(var/obj/mecha/M in src)//Mecha are not gibbed but are damaged.
@@ -589,7 +595,8 @@
 //  possible. It results in more efficient (CPU-wise) pathing
 //  for bots and anything else that only moves in cardinal dirs.
 /turf/proc/Distance_cardinal(turf/T)
-	if(!src || !T) return 0
+	if(!src || !T)
+		return 0
 	return abs(src.x - T.x) + abs(src.y - T.y)
 
 ////////////////////////////////////////////////////

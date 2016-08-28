@@ -257,7 +257,8 @@ Auto Patrol: []"},
 /obj/machinery/bot/ed209/Emag(mob/user as mob)
 	..()
 	if(open && !locked)
-		if(user) to_chat(user, "<span class='warning'>You short out [src]'s target assessment circuits.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You short out [src]'s target assessment circuits.</span>")
 		spawn(0)
 			for(var/mob/O in hearers(src, null))
 				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
@@ -473,7 +474,8 @@ Auto Patrol: []"},
 	if(loc == patrol_target)		// reached target
 		at_patrol_target()
 		return
-	if(!path || !istype(path))  path = list()
+	if(!path || !istype(path))
+		path = list()
 	else if(path.len > 0 && patrol_target)		// valid path
 
 		var/turf/next = path[1]
@@ -653,7 +655,8 @@ Auto Patrol: []"},
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src
@@ -685,7 +688,8 @@ Auto Patrol: []"},
 // given an optional turf to avoid
 /obj/machinery/bot/ed209/proc/calc_path(var/turf/avoid = null)
 	src.path = AStar(src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
-	if (!src.path) src.path = list()
+	if (!src.path)
+		src.path = list()
 
 
 // look for a criminal in view of the bot
@@ -734,7 +738,8 @@ Auto Patrol: []"},
 /obj/machinery/bot/ed209/proc/assess_perp(mob/living/carbon/human/perp as mob)
 	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
 
-	if(src.emagged == 2) return 10 //Everyone is a criminal!
+	if(src.emagged == 2)
+		return 10 //Everyone is a criminal!
 
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
 
@@ -752,15 +757,15 @@ Auto Patrol: []"},
 
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
 			threatcount += 2
-
-		if(!perp.wear_id)
+		var/visible_id = perp.get_visible_id()
+		if(!visible_id)
 			if(idcheck)
 				threatcount += 4
 			else
 				threatcount += 2
 
 		//Agent cards lower threatlevel.
-		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+		if(istype(visible_id, /obj/item/weapon/card/id/syndicate))
 			threatcount -= 2
 
 	if(src.lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
@@ -784,10 +789,9 @@ Auto Patrol: []"},
 	if(src.check_records)
 		for (var/datum/data/record/E in data_core.general)
 			var/perpname = perp.name
-			if(perp.wear_id)
-				var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
-				if(id)
-					perpname = id.registered_name
+			var/obj/item/weapon/card/id/id = perp.get_visible_id()
+			if(id)
+				perpname = id.registered_name
 
 			if(E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
@@ -949,8 +953,10 @@ Auto Patrol: []"},
 
 	if(istype(W, /obj/item/weapon/pen))
 		var/t = copytext(stripped_input(user, "Enter new robot name", src.name, src.created_name),1,MAX_NAME_LEN)
-		if(!t)	return
-		if(!in_range(src, usr) && src.loc != usr)	return
+		if(!t)
+			return
+		if(!in_range(src, usr) && src.loc != usr)
+			return
 		created_name = t
 		return
 

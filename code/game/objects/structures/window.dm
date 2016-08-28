@@ -153,7 +153,8 @@
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 
@@ -516,6 +517,10 @@
 	d_state = WINDOWSECURE
 	reinforced = 1
 	penetration_dampening = 3
+
+/obj/structure/window/reinforced/loose
+	anchored = 0
+	d_state = WINDOWLOOSE
 
 /obj/structure/window/plasma
 

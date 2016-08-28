@@ -7,7 +7,7 @@
 	icon_state = "stickybomb"
 	item_state = null
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=3;combat=4;programming=3"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_COMBAT + "=4;" + Tc_PROGRAMMING + "=3"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
 	flags = FPRINT
@@ -73,7 +73,8 @@
 		..()
 
 /obj/item/weapon/gun/stickybomb/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	if(loaded.len)
 		var/obj/item/stickybomb/B = pick(loaded)
 		loaded -= B

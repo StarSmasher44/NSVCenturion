@@ -7,7 +7,7 @@
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 	species_fit = list(VOX_SHAPED)
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
 
 //Monkeys can not take the muzzle off of themself! Call PETA!
@@ -76,6 +76,13 @@
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/mask/neorussian
+	name = "neo-Russian mask"
+	desc = "Somehow, it makes you act and look way more polite than usual."
+	icon_state = "nr_mask"
+	item_state = "nr_mask"
+	body_parts_covered = FACE
 
 /obj/item/clothing/mask/pig
 	name = "pig mask"

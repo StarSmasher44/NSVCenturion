@@ -24,7 +24,7 @@
 	throw_range = 5
 	flags = FPRINT
 	siemens_coefficient = 1
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("attacks", "stabs", "pokes")
 
 /obj/item/weapon/kitchen/utensil/New()
@@ -190,7 +190,7 @@
 	starting_materials = list(MAT_IRON = 12000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
@@ -242,7 +242,7 @@
 	starting_materials = list(MAT_IRON = 12000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("cleaves", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
@@ -305,7 +305,8 @@
 					H.Paralyse(time)
 				else
 					H.Stun(time)
-				if(H.stat != 2)	H.stat = 1
+				if(H.stat != 2)
+					H.stat = 1
 				user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
 				return
 			else
@@ -471,6 +472,8 @@
 		return 5
 
 /obj/item/weapon/tray/attackby(obj/item/W as obj, mob/user as mob, params)
+	if(isrobot(user) && !isMoMMI(user))
+		return
 	if(istype(W, /obj/item/weapon/kitchen/rollingpin)) //shield bash
 		if(cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")

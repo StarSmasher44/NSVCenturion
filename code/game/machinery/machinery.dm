@@ -376,7 +376,7 @@ Class Procs:
 			return 1
 		var/turf/T = get_turf(usr)
 		if(!isAI(usr) && T.z != z)
-			if(usr.z != 2)
+			if(usr.z != map.zCentcomm)
 				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
 				return 1
 		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
@@ -633,7 +633,8 @@ Class Procs:
 
 // Hook for html_interface module to unset the active machine when the window is closed by the player.
 /obj/machinery/proc/hiOnHide(datum/html_interface_client/hclient)
-	if (hclient.client.mob && hclient.client.mob.machine == src) hclient.client.mob.unset_machine()
+	if (hclient.client.mob && hclient.client.mob.machine == src)
+		hclient.client.mob.unset_machine()
 
 /obj/machinery/proc/alert_noise(var/notice_state = "ping")
 	switch(notice_state)
@@ -708,7 +709,8 @@ Class Procs:
 			spawn()
 				sleep(3)
 				for(var/i = 2 to strength)
-					if(!Move(get_step(loc, kick_dir))) break
+					if(!Move(get_step(loc, kick_dir)))
+						break
 					sleep(3)
 	else
 		src.shake(1, 3) //1 means x movement, 3 means intensity

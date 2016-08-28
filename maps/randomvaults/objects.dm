@@ -32,6 +32,8 @@
 
 /area/vault/spacepond
 
+/area/vault/spacepond/wine_cellar
+
 /area/vault/ioufort
 
 /area/vault/hive_shuttle
@@ -39,8 +41,20 @@
 /area/vault/listening
 	requires_power = 1
 
+/obj/item/weapon/disk/shuttle_coords/vault/listening
+	destination = /obj/docking_port/destination/vault/listening
+
+/obj/docking_port/destination/vault/listening
+	areaname = "outpost V-24"
+
 /area/vault/biodome
 	requires_power = 1
+
+/obj/item/weapon/disk/shuttle_coords/vault/biodome
+	destination = /obj/docking_port/destination/vault/biodome
+
+/obj/docking_port/destination/vault/biodome
+	areaname = "biodome"
 
 /area/vault/brokeufo
 	requires_power = 1
@@ -71,7 +85,8 @@
 
 /obj/effect/landmark/catechizer_spawn/New()
 	spawn()
-		if(!isturf(loc)) return
+		if(!isturf(loc))
+			return
 
 		var/list/all_spawns = list()
 		for(var/obj/effect/landmark/catechizer_spawn/S in get_area(src))
@@ -182,3 +197,13 @@
 	icon_state = "duey0"
 	icon_initial = "duey"
 	Max_Fertilizers = 50
+
+/obj/structure/ladder/spacepond/ground
+	name = "wine cellar"
+	id = "spacepond"
+	height = 1
+
+/obj/structure/ladder/spacepond/winecellar
+	name = "space cabin"
+	id = "spacepond"
+	height = 0

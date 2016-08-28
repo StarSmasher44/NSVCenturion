@@ -28,7 +28,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
 
@@ -156,6 +156,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	attack_verb = list("burns", "singes")
 	heat_production = 1000
 	light_color = LIGHT_COLOR_FIRE
+	slot_flags = SLOT_MASK|SLOT_EARS
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/weapon/cigbutt
@@ -329,6 +330,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_wear_mask(0)
+		M.update_inv_ears(0)
 		M.update_inv_hands()
 
 /obj/item/clothing/mask/cigarette/process()
@@ -405,6 +407,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon_state = "cigar"
 	overlay_on = "cigarlit"
 	flags = FPRINT
+	slot_flags = SLOT_MASK
 	type_butt = /obj/item/weapon/cigbutt/cigarbutt
 	item_state = "cigar"
 	smoketime = 1500
@@ -459,6 +462,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "bluntlit"
 	type_butt = /obj/item/weapon/cigbutt/bluntbutt
 	item_state = "blunt"
+	slot_flags = SLOT_MASK
 	species_fit = list(GREY_SHAPED)
 	attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
@@ -517,6 +521,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	flags = FPRINT
 	icon_state = "pipe"
 	item_state = "pipe"
+	slot_flags = SLOT_MASK
 	overlay_on = "pipelit"
 	species_fit = list(GREY_SHAPED)
 	smoketime = 100

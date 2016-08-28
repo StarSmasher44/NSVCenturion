@@ -10,7 +10,6 @@
 	name = ""
 	icon = 'icons/mob/screen1.dmi'
 	layer = HUD_BASE_LAYER
-	unacidable = 1
 	var/obj/master = null	//A reference to the object in the slot. Grabs or items, generally.
 	var/gun_click_time = -100 //I'm lazy.
 	var/globalscreen = 0 //This screen object is not unique to one screen, can be seen by many
@@ -28,7 +27,7 @@
 	screen_loc = "CENTER-7,CENTER-7"
 	maptext_height = 480
 	maptext_width = 480
-
+	
 /obj/screen/adminbus
 
 /obj/screen/specialblob
@@ -98,7 +97,13 @@
 	if(overlay != null)
 		overlay.loc = null
 		overlay = null
+		
+/obj/screen/item_action/MouseEntered(location,control,params)
+	openToolTip(usr,src,params,title = name,content = desc)
 
+/obj/screen/item_action/MouseExited()
+	closeToolTip(usr)
+	
 /obj/screen/item_action/Click()
 	if(!usr || !owner)
 		return 1
@@ -178,7 +183,13 @@
 		icon_state = "gun0"
 		screen_loc = ui_gun_select
 		//dir = 1
+		
+/obj/screen/gun/MouseEntered(location,control,params)
+	openToolTip(usr,src,params,title = name,content = desc)
 
+/obj/screen/gun/MouseExited()
+	closeToolTip(usr)
+	
 /obj/screen/zone_sel
 	name = "damage zone"
 	icon_state = "zone_sel"
@@ -192,54 +203,54 @@
 	var/old_selecting = selecting //We're only going to update_icon() if there's been a change
 
 	switch(icon_y)
-		if(1 to 6) //Feet
+		if(1 to 3) //Feet
 			switch(icon_x)
-				if(20 to 30)
+				if(10 to 15)
 					selecting = LIMB_RIGHT_FOOT
-				if(34 to 44)
+				if(17 to 22)
 					selecting = LIMB_LEFT_FOOT
 				else
 					return 1
-		if(7 to 18) //Legs
+		if(4 to 9) //Legs
 			switch(icon_x)
-				if(20 to 31)
+				if(10 to 15)
 					selecting = LIMB_RIGHT_LEG
-				if(32 to 44)
+				if(17 to 22)
 					selecting = LIMB_LEFT_LEG
 				else
 					return 1
-		if(19 to 26) //Hands and groin
+		if(10 to 13) //Hands and groin
 			switch(icon_x)
-				if(16 to 22)
+				if(8 to 11)
 					selecting = LIMB_RIGHT_HAND
-				if(23 to 40)
+				if(12 to 20)
 					selecting = LIMB_GROIN
-				if(41 to 48)
+				if(21 to 24)
 					selecting = LIMB_LEFT_HAND
 				else
 					return 1
-		if(27 to 44) //Chest and arms to shoulders
+		if(14 to 22) //Chest and arms to shoulders
 			switch(icon_x)
-				if(16 to 22)
+				if(8 to 11)
 					selecting = LIMB_RIGHT_ARM
-				if(23 to 40)
+				if(12 to 20)
 					selecting = LIMB_CHEST
-				if(41 to 48)
+				if(21 to 24)
 					selecting = LIMB_LEFT_ARM
 				else
 					return 1
-		if(45 to 60) //Head, but we need to check for eye or mouth
-			if(icon_x in 24 to 40)
+		if(23 to 30) //Head, but we need to check for eye or mouth
+			if(icon_x in 12 to 20)
 				selecting = LIMB_HEAD
 				switch(icon_y)
-					if(46 to 48)
-						if(icon_x in 30 to 34)
+					if(23 to 24)
+						if(icon_x in 15 to 17)
 							selecting = "mouth"
-					if(52) //Eyeline, eyes are on 15 and 17
-						if(icon_x in 28 to 36)
+					if(26) //Eyeline, eyes are on 15 and 17
+						if(icon_x in 14 to 18)
 							selecting = "eyes"
-					if(50 to 54)
-						if(icon_x in 30 to 34)
+					if(25 to 27)
+						if(icon_x in 15 to 17)
 							selecting = "eyes"
 
 	if(old_selecting != selecting)
@@ -278,7 +289,8 @@
 	return locate(X, Y, origin.z)
 
 /obj/screen/Click(location, control, params)
-	if(!usr)	return 1
+	if(!usr)
+		return 1
 
 	switch(name)
 		if("toggle")
@@ -779,3 +791,6 @@
 		if(!objects.globalscreen)
 			returnToPool(objects)
 	src.screen = null
+
+/obj/screen/acidable()
+	return 0

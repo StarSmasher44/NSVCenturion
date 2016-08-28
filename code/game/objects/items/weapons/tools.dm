@@ -45,7 +45,7 @@
 	starting_materials = list(MAT_IRON = 150)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
 /obj/item/weapon/wrench/attackby(obj/item/weapon/W, mob/user)
@@ -126,7 +126,8 @@
 		src.pixel_y = rand(0, 16) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M))	return ..()
+	if(!istype(M))
+		return ..()
 	if(can_operate(M))
 		return ..()
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD)
@@ -140,7 +141,8 @@
 		var/obj/item/stack/cable_coil/C = O
 		var/mob/M = usr
 		if(ishuman(M) && !M.restrained() && !M.stat && !M.paralysis && ! M.stunned)
-			if(!istype(M.loc,/turf)) return
+			if(!istype(M.loc,/turf))
+				return
 			if(C.amount < 10)
 				to_chat(usr, "<span class='warning'>You need at least 10 lengths to make a bolas wire!</span>")
 				return
@@ -176,7 +178,7 @@
 	starting_materials = list(MAT_IRON = 80)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("pinches", "nips at")
 
 /obj/item/weapon/wirecutters/New()
@@ -222,7 +224,7 @@
 	melt_temperature = MELTPOINT_PLASTIC
 
 	//R&D tech level
-	origin_tech = "engineering=1"
+	origin_tech = Tc_ENGINEERING + "=1"
 
 	//Welding tool specific stuff
 	var/welding = 0 	//Whether or not the welding tool is off(0), on(1) or currently welding(2)
@@ -321,7 +323,8 @@
 
 
 /obj/item/weapon/weldingtool/afterattack(obj/O as obj, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
 		O.reagents.trans_to(src, max_fuel)
 		to_chat(user, "<span class='notice'>Welder refueled</span>")
@@ -416,7 +419,8 @@
 
 //Toggles the welder off and on
 /obj/item/weapon/weldingtool/proc/toggle(var/message = 0)
-	if(!status)	return
+	if(!status)
+		return
 	src.welding = !( src.welding )
 	if (src.welding)
 		if (remove_fuel(1))
@@ -442,7 +446,8 @@
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob
 /obj/item/weapon/weldingtool/proc/eyecheck(mob/user as mob)
-	if(!iscarbon(user))	return 1
+	if(!iscarbon(user))
+		return 1
 	var/safety = user:eyecheck()
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
@@ -495,7 +500,7 @@
 	name = "Industrial Welding Tool"
 	max_fuel = 40
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 60)
-	origin_tech = "engineering=2"
+	origin_tech = Tc_ENGINEERING + "=2"
 
 /obj/item/weapon/weldingtool/largetank/empty
 	start_fueled = 0
@@ -505,7 +510,7 @@
 	max_fuel = 80
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
-	origin_tech = "engineering=3"
+	origin_tech = Tc_ENGINEERING + "=3"
 
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
@@ -515,7 +520,7 @@
 	max_fuel = 40
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
-	origin_tech = "engineering=4;plasmatech=3"
+	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 	icon_state = "ewelder"
 	var/last_gen = 0
 
@@ -548,7 +553,7 @@
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "engineering=1"
+	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 
 	suicide_act(mob/user)
@@ -572,7 +577,8 @@
 			if(do_surgery(M, user, src))
 				return
 		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]
-		if (!S) return
+		if (!S)
+			return
 		if(!(S.status & ORGAN_ROBOT) || user.a_intent != I_HELP)
 			return ..()
 		if(S.brute_dam)
@@ -599,7 +605,7 @@
 	siemens_coefficient = 1
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_MISC
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	var/open = 0
 
 	New()
@@ -634,7 +640,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "engineering=1"
+	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
 
 /obj/item/weapon/solder/New()

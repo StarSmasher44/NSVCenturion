@@ -63,7 +63,7 @@
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
-	sight &= ~BLIND
+	change_sight(removing = BLIND)
 	canmove = 0
 	src.loc = paicard
 	card = paicard
@@ -139,7 +139,8 @@
 	return 0
 
 /mob/living/silicon/pai/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	return 0
 
 /mob/living/silicon/pai/emp_act(severity)
@@ -222,7 +223,8 @@
 		src.unset_machine()
 		src.reset_view(null)
 		return 0
-	if (stat == 2 || !C.status || !(src.network in C.network)) return 0
+	if (stat == 2 || !C.status || !(src.network in C.network))
+		return 0
 
 	// ok, we're alive, camera is good and in our network...
 

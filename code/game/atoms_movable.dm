@@ -47,7 +47,7 @@
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
-	if(flags & HEAR && !ismob(src))
+	if((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
 	locked_atoms            = list()
@@ -55,10 +55,6 @@
 	locking_categories_name = list()
 
 /atom/movable/Destroy()
-	if(flags & HEAR && !ismob(src))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
 	gcDestroyed = "Bye, world!"
 	tag = null
 
@@ -85,7 +81,8 @@
 	..()
 
 /proc/delete_profile(var/type, code = 0)
-	if(!ticker || ticker.current_state < 3) return
+	if(!ticker || ticker.current_state < 3)
+		return
 	if(code == 0)
 		if (!("[type]" in del_profiling))
 			del_profiling["[type]"] = 0
@@ -104,6 +101,16 @@
 		soft_dels += 1
 
 /atom/movable/Del()
+	if((flags & HEAR) && !ismob(src))
+		var/found = 0
+		for(var/mob/virtualhearer/VH in virtualhearers)
+			if(VH.attached == src)
+				world.log << "Virtualhearer removed from [src] of type [type]"
+				returnToPool(VH)
+				found = 1
+		if(!found)
+			world.log << "Atom Movable virtualhearer for [type] could not be found for [src]"
+
 	if (gcDestroyed)
 
 		if (hard_deleted)
@@ -197,6 +204,8 @@
 			tether_datum.Delete_Chain()
 
 	last_move = (Dir || get_dir(oldloc, newLoc)) //If direction isn't specified, calculate it ourselves
+	set_inertia(last_move)
+
 	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
@@ -368,11 +377,13 @@
 
 	if(src.throwing)
 		for(var/atom/A in get_turf(src))
-			if(A == src) continue
+			if(A == src)
+				continue
 
 			if(isliving(A))
 				var/mob/living/L = A
-				if(L.lying) continue
+				if(L.lying)
+					continue
 				src.throw_impact(L, speed, user)
 
 				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
@@ -386,7 +397,8 @@
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
-	if(!target || !src)	return 0
+	if(!target || !src)
+		return 0
 	if(override)
 		sound_override = 1
 	//use a modified version of Bresenham's algorithm to get from the atom's current position to that of the target
@@ -548,7 +560,8 @@
 		return 1
 	else
 		var/turf/U = get_turf(A)
-		if(!U) return null
+		if(!U)
+			return null
 		return src.forceMove(U)
 
 /////////////////////////////
@@ -624,6 +637,9 @@
 		var/atom/movable/AM = loc
 		return AM.apply_inertia(direction)
 
+/atom/movable/proc/set_inertia(direction)
+	inertia_dir = direction
+
 /atom/movable/proc/process_inertia(turf/start)
 	set waitfor = 0
 	if(Process_Spacemove(1))
@@ -634,9 +650,12 @@
 
 	if(can_apply_inertia() && (src.loc == start))
 		if(!inertia_dir)
-			inertia_dir = last_move
+			return //inertia_dir = last_move
 
 		step(src, inertia_dir)
+
+/atom/movable/proc/reset_inertia()
+	inertia_dir = 0
 
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))

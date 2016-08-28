@@ -4,6 +4,7 @@
 /obj/item/weapon/reagent_containers/food/drinks
 	name = "drink"
 	desc = "yummy"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
 	icon = 'icons/obj/drinks.dmi'
 	icon_state = null
 	flags = FPRINT  | OPENCONTAINER
@@ -61,7 +62,7 @@
 		if(!M) //This really shouldn't be checked here, but sure
 			return
 
-		force = 15 //Smashing bottles over someoen's head hurts. //todo: check that this isn't overwriting anything it shouldn't be
+		force = 15 //Smashing bottles over someoen's head hurts. //todo: check that this isn't overwriting anything it shouldn't be //It was
 
 		var/datum/organ/external/affecting = user.zone_sel.selecting //Find what the player is aiming at
 
@@ -105,8 +106,10 @@
 
 			//Display an attack message.
 			for(var/mob/O in viewers(user, null))
-				if(M != user) O.show_message(text("<span class='danger'>[M] has been hit over the head with a [smashtext][src.name], by [user]!</span>"), 1)
-				else O.show_message(text("<span class='danger'>[M] hits \himself with a [smashtext][src.name] on the head!</span>"), 1)
+				if(M != user)
+					O.show_message(text("<span class='danger'>[M] has been hit over the head with a [smashtext][src.name], by [user]!</span>"), 1)
+				else
+					O.show_message(text("<span class='danger'>[M] hits \himself with a [smashtext][src.name] on the head!</span>"), 1)
 			//Weaken the target for the duration that we calculated and divide it by 5.
 			if(armor_duration)
 				M.apply_effect(min(armor_duration, 10) , WEAKEN) // Never weaken more than a flash!
@@ -114,8 +117,10 @@
 		else
 			//Default attack message and don't weaken the target.
 			for(var/mob/O in viewers(user, null))
-				if(M != user) O.show_message(text("<span class='danger'>[M] has been attacked with a [smashtext][src.name], by [user]!</span>"), 1)
-				else O.show_message(text("<span class='danger'>[M] has attacked himself with a [smashtext][src.name]!</span>"), 1)
+				if(M != user)
+					O.show_message(text("<span class='danger'>[M] has been attacked with a [smashtext][src.name], by [user]!</span>"), 1)
+				else
+					O.show_message(text("<span class='danger'>[M] has attacked himself with a [smashtext][src.name]!</span>"), 1)
 
 		//Attack logs
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has attacked [M.name] ([M.ckey]) with a bottle!</font>")
@@ -285,7 +290,6 @@
 	desc = "A golden cup"
 	name = "golden cup"
 	icon_state = "golden_cup"
-	item_state = "" //nope :(
 	w_class = W_CLASS_LARGE
 	force = 14
 	throwforce = 10
@@ -308,7 +312,6 @@
 	name = "space milk"
 	desc = "It's milk. White and nutritious goodness!"
 	icon_state = "milk"
-	item_state = "carton"
 	vending_cat = "dairy products"
 /obj/item/weapon/reagent_containers/food/drinks/milk/New()
 	..()
@@ -321,7 +324,6 @@
 	desc = "A big bag of flour. Good for baking!"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "flour"
-	item_state = "flour"
 /obj/item/weapon/reagent_containers/food/drinks/flour/New()
 	..()
 	reagents.add_reagent(FLOUR, 50)
@@ -332,7 +334,6 @@
 	name = "soy milk"
 	desc = "It's soy milk. White and nutritious goodness!"
 	icon_state = "soymilk"
-	item_state = "carton"
 	vending_cat = "dairy products"//it's not a dairy product but oh come on who cares
 /obj/item/weapon/reagent_containers/food/drinks/soymilk/New()
 	..()
@@ -354,7 +355,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
 	icon_state = "tea"
-	item_state = "coffee"
+	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/tea/New()
 	..()
 	switch(pick(1,2,3))
@@ -387,7 +388,7 @@
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
 	icon_state = "tea"
-	item_state = "coffee"
+	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate/New()
 	..()
 	reagents.add_reagent(HOT_COCO, 30)
@@ -607,7 +608,6 @@
 	name = "Magm-Ale"
 	desc = "A true dorf's drink of choice."
 	icon_state = "alebottle"
-	item_state = "beer"
 	vending_cat = "fermented"
 	molotov = -1 //can become a molotov
 	isGlass = 1
@@ -800,7 +800,7 @@
 	name = "Shaker"
 	desc = "A metal shaker to mix drinks in."
 	icon_state = "shaker"
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
 
@@ -808,7 +808,7 @@
 	name = "Thermos"
 	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
 	icon_state = "shaker"
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
 
@@ -821,7 +821,7 @@
 	name = "Captain's Flask"
 	desc = "A metal flask belonging to the captain."
 	icon_state = "flask"
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	volume = 60
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/detflask
@@ -1036,7 +1036,6 @@
 	name = "Orange Juice"
 	desc = "Full of vitamins and deliciousness!"
 	icon_state = "orangejuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 
@@ -1048,7 +1047,6 @@
 	name = "Milk Cream"
 	desc = "It's cream. Made from milk. What else did you think you'd find in there?"
 	icon_state = "cream"
-	item_state = "carton"
 	vending_cat = "dairy products"
 	starting_materials = null
 
@@ -1060,7 +1058,6 @@
 	name = "Tomato Juice"
 	desc = "Well, at least it LOOKS like tomato juice. You can't tell with all that redness."
 	icon_state = "tomatojuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 
@@ -1073,7 +1070,6 @@
 	name = "Lime Juice"
 	desc = "Sweet-sour goodness."
 	icon_state = "limejuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 
@@ -1098,14 +1094,13 @@
 	user.drop_item(force_drop = 1)
 	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(user.loc)
 	B.icon_state = src.icon_state
-	//B.force = src.force //Who thought this was a good idea? It makes bottles broken by throwing deal no damage and bottles smashed over someone's head continue to deal a ton.
 	B.name = src.smashname
 
 	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
 		B.icon_state = "glass_empty"
 
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(M)) // Create a glass shard at the target's location!
+		getFromPool(/obj/item/weapon/shard, get_turf(M || src)) // Create a glass shard at the target's location! Or
 
 	var/icon/I = new('icons/obj/drinks.dmi', B.icon_state)
 	I.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
@@ -1143,7 +1138,6 @@
 
 		//create new broken bottle
 		var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
-		B.force = src.force
 		B.name = src.smashname
 		B.icon_state = src.icon_state
 
@@ -1243,7 +1237,7 @@
 
 
 //todo: can light cigarettes with
-//todo: is force = 15 overwriting the force?
+//todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now
 
 ////////  Could be expanded upon:
 //  make it work with more chemicals and reagents, more like a chem grenade

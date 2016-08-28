@@ -59,6 +59,9 @@
 
 	if(!nick)
 		nick=name
+	set_keys()
+		
+/obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)
 		mykey = new keytype(src.loc)
 		mykey.paired_to=src
@@ -240,7 +243,8 @@
 		HealthCheck()
 
 /obj/structure/bed/chair/vehicle/proc/HealthCheck()
-	if(health > max_health) health = max_health
+	if(health > max_health)
+		health = max_health
 	if(health <= 0 && !destroyed)
 		die()
 

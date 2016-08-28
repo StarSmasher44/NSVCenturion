@@ -251,7 +251,8 @@
 		else
 			return fork.load_food(src, user)
 
-	if (..()) return
+	if (..())
+		return
 
 	//If we have reached this point, then we're either trying to slice the fooditem or trying to slip something inside it. Both require us to be sliceable.
 	if((slices_num <= 0 || !slices_num) || !slice_path || istype(W,/obj/item/weapon/reagent_containers/syringe)) //Let's also not slice with syringes.
@@ -872,7 +873,9 @@
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent(BLOOD, 4, data)
 */
+
 		reagents.add_reagent(NUTRIMENT, 6)
+		reagents.add_reagent(HONKSERUM, 6)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mimeburger
@@ -882,6 +885,7 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 6)
+		reagents.add_reagent(SILENCER, 6)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
@@ -938,7 +942,8 @@
 	..()
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
-		if(trash) new trash(src.loc)
+		if(trash)
+			new trash(src.loc)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
@@ -1657,7 +1662,8 @@
 	reagents.add_reagent(NUTRIMENT,10)
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/afterattack(obj/O, mob/user,proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	if(istype(O,/obj/structure/sink) && !wrapped)
 		to_chat(user, "<span class='notice'>You place [src] under a stream of water...</span>")
 		return Expand()
@@ -2961,13 +2967,15 @@
 		return
 
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/)) // Long ass fucking object name
-		if(src.pizza) to_chat(user, "<span class='warning'>[src] already has a pizza in it.</span>")
+		if(src.pizza)
+			to_chat(user, "<span class='warning'>[src] already has a pizza in it.</span>")
 		else if(src.open)
 			if(user.drop_item(I, src))
 				src.pizza = I
 				src.update_icon()
 				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
-		else to_chat(user, "<span class='warning'>Open [src] first.</span>")
+		else
+			to_chat(user, "<span class='warning'>Open [src] first.</span>")
 
 		return
 
@@ -2977,7 +2985,8 @@
 			return
 
 		var/t = input("Enter what you want to add to the tag:", "Write", null, null) as text
-		if (!Adjacent(user) || user.stat) return
+		if (!Adjacent(user) || user.stat)
+			return
 
 		var/obj/item/pizzabox/boxtotagto = src
 		if( boxes.len > 0 )
@@ -3784,6 +3793,11 @@
 	desc = "..."
 	icon_state = "slider_mime"
 
+/obj/item/weapon/reagent_containers/food/snacks/slider/mime/New()
+	..()
+	reagents.add_reagent(SILENCER, 2.5)
+	bitesize = 2.5
+
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
 	name = "slippery slider"
 	desc = "It's so slippery!"
@@ -3963,7 +3977,8 @@
 	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/proc/jump()
-	if(!istype(src.loc,/turf)) return
+	if(!istype(src.loc,/turf))
+		return
 	jump_cd=1
 	spawn(50)
 		jump_cd=0
@@ -3979,7 +3994,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/pickup(mob/living/user as mob)
 	var/mob/living/carbon/human/H = user
-	if(!H) return 1
+	if(!H)
+		return 1
 
 	spawn(0)
 		if(((M_CLUMSY in H.mutations)) || prob(25))
@@ -4261,7 +4277,7 @@
 		reagents.add_reagent(NUTRIMENT,2)
 
 /obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan
-	name = "zhu lóng cao fàn"
+	name = "zhu lï¿½ng cao fï¿½n"
 	desc = "Literally meaning 'pitcher plant rice'. After carefully cleansing and steaming the pitcher plant, it is stuffed with steamed rice. The carnivorous plant is rich with minerals from fauna it has consumed."
 	icon_state = "zhulongcaofan"
 	bitesize = 3

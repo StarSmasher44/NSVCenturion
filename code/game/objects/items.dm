@@ -96,6 +96,23 @@
 	..()
 	qdel(src)
 
+/obj/item/Topic(href, href_list)
+	.=..()
+	if(href_list["close"])
+		return
+
+	if(usr.incapacitated())
+		return 1
+	if (!usr.dexterity_check())
+		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return 1
+	if (!in_range(src, usr))
+		return 1
+
+	src.add_fingerprint(usr)
+	src.add_hiddenprint(usr)
+	return 0
+
 /obj/item/proc/restock() //used for borg recharging
 	return
 
@@ -159,13 +176,15 @@
 				return 0
 			attack_hand(user)
 	else if(isrobot(user))
-		if(!istype(src.loc, /obj/item/weapon/robot_module)) return
+		if(!istype(src.loc, /obj/item/weapon/robot_module))
+			return
 		var/mob/living/silicon/robot/R = user
 		R.activate_module(src)
 		R.hud_used.update_robot_modules_display()
 
 /obj/item/attack_hand(mob/user as mob)
-	if (!user) return
+	if (!user)
+		return
 
 	if (istype(src.loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out.
@@ -289,8 +308,10 @@
 //If you are making custom procs but would like to retain partial or complete functionality of this one, include a 'return ..()' to where you want this to happen.
 //Set disable_warning to 1 if you wish it to not give you outputs.
 /obj/item/proc/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	if(!slot) return CANNOT_EQUIP
-	if(!M) return CANNOT_EQUIP
+	if(!slot)
+		return CANNOT_EQUIP
+	if(!M)
+		return CANNOT_EQUIP
 
 	if(wielded)
 		if(!disable_warning)
@@ -800,8 +821,10 @@
 		//if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
 
 		for(var/i = 1 to user.held_items.len)
-			if(user.held_items[i]) continue
-			if(user.active_hand == i) continue
+			if(user.held_items[i])
+				continue
+			if(user.active_hand == i)
+				continue
 
 			if(user.put_in_hand(i, wielded))
 				wielded.attach_to(src)
@@ -995,7 +1018,8 @@ var/global/list/image/blood_overlays = list()
 			step_towards(src,S)
 		else if(current_size > STAGE_ONE)
 			step_towards(src,S)
-		else ..()
+		else
+			..()
 
 //Gets the rating of the item, used in stuff like machine construction.
 /obj/item/proc/get_rating()
@@ -1011,7 +1035,8 @@ var/global/list/image/blood_overlays = list()
 		return
 
 	var/kick_dir = get_dir(H, src)
-	if(H.loc == src.loc) kick_dir = H.dir
+	if(H.loc == src.loc)
+		kick_dir = H.dir
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 

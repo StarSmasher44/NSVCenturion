@@ -16,7 +16,7 @@
 	faction = "syndicate"
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/CanAttack(var/atom/the_target)
-	//IF WE ARE SYNDICATE MOBS WE DON'T ATTACK NUKE OPS (we still attack regular traitors, as to not blow up their cover)
+	//IF WE ARE Tc_SYNDICATE MOBS WE DON'T ATTACK NUKE OPS (we still attack regular traitors, as to not blow up their cover)
 	if(ismob(the_target))
 		var/mob/M = the_target
 		if(isnukeop(M))
@@ -53,7 +53,8 @@
 
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj)	return
+	if(!Proj)
+		return
 	if(prob(65))
 		src.health -= Proj.damage
 	else

@@ -6,7 +6,7 @@
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mmi_empty"
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "biotech=3"
+	origin_tech = Tc_BIOTECH + "=3"
 
 	var/list/mommi_assembly_parts = list(
 		/obj/item/weapon/cell = 1,
@@ -66,7 +66,8 @@ obj/item/device/mmi/Destroy()
 		icon = null
 		invisibility = 101
 		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(get_turf(loc))
-		if(!M)	return
+		if(!M)
+			return
 		M.invisibility = 0
 		//M.custom_name = created_name
 		M.Namepick()
@@ -202,7 +203,7 @@ obj/item/device/mmi/Destroy()
 /obj/item/device/mmi/radio_enabled
 	name = "Radio-enabled Man-Machine Interface"
 	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity. This one comes with a built-in radio."
-	origin_tech = "biotech=4"
+	origin_tech = Tc_BIOTECH + "=4"
 
 	var/obj/item/device/radio/radio = null//Let's give it a radio.
 

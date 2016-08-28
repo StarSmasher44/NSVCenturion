@@ -3,6 +3,8 @@ var/list/existing_vaults = list()
 /datum/map_element/vault
 	type_abbreviation = "V"
 
+	var/require_dungeons = 0 //If 1, don't spawn on maps without a dungeon location defined (see code/modules/randomMaps/dungeons.dm)
+
 	var/list/exclusive_to_maps = list() //Only spawn on these maps (accepts nameShort and nameLong, for more info see maps/_map.dm). No effect if empty
 	var/list/map_blacklist = list() //Don't spawn on these maps
 
@@ -15,7 +17,8 @@ var/list/existing_vaults = list()
 	existing_vaults.Add(src)
 
 	var/zlevel_base_turf_type = get_base_turf(location.z)
-	if(!zlevel_base_turf_type) zlevel_base_turf_type = /turf/space
+	if(!zlevel_base_turf_type)
+		zlevel_base_turf_type = /turf/space
 
 	for(var/turf/new_turf in objects)
 		if(new_turf.type == base_turf_type) //New turf is vault's base turf
@@ -58,6 +61,14 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/spacepond
 	file_path = "maps/randomvaults/spacepond.dmm"
+
+/datum/map_element/vault/spacepond/initialize(list/objects)
+	..()
+
+	load_dungeon(/datum/map_element/dungeon/wine_cellar)
+
+/datum/map_element/dungeon/wine_cellar
+	file_path = "maps/randomvaults/dungeons/wine_cellar.dmm"
 
 /datum/map_element/vault/iou_vault
 	file_path = "maps/randomvaults/iou_fort.dmm"

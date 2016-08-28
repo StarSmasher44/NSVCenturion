@@ -89,7 +89,6 @@
 	else
 		//remove overlay
 		connected_button.name = name
-		user.spell_channeling = null
 		charge_counter = charge_max
 		user.overlays -= chargeoverlay
 		if(zapzap != multicast) //partial cast
@@ -119,7 +118,8 @@
 	var/turf/U = get_turf(target)
 	var/obj/item/projectile/beam/lightning/spell/L = getFromPool(/obj/item/projectile/beam/lightning/spell, T)
 
-	if(!oursound) oursound = pick(lightning_sound)
+	if(!oursound)
+		oursound = pick(lightning_sound)
 	L.our_spell = src
 	playsound(get_turf(user), oursound, 100, 1, "vary" = 0)
 	L.tang = adjustAngle(get_angle(U,T))

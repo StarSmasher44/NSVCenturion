@@ -225,7 +225,8 @@
 		OnDeath()
 
 /obj/item/projectile/ricochet/Bump(atom/A as mob|obj|turf|area)
-	if(bumped)	return 0
+	if(bumped)
+		return 0
 	bumped = 1
 
 	if(A)
@@ -356,9 +357,11 @@
 	icon_state = "ricochet"
 	opacity = 0
 	density = 0
-	unacidable = 1
 	anchored = 1
 	layer = BELOW_PROJECTILE_LAYER
+
+/obj/structure/ricochet_trail/acidable()
+	return 0
 
 /obj/structure/ricochet_trail/New()
 	. = ..()
@@ -371,9 +374,11 @@
 	icon_state = "ricochet_bounce"
 	opacity = 0
 	density = 0
-	unacidable = 1
 	anchored = 1
 	layer = ABOVE_PROJECTILE_LAYER
+
+/obj/structure/ricochet_bump/acidable()
+	return 0
 
 /obj/structure/ricochet_bump/New()
 	. = ..()

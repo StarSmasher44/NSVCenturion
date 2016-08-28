@@ -1,4 +1,4 @@
-#define WORLD_ICON_SIZE 64
+#define WORLD_ICON_SIZE 32
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
 /world
 	mob = /mob/new_player
@@ -137,6 +137,7 @@ var/savefile/panicfile
 	sleep_offline = 1
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
+	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	processScheduler = new
 	master_controller = new /datum/controller/game_controller()
@@ -231,7 +232,8 @@ var/savefile/panicfile
 			n++
 		s["players"] = n
 
-		if(revdata)	s["revision"] = revdata.revision
+		if(revdata)
+			s["revision"] = revdata.revision
 		s["admins"] = admins
 
 		return list2params(s)
@@ -507,7 +509,8 @@ proc/establish_old_db_connection()
 	var/count = 0
 	for(var/Z = 1 to world.maxz)
 		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
-			if(!(count % 50000)) sleep(world.tick_lag)
+			if(!(count % 50000))
+				sleep(world.tick_lag)
 			count++
 			T.initialize()
 			turfs[count] = T

@@ -567,7 +567,7 @@
 					I.loc = M.loc
 					I.reset_plane_and_layer()
 					I.dropped(M)
-					I.z = 2
+					I.z = map.zCentcomm
 					I.y = 68
 					I.x = (thunderdomefightercount % 15) + 121
 
@@ -902,8 +902,10 @@
 			Delay_Antag(M, delay)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/Delay_Antag(var/mob/M,var/delay=100)
-	if(!M.mind)	return
-	if(!ishuman(M) && !ismonkey(M))	return
+	if(!M.mind)
+		return
+	if(!ishuman(M) && !ismonkey(M))
+		return
 
 	to_chat(M, "<span class='rose'>You feel like you forgot something important!</span>")
 

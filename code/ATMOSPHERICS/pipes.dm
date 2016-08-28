@@ -273,7 +273,8 @@
 				else
 					error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([node_id]): [node_type]")
 					return
-			if(!found) continue
+			if(!found)
+				continue
 
 			var/obj/machinery/atmospherics/unary/vent/burstpipe/BP = new burst_type(T, setdir=direction)
 			BP.color=src.color
@@ -591,7 +592,7 @@
 	color = PIPE_COLOR_PURPLE
 /obj/machinery/atmospherics/pipe/manifold/general
 	name = "\improper Gas pipe"
-	color = PIPE_COLOR_BLUE
+	color = PIPE_COLOR_GREY
 /obj/machinery/atmospherics/pipe/manifold/yellow
 	name = "\improper Air supply pipe"
 	color = PIPE_COLOR_ORANGE

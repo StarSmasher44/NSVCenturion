@@ -7,7 +7,7 @@
 	w_class = W_CLASS_MEDIUM
 	max_shells = 18
 	caliber = list("9mm" = 1)
-	origin_tech = "combat=4;materials=2"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	automatic = 1
 	fire_delay = 0
@@ -49,6 +49,9 @@
 	else
 		..()
 
+/obj/item/weapon/gun/projectile/automatic/lockbox
+	mag_type = "/obj/item/ammo_storage/magazine/smg9mm/empty"
+
 /obj/item/weapon/gun/projectile/automatic/mini_uzi
 	name = "Uzi"
 	desc = "A lightweight, fast firing gun, for when you want someone dead. Uses .45 rounds."
@@ -59,7 +62,7 @@
 	max_shells = 10
 	burst_count = 3
 	caliber = list(".45" = 1)
-	origin_tech = "combat=5;materials=2;syndicate=8"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
 
@@ -76,7 +79,7 @@
 	max_shells = 20
 	burst_count = 4
 	caliber = list("12mm" = 1)
-	origin_tech = "combat=5;materials=2;syndicate=8"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
@@ -98,17 +101,20 @@
 	icon_state = "xcomassaultrifle"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	origin_tech = "combat=5;materials=2"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	w_class = W_CLASS_MEDIUM
 	max_shells = 20
 	burst_count = 4
 	caliber = list("12mm" = 1)
-	ammo_type = "/obj/item/ammo_casing/a12mm"
+	ammo_type = "/obj/item/ammo_casing/a12mm/assault"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	load_method = 2
-
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/automatic/xcom/lockbox
+	mag_type = "/obj/item/ammo_storage/magazine/a12mm/empty"
+
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw
 	name = "\improper L6 SAW"
@@ -121,7 +127,7 @@
 	max_shells = 50
 	burst_count = 5
 	caliber = list("a762" = 1)
-	origin_tech = "combat=5;materials=1;syndicate=2"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=1;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
 	mag_type = "/obj/item/ammo_storage/magazine/a762"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'

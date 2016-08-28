@@ -8,6 +8,10 @@
 #define SCANMODE_ATMOS		5
 #define SCANMODE_DEVICE		6
 
+#define PDA_MINIMAP_WIDTH	256
+#define PDA_MINIMAP_OFFSET_X	8
+#define PDA_MINIMAP_OFFSET_Y	233
+
 //The advanced pea-green monochrome lcd of tomorrow.
 
 var/global/list/obj/item/device/pda/PDAs = list()
@@ -704,7 +708,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><img src=pda_cuffs.png> Security Bot Access</a></li>
 							</ul>"}
-					else	dat += "</ul>"
+					else
+						dat += "</ul>"
 					if(cartridge.access_quartermaster)
 
 						dat += {"<h4>Quartermaster Functions:</h4>
@@ -768,8 +773,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 				if (!toff)
 					for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
-						if (P == src)	continue
-						if(P.hidden) continue
+						if (P == src)
+							continue
+						if(P.hidden)
+							continue
 						dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
 						if (id && !istype(P,/obj/item/device/pda/ai))
 							dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><img src=pda_money.png>*Send Money*</a>)"
@@ -968,9 +975,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<img src="pda_minimap_[map.nameShort].png" style="position: relative; top: 0; left: 0;"/>
 						"}
 						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation]-8]px;"/>"}
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
 					else
@@ -979,9 +986,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<img src="pda_minimap_bg_notfound.png" style="position: relative; top: 0; left: 0;"/>
 						"}
 						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation]-8]px;"/>"}
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
 /*
@@ -1441,14 +1448,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("x")
 						var/new_x = input("Please input desired X coordinate.", "Station Map App", app.markx) as num
 						var/x_validate=new_x+WORLD_X_OFFSET[map.zMainStation]
-						if(x_validate < 1 || x_validate > 255)
+						if(x_validate < (world.maxx/2 - PDA_MINIMAP_WIDTH/2) || x_validate > (world.maxx/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
 						else
 							app.markx = new_x
 					if("y")
 						var/new_y = input("Please input desired Y coordinate.", "Station Map App", app.marky) as num
 						var/y_validate=new_y+WORLD_Y_OFFSET[map.zMainStation]
-						if(y_validate < 1 || y_validate > 255)
+						if(y_validate < (world.maxy/2 - PDA_MINIMAP_WIDTH/2) || y_validate > (world.maxy/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
 						else
 							app.marky = new_y
@@ -1894,7 +1901,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 
 	for (var/mob/O in hearers(3, U))
-		if(!silent) O.show_message(text("[bicon(src)] *[src.ttone]*"))
+		if(!silent)
+			O.show_message(text("[bicon(src)] *[src.ttone]*"))
 
 	var/mob/living/L = null
 	if(src.loc && isliving(src.loc))
@@ -2025,7 +2033,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if (!P.silent)
 			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
 		for (var/mob/O in hearers(3, P.loc))
-			if(!P.silent) O.show_message(text("[bicon(P)] *[P.ttone]*"))
+			if(!P.silent)
+				O.show_message(text("[bicon(P)] *[P.ttone]*"))
 		//Search for holder of the PDA.
 		var/mob/living/L = null
 		if(P.loc && isliving(P.loc))
@@ -2256,7 +2265,8 @@ obj/item/device/pda/AltClick()
 					return dev_analys.preattack(A, user, 1)
 
 /obj/item/device/pda/proc/explode() //This needs tuning.
-	if(!src.detonate) return
+	if(!src.detonate)
+		return
 	var/turf/T = get_turf(src.loc)
 
 	if (ismob(loc))
@@ -2283,7 +2293,8 @@ obj/item/device/pda/AltClick()
 	var/loop_count = 0
 	while(null in PDAs)
 		PDAs.Remove(null)
-		if(loop_count > 10) break
+		if(loop_count > 10)
+			break
 		loop_count++
 	PDAs -= src
 	..()
@@ -2361,6 +2372,9 @@ obj/item/device/pda/AltClick()
 	. = list()
 	// Returns a list of PDAs which can be viewed from another PDA/message monitor.
 	for(var/obj/item/device/pda/P in PDAs)
-		if(!P.owner || P.toff || P.hidden) continue
+		if(!P.owner || P.toff || P.hidden)
+			continue
 		. += P
 	return .
+
+#undef PDA_MINIMAP_WIDTH

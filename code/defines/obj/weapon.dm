@@ -34,7 +34,7 @@
 	throw_speed = 4
 	throw_range = 20
 	m_amt = 100
-	origin_tech = "magnets=2;syndicate=3"*/
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=3"*/
 
 /obj/item/weapon/rsp
 	name = "\improper Rapid-Seed-Producer (RSP)"
@@ -112,7 +112,7 @@
 	name = "cane"
 	desc = "A cane used by a true gentlemen. Or a clown."
 	icon = 'icons/obj/weapons.dmi'
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	icon_state = "cane"
 	item_state = "stick"
 	flags = FPRINT
@@ -166,7 +166,7 @@
 	siemens_coefficient = 1
 	throwforce = 0
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	var/breakouttime = 300	//Deciseconds = 30s = 0.5 minute
 
 /obj/item/weapon/legcuffs/bolas
@@ -181,7 +181,7 @@
 	throwforce = 2
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_METAL
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("lashes", "bludgeons", "whips")
 	force = 4
 	breakouttime = 50 //10 seconds
@@ -197,7 +197,8 @@
 	return(OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
-	if(!throw_range) return //divide by zero, also you throw like a girl
+	if(!throw_range)
+		return //divide by zero, also you throw like a girl
 	if(usr && !istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas)) //if there is a user, but not a mech
 		if(istype(usr, /mob/living/carbon/human)) //if the user is human
 			var/mob/living/carbon/human/H = usr
@@ -499,7 +500,7 @@
 	throwforce = 15
 	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_METAL
-	origin_tech = "combat=5"
+	origin_tech = Tc_COMBAT + "=5"
 	attack_verb = list("rams", "bludgeons")
 	force = 15
 	throw_speed = 1
@@ -626,7 +627,7 @@
 	starting_materials = list(MAT_IRON = 100)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature=MELTPOINT_SILICON
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 /obj/item/weapon/staff
 	name = "wizards staff"
@@ -819,7 +820,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 
 /*
 /obj/item/weapon/cigarpacket
@@ -847,7 +848,7 @@
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "capacitor"
 	desc = "A debug item for research."
-	origin_tech = "materials=8;programming=8;magnets=8;powerstorage=8;bluespace=8;combat=8;biotech=8;syndicate=8"
+	origin_tech = Tc_MATERIALS + "=8;" + Tc_PROGRAMMING + "=8;" + Tc_MAGNETS + "=8;" + Tc_POWERSTORAGE + "=8;" + Tc_BLUESPACE + "=8;" + Tc_COMBAT + "=8;" + Tc_BIOTECH + "=8;" + Tc_SYNDICATE + "=8"
 */
 
 /obj/item/weapon/ectoplasm
@@ -903,14 +904,18 @@ proc
         var icon{result = icon(base); temp}
 
         for(var/angle in 0 to 360 step step)
-            if(angle == 0  ) continue
-            if(angle == 360)   continue
+            if(angle == 0  )
+            	continue
+            if(angle == 360)
+            	continue
 
             temp = icon(base)
 
-            if(aa) temp.Scale(w2, h2)
+            if(aa)
+            	temp.Scale(w2, h2)
             temp.Turn(angle)
-            if(aa) temp.Scale(w,   h)
+            if(aa)
+            	temp.Scale(w,   h)
 
             result.Insert(temp, "[angle]")
 

@@ -1,5 +1,5 @@
-#define CARD_DISPLACE	18
-#define CARD_WIDTH		14 //width of the icon
+#define CARD_DISPLACE	9
+#define CARD_WIDTH		7 //width of the icon
 
 /*
  *	Taken from /tg/
@@ -276,7 +276,8 @@
 		var/obj/item/toy/singlecard/card = currenthand[i]
 		if(card)
 			card.layer = FLOAT_LAYER
-			card.pixel_x = (i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE) * PIXEL_MULTIPLIER
+			card.plane = FLOAT_PLANE
+			card.pixel_x = i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE
 			overlays += card
 
 /*
@@ -299,7 +300,7 @@
 	var/cardname = null
 	var/obj/item/toy/cards/parentdeck = null
 	var/flipped = 1 //Cards start flipped so that dealers can deal without having to see the card.
-	pixel_x = -5 * PIXEL_MULTIPLIER
+	pixel_x = -5
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)
 	..(NewLoc)
@@ -313,7 +314,7 @@
 /obj/item/toy/singlecard/update_icon()
 	if(flipped)
 		icon_state = "singlecard_down"
-		pixel_x = -5 * PIXEL_MULTIPLIER
+		pixel_x = -5
 		name = "card"
 	else
 		if(cardname)
@@ -322,7 +323,7 @@
 		else
 			src.icon_state = "sc_Ace of Spades"
 			src.name = "What Card"
-		src.pixel_x = 5 * PIXEL_MULTIPLIER
+		src.pixel_x = 5
 
 /obj/item/toy/singlecard/examine(mob/user)
 	..()
@@ -344,17 +345,15 @@
 		if(!(C.parentdeck || src.parentdeck) || C.parentdeck == src.parentdeck)
 			var/obj/item/toy/cardhand/H = new/obj/item/toy/cardhand(user.loc)
 			H.parentdeck = C.parentdeck
-			user.drop_item(C, H, force_drop = 1)
-			user.put_in_active_hand(H)
-			to_chat(user, "<span class = 'notice'>You combine \the [C] and \the [src] into a hand.</span>")
-			user.drop_item(C, H, force_drop = 1)
-
+			user.drop_item(C, src, force_drop = 1)
 			user.remove_from_mob(src) //we could be anywhere!
 			src.forceMove(H)
+			user.put_in_active_hand(H)
+			to_chat(user, "<span class = 'notice'>You combine \the [C] and \the [src] into a hand.</span>")
+			
 			H.currenthand += C
 			H.currenthand += src
 			H.update_icon()
-			user.put_in_hands(H)
 		else
 			to_chat(user, "<span class = 'notice'>You can't mix cards from other decks.</span>")
 	else if(istype(I, /obj/item/toy/cardhand))
@@ -363,9 +362,12 @@
 		for(var/obj/item/toy/singlecard/card in H.currenthand)
 			if(!(!(card.parentdeck || src.parentdeck) || card.parentdeck == src.parentdeck))
 				compatible = 0
+		if(H.currenthand.len >= H.max_hand_size)
+			to_chat(user, "<span class = 'warning'>You can't add any more cards to this hand.</span>")
+			return
 		if(compatible)
 			user << "<span class = 'notice'>You add \the [src] to your hand.</span>"
-			user.drop_item(src, H)
+			user.drop_item(src)
 			user.remove_from_mob(src) //we could be anywhere!
 			src.forceMove(H)
 			H.currenthand += src

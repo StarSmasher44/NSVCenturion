@@ -1,3 +1,7 @@
+/datum/map_element/dungeon/holodeck
+	name = "holodeck"
+	file_path = "maps/misc/holodeck.dmm"
+
 /obj/machinery/computer/HolodeckControl
 	name = "Holodeck Control Computer"
 	desc = "A computer used to control a nearby holodeck."
@@ -427,7 +431,8 @@
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 

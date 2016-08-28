@@ -110,7 +110,8 @@
 			return tally
 
 	var/health_deficiency = (100 - health)
-	if(health_deficiency >= 45) tally += (health_deficiency / 25)
+	if(health_deficiency >= 45)
+		tally += (health_deficiency / 25)
 
 	if (bodytemperature < 183.222)
 		tally += (283.222 - bodytemperature) / 10 * 1.75
@@ -140,12 +141,18 @@
 		if(!client && powerlevel > 0)
 			var/probab = 10
 			switch(powerlevel)
-				if(1 to 2) probab = 20
-				if(3 to 4) probab = 30
-				if(5 to 6) probab = 40
-				if(7 to 8) probab = 60
-				if(9) 	   probab = 70
-				if(10) 	   probab = 95
+				if(1 to 2)
+					probab = 20
+				if(3 to 4)
+					probab = 30
+				if(5 to 6)
+					probab = 40
+				if(7 to 8)
+					probab = 60
+				if(9)
+					probab = 70
+				if(10)
+					probab = 95
 			if(prob(probab))
 
 
@@ -305,7 +312,8 @@
 		to_chat(M, "You cannot attack people before the game has started.")
 		return
 
-	if(Victim) return // can't attack while eating!
+	if(Victim)
+		return // can't attack while eating!
 
 	if (health > -100)
 
@@ -345,7 +353,8 @@
 		updatehealth()
 
 /mob/living/carbon/slime/attack_paw(mob/living/carbon/monkey/M as mob)
-	if(!(istype(M, /mob/living/carbon/monkey)))	return//Fix for aliens receiving double messages when attacking other aliens.
+	if(!(istype(M, /mob/living/carbon/monkey)))
+		return//Fix for aliens receiving double messages when attacking other aliens.
 
 	if (!ticker)
 		to_chat(M, "You cannot attack people before the game has started.")
@@ -616,7 +625,8 @@
 
 
 /mob/living/carbon/slime/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	return 0
 
 
@@ -642,7 +652,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		health = maxHealth
 		stat = CONSCIOUS
 	else
-		// slimes can't suffocate unless they suicide. They are also not harmed by fire
+		// slimes can't suffocate unless they suicide or they fall into crit. They are also not harmed by fire
 		health = maxHealth - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
 
 /mob/living/carbon/slime/proc/get_obstacle_ok(atom/A)
@@ -738,7 +748,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	throwforce = 1.0
 	throw_speed = 3
 	throw_range = 6
-	origin_tech = "biotech=4"
+	origin_tech = Tc_BIOTECH + "=4"
 	var/Uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
 	var/primarytype = /mob/living/carbon/slime
@@ -1098,8 +1108,9 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	item_state = "golem"
 	canremove = 0
 	siemens_coefficient = 0
-	unacidable = 1
 
+/obj/item/clothing/mask/gas/golem/acidable()
+	return 0
 
 /obj/item/clothing/gloves/golem
 	name = "golem's hands"
@@ -1117,12 +1128,14 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	name = "golem's head"
 	desc = "a golem's head"
 	canremove = 0
-	unacidable = 1
 	flags = FPRINT
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	armor = list(melee = 80, bullet = 20, laser = 20, energy = 10, bomb = 0, bio = 0, rad = 0)
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/head/space/golem/acidable()
+	return 0
 
 /obj/effect/golem_rune
 	anchored = 1
@@ -1130,7 +1143,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	name = "rune"
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
-	unacidable = 1
 	plane = ABOVE_TURF_PLANE
 	layer = RUNE_LAYER
 	var/list/mob/dead/observer/ghosts[0]
@@ -1179,7 +1191,8 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			volunteer(O)
 
 	attack_ghost(var/mob/dead/observer/O)
-		if(!O) return
+		if(!O)
+			return
 		volunteer(O)
 
 	proc/check_observer(var/mob/dead/observer/O)
@@ -1247,7 +1260,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	throwforce = 1.0
 	throw_speed = 3
 	throw_range = 6
-	origin_tech = "biotech=4"
+	origin_tech = Tc_BIOTECH + "=4"
 	var/POWERFLAG = 0 // sshhhhhhh
 	var/Flush = 30
 	var/Uses = 5 // uses before it goes inert
@@ -1284,7 +1297,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "slime egg-growing"
 	bitesize = 12
-	origin_tech = "biotech=4"
+	origin_tech = Tc_BIOTECH + "=4"
 	var/grown = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/New()

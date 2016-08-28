@@ -17,21 +17,31 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	invisibility = INVISIBILITY_MAXIMUM
 	flags = INVULNERABLE
 	status_flags = GODMODE
-
 	alpha = 0
 	animate_movement = 0
 	ignoreinvert = 1
 	//This can be expanded with vision flags to make a device to hear through walls for example
+	var/attached_type = null
+	var/attached_ref = null
 
-/mob/virtualhearer/New(attachedto)
+/mob/virtualhearer/New(atom/attachedto)
 	AddToProfiler()
 	virtualhearers += src
 	loc = get_turf(attachedto)
 	attached = attachedto
+
+	var/mob/M = attachedto
+	if(istype(M))
+		sight = M.sight
+
+	attached_type = attachedto.type //record the attached's typepath in case something goes wrong
+	attached_ref = "[attachedto]" //record attached's text ref to see what is happening
+	world.log << "Virtualhearer attached to [attachedto] of type [attachedto.type]"
 	if(is_type_in_list(attachedto,stationary_hearers))
 		virtualhearers -= src
 
 /mob/virtualhearer/Destroy()
+	..()
 	virtualhearers -= src
 	attached = null
 
@@ -58,3 +68,16 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 
 /mob/virtualhearer/blob_act()
 	return
+
+/mob/proc/change_sight(adding, removing, copying)
+	var/oldsight = sight
+	if(copying)
+		sight = copying
+	if(adding)
+		sight |= adding
+	if(removing)
+		sight &= ~removing
+	if(sight != oldsight)
+		for(var/mob/virtualhearer/VH in virtualhearers)
+			if(VH.attached == src)
+				VH.sight = sight

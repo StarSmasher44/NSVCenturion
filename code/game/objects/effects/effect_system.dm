@@ -10,10 +10,12 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	name = "effect"
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
-	unacidable = 1 // so effect are not targeted by alien acid.
 	flags = 0
 	w_type=NOT_RECYCLABLE
 	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
+
+/obj/effect/acidable()
+	return 0
 
 /obj/effect/effect/water
 	name = "water"
@@ -279,7 +281,8 @@ steam.start() -- spawns the effect
 			M.coughedtime = 0
 
 /obj/effect/effect/smoke/bad/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 	if(istype(mover, /obj/item/projectile/beam))
 		var/obj/item/projectile/beam/B = mover
 		B.damage = (B.damage/2)
@@ -376,7 +379,8 @@ steam.start() -- spawns the effect
 				sleep(10)
 				step(smoke,direction)
 			spawn(smoke.time_to_live*0.75+rand(10,30))
-				if (smoke) qdel(smoke)
+				if (smoke)
+					qdel(smoke)
 				src.total_smoke--
 
 
@@ -619,8 +623,10 @@ steam.start() -- spawns the effect
 					I.icon_state = "blank"
 					II.icon_state = "blank"
 					spawn( 20 )
-						if(I) returnToPool(I)
-						if(II) returnToPool(II)
+						if(I)
+							returnToPool(I)
+						if(II)
+							returnToPool(II)
 
 			spawn(2)
 				if(src.on)
@@ -656,7 +662,8 @@ steam.start() -- spawns the effect
 					src.oldposition = get_turf(holder)
 					I.dir = src.holder.dir
 					spawn(10)
-						if(I) qdel(I)
+						if(I)
+							qdel(I)
 						src.number--
 					spawn(2)
 						if(src.on)
@@ -931,7 +938,8 @@ steam.start() -- spawns the effect
 		to_chat(user, "<span class='notice'>You hit \the [src] to no effect.</span>")
 
 /obj/structure/foamedmetal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group) return 0
+	if(air_group)
+		return 0
 	return !density
 
 
@@ -1087,4 +1095,5 @@ steam.start() -- spawns the effect
 			else if (round(amount/2) > 0)
 				dmglevel = 3
 
-			if(dmglevel<4) holder.ex_act(dmglevel)
+			if(dmglevel<4)
+				holder.ex_act(dmglevel)

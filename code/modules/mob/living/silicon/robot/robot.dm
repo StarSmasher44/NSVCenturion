@@ -182,8 +182,10 @@
 /mob/living/silicon/robot/Destroy()
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
-		if(T)	mmi.loc = T
-		if(mind)	mind.transfer_to(mmi.brainmob)
+		if(T)
+			mmi.loc = T
+		if(mind)
+			mind.transfer_to(mmi.brainmob)
 		if(mmi.brainmob)
 			mmi.brainmob.locked_to_z = locked_to_z
 		mmi = null
@@ -287,6 +289,7 @@
 			module_sprites["Marina-MN"] = "marinaMN"
 			module_sprites["Sleek"] = "sleekminer"
 			module_sprites["#31"] = "servbot-miner"
+			module_sprites["Kodiak"] = "kodiak-miner"
 			speed = -1
 
 		if("Medical")
@@ -302,6 +305,7 @@
 			module_sprites["Eve"] = "eve"
 			module_sprites["Sleek"] = "sleekmedic"
 			module_sprites["#17"] = "servbot-medi"
+			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
 		if("Security")
@@ -331,6 +335,7 @@
 			module_sprites["Marina-EN"] = "marinaEN"
 			module_sprites["Sleek"] = "sleekengineer"
 			module_sprites["#25"] = "servbot-engi"
+			module_sprites["Kodiak"] = "kodiak-eng"
 			speed = -2
 
 		if("Janitor")
@@ -369,11 +374,11 @@
 	if(modtype == "Medical" || modtype == "Security" || modtype == "Combat")
 		status_flags &= ~CANPUSH
 
+	var/picked  = pick(module_sprites)
+	icon_state = module_sprites[picked]
+
 	if(!forced_module)
 		choose_icon(6, module_sprites)
-	else
-		var/picked  = pick(module_sprites)
-		icon_state = module_sprites[picked]
 
 	base_icon = icon_state
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
@@ -505,7 +510,8 @@
 
 	var/list/installed_components = list()
 	for(var/V in components)
-		if(V == "power cell") continue
+		if(V == "power cell")
+			continue
 		var/datum/robot_component/C = components[V]
 		if(C.installed)
 			installed_components += V
@@ -605,7 +611,8 @@
 		stat(null, text("Welder Fuel: [WT.get_fuel()]/[WT.max_fuel]"))
 
 /mob/living/silicon/robot/proc/show_stacks()
-	if(!module) return
+	if(!module)
+		return
 	for(var/obj/item/stack/S in module.modules)
 		stat(null, text("[S.name]: [S.amount]/[S.max_amount]"))
 
@@ -625,7 +632,8 @@
 
 
 /mob/living/silicon/robot/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	return 0
 
 
@@ -656,7 +664,8 @@
 /mob/living/silicon/robot/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
 	updatehealth()
-	if(prob(75) && Proj.damage > 0) spark_system.start()
+	if(prob(75) && Proj.damage > 0)
+		spark_system.start()
 	return 2
 
 
@@ -717,7 +726,8 @@
 			else
 				to_chat(user, "The cover is already open.")
 		else
-			if(emagged == 1) return 1
+			if(emagged == 1)
+				return 1
 			if(wiresexposed)
 				to_chat(user, "The wires get in your way.")
 			else
@@ -830,7 +840,8 @@
 				// Okay we're not removing the cell or an MMI, but maybe something else?
 				var/list/removable_components = list()
 				for(var/V in components)
-					if(V == "power cell") continue
+					if(V == "power cell")
+						continue
 					var/datum/robot_component/C = components[V]
 					if(C.installed == 1 || C.installed == -1)
 						removable_components += V
@@ -1017,7 +1028,8 @@
 		to_chat(M, "You cannot attack people before the game has started.")
 		return
 
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	if (health > -100)
 
@@ -1041,12 +1053,18 @@
 			var/stunprob = 10
 
 			switch(M.powerlevel)
-				if(1 to 2) stunprob = 20
-				if(3 to 4) stunprob = 30
-				if(5 to 6) stunprob = 40
-				if(7 to 8) stunprob = 60
-				if(9) 	   stunprob = 70
-				if(10) 	   stunprob = 95
+				if(1 to 2)
+					stunprob = 20
+				if(3 to 4)
+					stunprob = 30
+				if(5 to 6)
+					stunprob = 40
+				if(7 to 8)
+					stunprob = 60
+				if(9)
+					stunprob = 70
+				if(10)
+					stunprob = 95
 
 			if(prob(stunprob))
 				M.powerlevel -= 3
@@ -1282,16 +1300,20 @@
 	if (href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
 		var/L = text2num(href_list["lawc"])
 		switch(lawcheck[L+1])
-			if ("Yes") lawcheck[L+1] = "No"
-			if ("No") lawcheck[L+1] = "Yes"
+			if ("Yes")
+				lawcheck[L+1] = "No"
+			if ("No")
+				lawcheck[L+1] = "Yes"
 //		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
 		checklaws()
 
 	if (href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
 		var/L = text2num(href_list["lawi"])
 		switch(ioncheck[L])
-			if ("Yes") ioncheck[L] = "No"
-			if ("No") ioncheck[L] = "Yes"
+			if ("Yes")
+				ioncheck[L] = "No"
+			if ("No")
+				ioncheck[L] = "Yes"
 //		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
 		checklaws()
 	if (href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
@@ -1430,13 +1452,15 @@
 	set category = "IC"
 	set src = usr
 
-	if(attack_delayer.blocked()) return
+	if(attack_delayer.blocked())
+		return
 
 	if(isVentCrawling())
 		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
 		return
 
-	if(stat == DEAD) return
+	if(stat == DEAD)
+		return
 	var/obj/item/W = get_active_hand()
 	if (W)
 		W.attack_self(src)
@@ -1483,13 +1507,10 @@
 	else
 		triesleft--
 
-	lockcharge = 1  //Locks borg until it select an icon to avoid secborgs running around with a standard sprite
-
 	var/icontype = input("Select an icon! [triesleft>0 ? "You have [triesleft] more chances." : "This is your last try."]", "Robot", null, null) as null|anything in module_sprites
 
 	if(icontype)
 		icon_state = module_sprites[icontype]
-		lockcharge = null
 	else
 		triesleft++
 		return

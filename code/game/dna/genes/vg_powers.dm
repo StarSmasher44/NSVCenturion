@@ -43,7 +43,8 @@ Obviously, requires DNA2.
 	return 0
 
 /datum/dna/gene/basic/grant_spell/hulk/OnMobLife(var/mob/living/carbon/human/M)
-	if(!istype(M)) return
+	if(!istype(M))
+		return
 	if(M_HULK in M.mutations)
 		var/timeleft=M.hulk_time - world.time
 		if(M.health <= 25 || timeleft <= 0)
@@ -59,7 +60,7 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk
 	name = "Hulk Out"
 	panel = "Mutant Powers"
-	range = -1
+	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
 	charge_max = HULK_COOLDOWN
@@ -80,7 +81,7 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk/cast(list/targets, mob/user)
 	if (istype(user.loc,/mob))
 		to_chat(usr, "<span class='warning'>You can't hulk out right now!</span>")
-		return
+		return 1
 	for(var/mob/living/carbon/human/M in targets)
 		M.hulk_time = world.time + src.duration
 		M.mutations.Add(M_HULK)
