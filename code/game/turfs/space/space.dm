@@ -53,12 +53,6 @@
 		return 1
 	return BUILD_FAILURE
 
-// Ported from unstable r355
-
-/turf/space/Entered(atom/movable/A as mob|obj)
-	..()
-	inertial_drift(A)
-
 /turf/space/proc/Sandbox_Spacemove(atom/movable/A as mob|obj)
 	var/cur_x
 	var/cur_y
@@ -70,7 +64,8 @@
 	if(src.x <= 1)
 
 		var/list/cur_pos = src.get_global_map_pos()
-		if(!cur_pos) return
+		if(!cur_pos)
+			return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
 		next_x = (--cur_x||global_map.len)
@@ -96,7 +91,8 @@
 			return
 
 		var/list/cur_pos = src.get_global_map_pos()
-		if(!cur_pos) return
+		if(!cur_pos)
+			return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
 		next_x = (++cur_x > global_map.len ? 1 : cur_x)
@@ -121,7 +117,8 @@
 			A = null
 			return
 		var/list/cur_pos = src.get_global_map_pos()
-		if(!cur_pos) return
+		if(!cur_pos)
+			return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
 		y_arr = global_map[cur_x]
@@ -147,7 +144,8 @@
 			A = null
 			return
 		var/list/cur_pos = src.get_global_map_pos()
-		if(!cur_pos) return
+		if(!cur_pos)
+			return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
 		y_arr = global_map[cur_x]
@@ -184,3 +182,6 @@
 
 /turf/space/void/New()
 	return
+
+/turf/space/has_gravity()
+	return 0

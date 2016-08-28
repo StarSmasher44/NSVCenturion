@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 /obj/item/weapon/implantcase
 	name = "Glass Case"
@@ -35,8 +35,10 @@
 			else
 				src.name = "Glass Case"
 		else if(istype(I, /obj/item/weapon/reagent_containers/syringe))
-			if(!src.imp)	return
-			if(!src.imp.allow_reagents)	return
+			if(!src.imp)
+				return
+			if(!src.imp.allow_reagents)
+				return
 			if(src.imp.reagents.total_volume >= src.imp.reagents.maximum_volume)
 				to_chat(user, "<span class='warning'>[src] is full.</span>")
 			else

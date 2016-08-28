@@ -67,8 +67,15 @@
 	weaken = 0
 	superspeed = 1
 
+/obj/item/projectile/bullet/midbullet/assault
+	damage = 20
+	stun = 0
+	weaken = 0
+
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
+	stun = 0
+	weaken = 0
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
@@ -118,7 +125,7 @@
 	damage_type = BRUTE
 	flag = "bullet"
 	kill_count = 100
-	layer = 13
+	layer = PROJECTILE_LAYER
 	damage = 40
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "spur_high"
@@ -197,7 +204,7 @@
 		var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,impact_icon)
 		impact.pixel_x = PixelX
 		impact.pixel_y = PixelY
-		impact.layer = 13
+		impact.layer = PROJECTILE_LAYER
 		T.overlays += impact
 		spawn(3)
 			T.overlays -= impact
@@ -217,7 +224,7 @@
 		if(loc)
 			var/turf/T = loc
 			var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,"spur_2")
-			impact.layer = 13
+			impact.layer = PROJECTILE_LAYER
 			T.overlays += impact
 			spawn(3)
 				T.overlays -= impact
@@ -342,7 +349,8 @@
 	if(istype(atarget, /mob/living) && damage == 200)
 		var/mob/living/M = atarget
 		M.gib()
-	else ..()
+	else
+		..()
 
 /obj/item/projectile/bullet/APS/OnFired()
 	..()
@@ -731,3 +739,17 @@
 			spawn()
 				B.process()
 	..()
+	
+/obj/item/projectile/bullet/invisible
+	name = "invisible bullet"
+	icon_state = null
+	damage = 25
+	fire_sound = null
+	
+/obj/item/projectile/bullet/invisible/on_hit(var/atom/target, var/blocked = 0) //silence the target for a few seconds on hit
+	if (..(target, blocked))
+		var/mob/living/L = target
+		if(L.silent && L.silent < 5)
+			L.silent = 5
+		return 1
+	return 0

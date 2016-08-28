@@ -135,6 +135,8 @@
 
 #define isatom(A) (istype(A, /atom))
 
+#define ismatrix(A) (istype(A, /matrix))
+
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind.vampire)

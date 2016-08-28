@@ -67,7 +67,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			return
 
 	var/turf/T = get_turf(M)
-	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = MOB_PLANE)
 
 	feedback_add_details("admin_verb","AM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -106,7 +106,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		return
 
 	var/turf/T = get_turf(M)
-	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = MOB_PLANE)
 
 	to_chat(M, "<span class='danger'>You get the feeling that you're not the only one who remembered his true origin. Will they be your allies or your foes? That is for you to decide.</span>")
 
@@ -117,7 +117,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 	switch(choice)
 		if("traitor")
-			if(istraitor(M))	return 0
+			if(istraitor(M))
+				return 0
 			ticker.mode.traitors += M.mind
 			M.mind.special_role = "traitor"
 			ticker.mode.forge_traitor_objectives(M.mind)
@@ -130,8 +131,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -159,7 +159,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("changeling")
-			if(ischangeling(M))	return 0
+			if(ischangeling(M))
+				return 0
 			ticker.mode.changelings += M.mind
 			ticker.mode.grant_changeling_powers(M)
 			M.mind.special_role = "Changeling"
@@ -172,7 +173,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("vampire")
-			if(isvampire(M))	return 0
+			if(isvampire(M))
+				return 0
 			ticker.mode.vampires += M.mind
 			ticker.mode.grant_vampire_powers(M)
 			M.mind.special_role = "Vampire"
@@ -189,8 +191,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -214,14 +215,15 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("cult")
-			if(iscult(M))	return 0
+			if(iscult(M))
+				return 0
 			ticker.mode.cult += M.mind
 			ticker.mode.update_cult_icons_added(M.mind)
 			M.mind.special_role = "Cultist"
 			to_chat(M, "<span class='sinister'>You remember the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-			M.add_language("Cult")
+			M.add_language(LANGUAGE_CULT)
 			var/datum/game_mode/cult/cult = ticker.mode
 			if (istype(cult))
 				cult.memoize_cult_objectives(M.mind)
@@ -248,8 +250,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -318,7 +319,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("rev")
-			if(isrevhead(M))	return 0
+			if(isrevhead(M))
+				return 0
 			ticker.mode.head_revolutionaries += M.mind
 			ticker.mode.update_rev_icons_added(M.mind)
 			M.mind.special_role = "Head Revolutionary"
@@ -332,8 +334,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -363,7 +364,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("nuke")
-			if(isnukeop(M))	return 0
+			if(isnukeop(M))
+				return 0
 			ticker.mode.syndicates += M.mind
 			ticker.mode.update_synd_icons_added(M.mind)
 			M.real_name = "[syndicate_name()] Operative"
@@ -380,7 +382,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -408,7 +410,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("deathsquad")
-			if(isdeathsquad(M))	return 0
+			if(isdeathsquad(M))
+				return 0
 			ticker.mode.deathsquad += M.mind
 			M.mind.assigned_role = "MODE"
 			M.mind.special_role = "Death Commando"
@@ -437,8 +440,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -473,7 +475,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("wizard")
-			if(iswizard(M))	return 0
+			if(iswizard(M))
+				return 0
 			ticker.mode.wizards += M.mind
 			M.mind.special_role = "Wizard"
 			M.mind.assigned_role = "MODE"
@@ -488,8 +491,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -564,8 +566,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("monkey")
-			if(M.monkeyizing)	return 0
-			if(isbadmonkey(M))	return 0
+			if(M.monkeyizing)
+				return 0
+			if(isbadmonkey(M))
+				return 0
 			ticker.mode.infected_monkeys += M.mind
 			var/mob/living/carbon/human/H = M
 			var/mob/living/carbon/monkey/K = M

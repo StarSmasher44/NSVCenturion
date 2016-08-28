@@ -39,11 +39,12 @@
 
 	languages = list(	LANGUAGE_GALACTIC_COMMON = 1, LANGUAGE_TRADEBAND = 1, LANGUAGE_VOX = 0,
 						LANGUAGE_ROOTSPEAK = 0, LANGUAGE_GREY = 0, LANGUAGE_CLATTER = 0,
-						LANGUAGE_MONKEY = 0, LANGUAGE_UNATHI = 0, LANGUAGE_SIIK_TAJR = 0,
+						LANGUAGE_MONKEY = 0, LANGUAGE_UNATHI = 0, LANGUAGE_CATBEAST = 0,
 						LANGUAGE_SKRELLIAN = 0, LANGUAGE_GUTTER = 0, LANGUAGE_MONKEY = 0,
 						LANGUAGE_MOUSE = 0, LANGUAGE_HUMAN = 0)
 	added_languages = list()
-	if(!isMoMMI(R)) add_languages(R)
+	if(!isMoMMI(R))
+		add_languages(R)
 	AddToProfiler()
 	src.modules += new /obj/item/device/flashlight(src)
 	src.modules += new /obj/item/device/flash(src)
@@ -239,7 +240,8 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 			src.modules -= null
 
 	recharge_tick++
-	if(recharge_tick < recharge_time) return 0
+	if(recharge_tick < recharge_time)
+		return 0
 	recharge_tick = 0
 	if(R && R.cell)
 		respawn_consumable(R)
@@ -306,7 +308,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	languages = list(
 					LANGUAGE_GALACTIC_COMMON	= 1,
 					LANGUAGE_UNATHI		= 1,
-					LANGUAGE_SIIK_TAJR	= 1,
+					LANGUAGE_CATBEAST	= 1,
 					LANGUAGE_SKRELLIAN	= 1,
 					LANGUAGE_ROOTSPEAK	= 1,
 					LANGUAGE_TRADEBAND	= 1,

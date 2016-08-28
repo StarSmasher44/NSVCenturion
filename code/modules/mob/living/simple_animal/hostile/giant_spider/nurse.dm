@@ -11,7 +11,6 @@
 	melee_damage_upper = 10
 	poison_per_bite = 10
 	poison_type = STOXIN
-	speed=2.5
 	var/fed = 0
 	var/atom/cocoon_target
 
@@ -24,7 +23,8 @@
 			stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	if(istype(loc,/obj/item/device/mobcapsule)) //Dont bother trying to do shit while inside of a capsule, stops self-web spinning
 		return
 	..()
@@ -172,7 +172,7 @@
 	icon_state = "spider_queen1"
 	icon_living = "spider_queen1"
 	icon_dead = "spider_queen_dead"
-	pixel_x = -16
+	pixel_x = -16 * PIXEL_MULTIPLIER
 	maxHealth = 500
 	health = 500
 	melee_damage_lower = 30

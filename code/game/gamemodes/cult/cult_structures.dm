@@ -95,7 +95,6 @@
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "hole"
 	density = 1
-	unacidable = 1
 	anchored = 1.0
 	var/spawnable = null
 
@@ -147,8 +146,10 @@
 			return
 
 
-		if(iscultist(M)) return
-		if(!ishuman(M) && !isrobot(M)) return
+		if(iscultist(M))
+			return
+		if(!ishuman(M) && !isrobot(M))
+			return
 
 		M.monkeyizing = 1
 		M.canmove = 0

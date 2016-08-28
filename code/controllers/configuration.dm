@@ -179,6 +179,13 @@
 	var/error_silence_time = 6000 // How long a unique error will be silenced for
 	var/error_msg_delay = 50 // How long to wait between messaging admins about occurrences of a unique error
 	var/use_overmap = 0
+
+
+	// Discord crap.
+	var/discord_url
+	var/discord_password
+
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -205,7 +212,8 @@
 	var/list/Lines = file2list(filename)
 
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)
@@ -555,6 +563,10 @@
 					error_silence_time = value
 				if("error_msg_delay")
 					error_msg_delay = value
+				if("discord_url")
+					discord_url = value
+				if("discord_password")
+					discord_password = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"
@@ -625,7 +637,8 @@
 /datum/configuration/proc/loadsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)
@@ -671,7 +684,8 @@
 /datum/configuration/proc/loadforumsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)

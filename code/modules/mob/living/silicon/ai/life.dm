@@ -1,5 +1,6 @@
 /mob/living/silicon/ai/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if (src.stat == 2)
 		return
@@ -58,9 +59,7 @@
 					//I'll get back to this when I find out  how this is -supposed- to work ~Carn //removed this shit since it was confusing as all hell --39kk9t
 			//stage = 4.5
 			if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
-				src.sight |= SEE_TURFS
-				src.sight |= SEE_MOBS
-				src.sight |= SEE_OBJS
+				change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				src.see_in_dark = 8
 				src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
@@ -94,11 +93,9 @@
 			if(client)
 				if(src.blind)
 					src.blind.screen_loc = "1,1 to 15,15"
-					if (src.blind.layer!=18)
-						src.blind.layer = 18
-				src.sight = src.sight&~SEE_TURFS
-				src.sight = src.sight&~SEE_MOBS
-				src.sight = src.sight&~SEE_OBJS
+					if (src.blind.layer != 18)
+						src.blind.layer = UNDER_HUD_LAYER
+				change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				src.see_in_dark = 0
 			src.see_invisible = SEE_INVISIBLE_LIVING
 
@@ -168,8 +165,10 @@
 									break
 							if (!theAPC)
 								switch(PRP)
-									if (1) to_chat(src, "Unable to locate APC!")
-									else to_chat(src, "Lost connection with the APC!")
+									if (1)
+										to_chat(src, "Unable to locate APC!")
+									else
+										to_chat(src, "Lost connection with the APC!")
 								src:aiRestorePowerRoutine = 2
 								return
 							if (loc.power_equip)
@@ -180,9 +179,12 @@
 										src.blind.layer = 0 //This, too, is a fix to issue 603
 									return
 							switch(PRP)
-								if (1) to_chat(src, "APC located. Optimizing route to APC to avoid needless power waste.")
-								if (2) to_chat(src, "Best route identified. Hacking offline APC power port.")
-								if (3) to_chat(src, "Power port upload access confirmed. Loading control program into APC power port software.")
+								if (1)
+									to_chat(src, "APC located. Optimizing route to APC to avoid needless power waste.")
+								if (2)
+									to_chat(src, "Best route identified. Hacking offline APC power port.")
+								if (3)
+									to_chat(src, "Power port upload access confirmed. Loading control program into APC power port software.")
 								if (4)
 									to_chat(src, "Transfer complete. Forcing APC to execute program.")
 									sleep(50)

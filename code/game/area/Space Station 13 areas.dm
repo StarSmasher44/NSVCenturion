@@ -26,7 +26,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Space"
 	icon = 'icons/turf/areas.dmi'
 	icon_state = "unknown"
-	layer = 10
 	mouse_opacity = 0
 	luminosity = 0
 	var/lightswitch = 1
@@ -73,10 +72,12 @@ var/list/teleportlocs = list()
 
 proc/process_teleport_locs()
 	for(var/area/AR in areas)
-		if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station)) continue
-		if(teleportlocs.Find(AR.name)) continue
+		if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station))
+			continue
+		if(teleportlocs.Find(AR.name))
+			continue
 		var/turf/picked = safepick(get_area_turfs(AR.type))
-		if (picked && picked.z == 1)
+		if (picked && picked.z == map.zMainStation)
 			teleportlocs += AR.name
 			teleportlocs[AR.name] = AR
 
@@ -86,12 +87,13 @@ var/list/ghostteleportlocs = list()
 
 proc/process_ghost_teleport_locs()
 	for(var/area/AR in areas)
-		if(ghostteleportlocs.Find(AR.name)) continue
+		if(ghostteleportlocs.Find(AR.name))
+			continue
 		if(istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 		var/turf/picked = safepick(get_area_turfs(AR.type))
-		if (picked && (picked.z == 1 || picked.z == 5 || picked.z == 3))
+		if (picked && (picked.z == map.zMainStation || picked.z == map.zAsteroid || picked.z == map.zTCommSat))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 
@@ -101,7 +103,8 @@ var/global/list/adminbusteleportlocs = list()
 
 proc/process_adminbus_teleport_locs()
 	for(var/area/AR in areas)
-		if(adminbusteleportlocs.Find(AR.name)) continue
+		if(adminbusteleportlocs.Find(AR.name))
+			continue
 		var/turf/picked = safepick(get_area_turfs(AR.type))
 		if (picked)
 			adminbusteleportlocs += AR.name

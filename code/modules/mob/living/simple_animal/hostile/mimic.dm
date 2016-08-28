@@ -54,7 +54,8 @@
 	return
 
 /mob/living/simple_animal/hostile/mimic/proc/environment_disguise(list/L = crate_mimic_disguises)
-	if(!L) return
+	if(!L)
+		return
 	//First, determine the environment we're in
 
 	var/our_area_type = "default"
@@ -146,8 +147,10 @@ var/global/list/crate_mimic_disguises = list(\
 				var/found_alive_mob = 0
 
 				for(var/mob/living/L in view(7,src))
-					if(L == src) continue
-					if(L.stat) continue //Dead bodies don't bother us
+					if(L == src)
+						continue
+					if(L.stat)
+						continue //Dead bodies don't bother us
 
 					found_alive_mob = 1
 					break
@@ -176,7 +179,8 @@ var/global/list/crate_mimic_disguises = list(\
 	..()
 	//Put all loot inside us!
 	for(var/obj/item/I in loc)
-		if(I.anchored || I.density) continue
+		if(I.anchored || I.density)
+			continue
 
 		I.forceMove(src)
 
@@ -219,7 +223,8 @@ var/global/list/crate_mimic_disguises = list(\
 		name = "[initial(name)] mimic"
 
 /mob/living/simple_animal/hostile/mimic/crate/proc/calm_down(change_icon = 1)
-	if(angry > 1) return //If angry is 2, can't calm down!
+	if(angry > 1)
+		return //If angry is 2, can't calm down!
 
 	angry = 0
 	if(change_icon)
@@ -350,7 +355,7 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/device/aicard, /obj/item/device/analyzer, /obj/item/device/assembly/igniter, /obj/item/device/camera, /obj/item/device/codebreaker, /obj/item/device/device_analyser,\
 				/obj/item/device/flash, /obj/item/device/flashlight, /obj/item/device/hailer, /obj/item/device/material_synth, /obj/item/device/megaphone, /obj/item/device/paicard,\
 				/obj/item/device/pda/clown, /obj/item/device/rcd/matter/engineering, /obj/item/device/radio, /obj/item/device/robotanalyzer, /obj/item/device/soulstone,\
-				/obj/item/device/soundsynth, /obj/item/device/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items
+				/obj/item/device/soundsynth, /obj/item/device/instrument/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items
 
 	"medbay" = list(/obj/item/weapon/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/weapon/surgicaldrill, /obj/item/weapon/hemostat, /obj/item/weapon/dnainjector/nofail/hulkmut,\
 				/obj/item/weapon/bonesetter, /obj/item/weapon/autopsy_scanner, /obj/item/weapon/FixOVein, /obj/item/stack/medical/ointment, /obj/item/weapon/storage/firstaid,\
@@ -503,21 +508,22 @@ var/global/list/protected_objects = list(
 		time_to_die=world.time+duration
 
 /mob/living/simple_animal/hostile/mimic/copy/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 
 	spawn()
 		var/amplitude = 2
-		var/pixel_x_diff = rand(-amplitude, amplitude)
-		var/pixel_y_diff = rand(-amplitude, amplitude)
+		var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 		animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 		animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-		pixel_x_diff = rand(-amplitude, amplitude)
-		pixel_y_diff = rand(-amplitude, amplitude)
+		pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 		animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 		animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-		pixel_x_diff = rand(-amplitude, amplitude)
-		pixel_y_diff = rand(-amplitude, amplitude)
+		pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 		animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 		animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 
@@ -571,16 +577,16 @@ var/global/list/protected_objects = list(
 
 		spawn()
 			var/amplitude = 2
-			var/pixel_x_diff = rand(-amplitude, amplitude)
-			var/pixel_y_diff = rand(-amplitude, amplitude)
+			var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-			pixel_x_diff = rand(-amplitude, amplitude)
-			pixel_y_diff = rand(-amplitude, amplitude)
+			pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-			pixel_x_diff = rand(-amplitude, amplitude)
-			pixel_y_diff = rand(-amplitude, amplitude)
+			pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 

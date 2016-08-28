@@ -1,7 +1,7 @@
 
 /mob
 	density = 1
-	layer = 4.0
+	layer = MOB_LAYER
 	animate_movement = 2
 
 	w_type = RECYK_BIOLOGICAL
@@ -97,7 +97,6 @@
 	var/druggy = 0			//Carbon
 	var/confused = 0		//Carbon
 	var/antitoxs = null
-	var/plasma = null
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
 	var/lying = 0
@@ -105,7 +104,6 @@
 	var/canmove = 1
 	var/candrop = 1
 	var/lastpuke = 0
-	var/unacidable = 0
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers
@@ -170,8 +168,6 @@
 	var/in_throw_mode = 0
 
 	var/coughedtime = null
-
-	var/inertia_dir = 0
 
 	var/job = null//Living
 

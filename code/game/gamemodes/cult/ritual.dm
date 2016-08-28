@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 var/cultwords = list()
 var/global/runedec = 0
@@ -27,9 +27,8 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "1"
 	var/visibility = 0
-	unacidable = 1
-	layer = TURF_LAYER
-	plane = PLANE_TURF
+	layer = RUNE_LAYER
+	plane = ABOVE_TURF_PLANE
 
 	var/dead=0 // For cascade and whatnot.
 

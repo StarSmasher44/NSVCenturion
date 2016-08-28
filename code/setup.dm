@@ -29,8 +29,8 @@ var/global/disable_vents     = 0
 #define PIPING_LAYER_MIN	1
 #define PIPING_LAYER_MAX	5
 
-#define PIPING_LAYER_P_X		5 //each positive increment of piping_layer changes the pixel_x by this amount
-#define PIPING_LAYER_P_Y		-5 //same, but negative because they form a diagonal
+#define PIPING_LAYER_P_X		5*PIXEL_MULTIPLIER //each positive increment of piping_layer changes the pixel_x by this amount
+#define PIPING_LAYER_P_Y		-5*PIXEL_MULTIPLIER //same, but negative because they form a diagonal
 #define PIPING_LAYER_LCHANGE	0.05 //how much the layer var changes per increment
 
 #define PI 3.1415
@@ -128,335 +128,6 @@ var/global/disable_vents     = 0
 
 // Factor of how fast mob nutrition decreases
 #define HUNGER_FACTOR 0.15  // Please remember when editing this that it will also affect hypothermia.
-
-//Reagents
-
-#define VAPORSALT			"vaporsalt"
-#define BUSTANUT 			"bustanut"
-#define ROGAN 			"rogan"
-#define SLIMEJELLY 			"slimejelly"
-#define BLOOD 			"blood"
-#define VACCINE 			"vaccine"
-#define WATER 			"water"
-#define LUBE 			"lube"
-#define PHALANXIMINE 			"phalanximine"
-#define TOXIN 			"toxin"
-#define PLASTICIDE 			"plasticide"
-#define CYANIDE "cyanide"
-#define CHEFSPECIAL 			"chefspecial"
-#define MINTTOXIN 			"minttoxin"
-#define MUTATIONTOXIN 			"mutationtoxin"
-#define AMUTATIONTOXIN 			"amutationtoxin"
-#define STOXIN 			"stoxin"
-#define INAPROVALINE 			"inaprovaline"
-#define HOLYWATER 			"holywater"
-#define SEROTROTIUM 			"serotrotium"
-#define SILICATE 			"silicate"
-#define OXYGEN 			"oxygen"
-#define COPPER 			"copper"
-#define NITROGEN 			"nitrogen"
-#define HYDROGEN 			"hydrogen"
-#define POTASSIUM 			"potassium"
-#define MERCURY 			"mercury"
-#define SULFUR 			"sulfur"
-#define CARBON 			"carbon"
-#define CHLORINE 			"chlorine"
-#define FLUORINE 			"fluorine"
-#define SODIUM 			"sodium"
-#define PHOSPHORUS 			"phosphorus"
-#define LITHIUM 			"lithium"
-#define SUGAR 			"sugar"
-#define SACID 			"sacid"
-#define PACID 			"pacid"
-#define GLYCEROL 			"glycerol"
-#define NITROGLYCERIN 			"nitroglycerin"
-#define RADIUM 			"radium"
-#define RYETALYN 			"ryetalyn"
-#define PAISMOKE 			"paismoke"
-#define THERMITE 			"thermite"
-#define PARACETAMOL 			"paracetamol"
-#define MUTAGEN 			"mutagen"
-#define TRAMADOL 			"tramadol"
-#define OXYCODONE 			"oxycodone"
-#define VIRUSFOOD 			"virusfood"
-#define STERILIZINE 			"sterilizine"
-#define IRON 			"iron"
-#define GOLD 			"gold"
-#define SILVER 			"silver"
-#define URANIUM 			"uranium"
-#define ALUMINUM 			"aluminum"
-#define SILICON 			"silicon"
-#define FUEL 			"fuel"
-#define VOMIT 			"vomit"
-#define CLEANER 			"cleaner"
-#define FERTILIZER 			"fertilizer"
-#define EZNUTRIENT 			"eznutrient"
-#define ROBUSTHARVEST 			"robustharvest"
-#define PLANTBGONE 			"plantbgone"
-#define PLASMA 			"plasma"
-#define LEPORAZINE 			"leporazine"
-#define CRYPTOBIOLIN 			"cryptobiolin"
-#define LEXORIN 			"lexorin"
-#define KELOTANE 			"kelotane"
-#define DERMALINE 			"dermaline"
-#define DEXALIN 			"dexalin"
-#define DEXALINP 			"dexalinp"
-#define TRICORDRAZINE 			"tricordrazine"
-#define ADMINORDRAZINE 			"adminordrazine"
-#define SYNAPTIZINE 			"synaptizine"
-#define IMPEDREZENE 			"impedrezene"
-#define HYRONALIN 			"hyronalin"
-#define ARITHRAZINE 			"arithrazine"
-#define ALKYSINE 			"alkysine"
-#define IMIDAZOLINE 			"imidazoline"
-#define INACUSIATE 			"inacusiate"
-#define PERIDAXON 			"peridaxon"
-#define BICARIDINE 			"bicaridine"
-#define HYPERZINE 			"hyperzine"
-#define CRYOXADONE 			"cryoxadone"
-#define CLONEXADONE 			"clonexadone"
-#define REZADONE 			"rezadone"
-#define SPACEACILLIN 			"spaceacillin"
-#define CARPOTOXIN 			"carpotoxin"
-#define ZOMBIEPOWDER 			"zombiepowder"
-#define MINDBREAKER 			"mindbreaker"
-#define SPIRITBREAKER 			"spiritbreaker"
-#define METHYLIN 			"methylin"
-#define BICARODYNE 			"bicarodyne"
-#define STABILIZINE 			"stabilizine"
-#define NANITES 			"nanites"
-#define AUTISTNANITES 			"autistnanites"
-#define XENOMICROBES 			"xenomicrobes"
-#define NANOBOTS 			"nanobots"
-#define MEDNANOBOTS 			"mednanobots"
-#define COMNANOBOTS 			"comnanobots"
-#define FLUOROSURFACTANT 			"fluorosurfactant"
-#define NICOTINE 			"nicotine"
-#define AMMONIA 			"ammonia"
-#define GLUE 			"glue"
-#define DIETHYLAMINE 			"diethylamine"
-#define ETHYLREDOXRAZINE 			"ethylredoxrazine"
-#define CHLORALHYDRATE 			"chloralhydrate"
-#define NUTRIMENT 			"nutriment"
-#define LIPOZINE 			"lipozine"
-#define SOYSAUCE 			"soysauce"
-#define KETCHUP 			"ketchup"
-#define CAPSAICIN 			"capsaicin"
-#define CONDENSEDCAPSAICIN 			"condensedcapsaicin"
-#define BLACKCOLOR 			"blackcolor"
-#define FROSTOIL 			"frostoil"
-#define SODIUMCHLORIDE 			"sodiumchloride"
-#define CREATINE 			"creatine"
-#define CARPPHEROMONES 			"carppheromones"
-#define BLACKPEPPER 			"blackpepper"
-#define CINNAMON 			"cinnamon"
-#define COCO 			"coco"
-#define AMATOXIN 			"amatoxin"
-#define AMANATIN 			"amanatin"
-#define PSILOCYBIN 			"psilocybin"
-#define SPRINKLES 			"sprinkles"
-#define SYNDICREAM 			"syndicream"
-#define CORNOIL 			"cornoil"
-#define ENZYME 			"enzyme"
-#define FLOUR 			"flour"
-#define RICE 			"rice"
-#define CHERRYJELLY 			"cherryjelly"
-#define DISCOUNT 			"discount"
-#define IRRADIATEDBEANS 			"irradiatedbeans"
-#define TOXICWASTE 			"toxicwaste"
-#define REFRIEDBEANS 			"refriedbeans"
-#define MUTATEDBEANS 			"mutatedbeans"
-#define BEFF 			"beff"
-#define HORSEMEAT 			"horsemeat"
-#define MOONROCKS 			"moonrocks"
-#define OFFCOLORCHEESE 			"offcolorcheese"
-#define BONEMARROW 			"bonemarrow"
-#define GREENRAMEN 			"greenramen"
-#define GLOWINGRAMEN 			"glowingramen"
-#define DEEPFRIEDRAMEN 			"deepfriedramen"
-#define PEPTOBISMOL 			"peptobismol"
-#define DRINK 			"drink"
-#define ORANGEJUICE 			"orangejuice"
-#define TOMATOJUICE 			"tomatojuice"
-#define LIMEJUICE 			"limejuice"
-#define CARROTJUICE 			"carrotjuice"
-#define BERRYJUICE 			"berryjuice"
-#define POISONBERRYJUICE 			"poisonberryjuice"
-#define WATERMELONJUICE 			"watermelonjuice"
-#define APPLEJUICE 			"applejuice"
-#define LEMONJUICE 			"lemonjuice"
-#define BANANA 			"banana"
-#define NOTHING 			"nothing"
-#define POTATO 			"potato"
-#define MILK 			"milk"
-#define SOYMILK 			"soymilk"
-#define CREAM 			"cream"
-#define COFFEE 			"coffee"
-#define ICECOFFEE 			"icecoffee"
-#define TEA 			"tea"
-#define ICETEA 			"icetea"
-#define ARNOLDPALMER 			"arnoldpalmer"
-#define KAHLUA 			"kahlua"
-#define TONIC 			"tonic"
-#define SODAWATER 			"sodawater"
-#define ICE 			"ice"
-#define COLA 			"cola"
-#define SPACEMOUNTAINWIND 			"spacemountainwind"
-#define LEMONADE 			"lemonade"
-#define KIRASPECIAL 			"kiraspecial"
-#define BROWNSTAR 			"brownstar"
-#define MILKSHAKE 			"milkshake"
-#define REWRITER 			"rewriter"
-#define HIPPIESDELIGHT 			"hippiesdelight"
-#define ETHANOL 			"ethanol"
-#define BEER 			"beer"
-#define WHISKEY 			"whiskey"
-#define SPECIALWHISKEY 			"specialwhiskey"
-#define GIN 			"gin"
-#define ABSINTHE 			"absinthe"
-#define RUM 			"rum"
-#define TEQUILA 			"tequila"
-#define VERMOUTH 			"vermouth"
-#define WINE 			"wine"
-#define COGNAC 			"cognac"
-#define HOOCH 			"hooch"
-#define ALE 			"ale"
-#define PWINE 			"pwine"
-#define RUM 			"rum"
-#define VODKA 			"vodka"
-#define SAKE 			"sake"
-#define TEQUILA 			"tequila"
-#define VERMOUTH 			"vermouth"
-#define WINE 			"wine"
-#define COGNAC 			"cognac"
-#define HOOCH 			"hooch"
-#define ALE 			"ale"
-#define THIRTEENLOKO 			"thirteenloko"
-#define BILK 			"bilk"
-#define ATOMICBOMB 			"atomicbomb"
-#define THREEMILEISLAND 			"threemileisland"
-#define GOLDSCHLAGER 			"goldschlager"
-#define PATRON 			"patron"
-#define GINTONIC 			"gintonic"
-#define CUBALIBRE 			"cubalibre"
-#define WHISKEYCOLA 			"whiskeycola"
-#define MARTINI 			"martini"
-#define VODKAMARTINI 			"vodkamartini"
-#define WHITERUSSIAN 			"whiterussian"
-#define SCREWDRIVERCOCKTAIL 			"screwdrivercocktail"
-#define BOOGER 			"booger"
-#define BLOODYMARY 			"bloodymary"
-#define GARGLEBLASTER 			"gargleblaster"
-#define BRAVEBULL 			"bravebull"
-#define TEQUILASUNRISE 			"tequilasunrise"
-#define TOXINSSPECIAL 			"toxinsspecial"
-#define BEEPSKYSMASH 			"beepskysmash"
-#define DOCTORSDELIGHT 			"doctorsdelight"
-#define CHANGELINGSTING 			"changelingsting"
-#define IRISHCREAM 			"irishcream"
-#define MANLYDORF 			"manlydorf"
-#define LONGISLANDICEDTEA 			"longislandicedtea"
-#define MOONSHINE 			"moonshine"
-#define IRISHCOFFEE 			"irishcoffee"
-#define MARGARITA 			"margarita"
-#define BLACKRUSSIAN 			"blackrussian"
-#define MANHATTAN 			"manhattan"
-#define WHISKEYSODA 			"whiskeysoda"
-#define ANTIFREEZE 			"antifreeze"
-#define BAREFOOT 			"barefoot"
-#define SNOWWHITE 			"snowwhite"
-#define DEMONSBLOOD 			"demonsblood"
-#define VODKATONIC 			"vodkatonic"
-#define GINFIZZ 			"ginfizz"
-#define PINACOLADA 			"pinacolada"
-#define SINGULO 			"singulo"
-#define SBITEN 			"sbiten"
-#define DEVILSKISS 			"devilskiss"
-#define MEAD 			"mead"
-#define GROG 			"grog"
-#define ALOE 			"aloe"
-#define ANDALUSIA 			"andalusia"
-#define ALLIESCOCKTAIL 			"alliescocktail"
-#define ACIDSPIT 			"acidspit"
-#define AMASEC 			"amasec"
-#define NEUROTOXIN 			"neurotoxin"
-#define BANANAHONK 			"bananahonk"
-#define SILENCER 			"silencer"
-#define CHANGELINGSTING 			"changelingsting"
-#define ERIKASURPRISE 			"erikasurprise"
-#define IRISHCARBOMB 			"irishcarbomb"
-#define SYNDICATEBOMB 			"syndicatebomb"
-#define DRIESTMARTINI 			"driestmartini"
-#define VINEGAR 			"vinegar"
-#define HONKSERUM 			"honkserum"
-#define HAMSERUM 			"hamserum"
-#define GREENTEA 			"greentea"
-#define REDTEA 			"redtea"
-#define SINGULARITEA 			"singularitea"
-#define CHIFIR 			"chifir"
-#define ACIDTEA 			"acidtea"
-#define YINYANG 			"yinyang"
-#define GYRO 			"gyro"
-#define DANTEA 			"dantea"
-#define MINT 			"mint"
-#define CHAMOMILE 			"chamomile"
-#define EXCHAMOMILE 			"exchamomile"
-#define FANCYDAN 			"fancydan"
-#define PLASMATEA 			"plasmatea"
-#define GREYTEA 			"greytea"
-#define ESPRESSO 			"espresso"
-#define TONIO 			"tonio"
-#define CAPPUCCINO 			"cappuccino"
-#define DOPPIO 			"doppio"
-#define PASSIONE 			"passione"
-#define SECCOFFEE 			"seccoffee"
-#define MEDCOFFEE 			"medcoffee"
-#define DETCOFFEE 			"detcoffee"
-#define ETANK 			"etank"
-#define QUANTUM 			"quantum"
-#define SPORTDRINK 			"sportdrink"
-#define CITALOPRAM 			"citalopram"
-#define PAROXETINE 			"paroxetine"
-#define GRAVY 			"gravy"
-#define LEFT4ZED		"left4zed"
-#define ANTI_TOXIN		"anti_toxin"
-#define REAGENT			"reagent"
-#define STOXIN2			"stoxin2"
-#define SPACE_DRUGS		"space_drugs"
-#define FOAMING_AGENT	"foaming_agent"
-#define BEER2			"beer2"
-#define HOT_COCO		"hot_coco"
-#define DRY_RAMEN		"dry_ramen"
-#define HOT_RAMEN		"hot_ramen"
-#define HELL_RAMEN		"hell_ramen"
-#define CLOTTING_AGENT	"clotting_agent"
-#define SOY_LATTE		"soy_latte"
-#define CAFE_LATTE		"cafe_latte"
-#define NUKA_COLA		"nuka_cola"
-#define DR_GIBB			"dr_gibb"
-#define SPACE_UP		"space_up"
-#define LEMON_LIME		"lemon_lime"
-#define B52				"b52"
-#define MANHATTAN_PROJ	"manhattan_proj"
-#define BAHAMA_MAMA		"bahama_mama"
-#define RED_MEAD		"red_mead"
-#define ICED_BEER		"iced_beer"
-#define CHARCOAL		"charcoal"
-
-#define TUNGSTEN 			"tungsten"
-#define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
-#define GROUND_ROCK 			"ground_rock"
-#define DENSITY_SEPARATED_SAMPLE 			"density_separated_sample"
-#define ANALYSIS_SAMPLE 			"analysis_sample"
-#define CHEMICAL_WASTE 			"chemical_waste"
-
-
-// How many units of reagent are consumed per tick, by default.
-#define REAGENTS_METABOLISM 0.2
-
-// By defining the effect multiplier this way, it'll exactly adjust
-// all effects according to how they originally were with the 0.4 metabolism
-#define REAGENTS_EFFECT_MULTIPLIER REAGENTS_METABOLISM / 0.4
 
 
 #define MINIMUM_AIR_RATIO_TO_SUSPEND 0.05
@@ -606,8 +277,11 @@ var/MAX_EXPLOSION_RANGE = 14
 #define PASSTABLE	1
 #define PASSGLASS	2
 #define PASSGRILLE	4
-#define PASSBLOB	8
-#define PASSMACHINE	16//computers, vending machines, rnd machines
+#define PASSMOB		8
+#define PASSBLOB	16
+#define PASSMACHINE	32 //computers, vending machines, rnd machines
+#define PASSDOOR	64 //not just airlocks, but also firelocks, windoors etc
+
 
 /*
 	These defines are used specifically with the atom/movable/languages bitmask.
@@ -1105,9 +779,10 @@ SEE_PIXELS	256
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
 
-
-//Please don't edit these values without speaking to Errorage first	~Carn
 //Admin Permissions
+//Please don't edit these values without speaking to [current /vg/ host here] first
+//Currently at the limit for rank bitflags, if any are needed to be added in the future then consider replacement of R_MOD as we don't use it at time of writing, or merge R_STEALTH into R_ADMIN.
+
 #define R_BUILDMODE		1
 #define R_ADMIN			2
 #define R_BAN			4
@@ -1123,8 +798,9 @@ SEE_PIXELS	256
 #define R_SPAWN			4096
 #define R_MOD			8192
 #define R_ADMINBUS		16384
+#define R_POLLING		32768
 
-#define R_MAXPERMISSION 16384 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
+#define R_MAXPERMISSION 32768 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
 
 #define R_HOST			65535
 
@@ -1231,11 +907,6 @@ SEE_PIXELS	256
 #define PULSE_FAST		4	//90-120 bpm
 #define PULSE_2FAST		5	//>120 bpm
 #define PULSE_THREADY	6	//occurs during hypovolemic shock
-//feel free to add shit to lists below
-var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE)	//increase heart rate
-var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN)					//decrease heart rate
-var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
-var/list/cheartstopper = list(/*"potassium_chloride"*/) //this stops the heart when overdose is met -- c = conditional
 
 //proc/get_pulse methods
 #define GETPULSE_HAND	0	//less accurate (hand)
@@ -1472,6 +1143,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_ATMOS    "atmos"
 #define I_CHEMS	   "chems"
 #define I_WIRES    "wires"
+#define I_GHOST    "poltergeist"
 
 // delayNext() flags.
 #define DELAY_MOVE    1
@@ -1551,11 +1223,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 //AOE spells
 #define IGNOREDENSE		64	//are dense turfs ignored in selection?
 #define IGNORESPACE		128	//are space turfs ignored in selection?
+#define NODUPLICATE		256 //can we put the same summon type on the same tile?
 //End split flags
-#define CONSTRUCT_CHECK	256	//used by construct spells - checks for nullrods
-#define NO_BUTTON		512	//spell won't show up in the HUD with this
-#define WAIT_FOR_CLICK	1024//spells wait for you to click on a target to cast
-#define TALKED_BEFORE	2048//spells require you to have heard the person you are casting it upon
+#define CONSTRUCT_CHECK	512	//used by construct spells - checks for nullrods
+#define NO_BUTTON		1024	//spell won't show up in the HUD with this
+#define WAIT_FOR_CLICK	2048//spells wait for you to click on a target to cast
+#define TALKED_BEFORE	4096//spells require you to have heard the person you are casting it upon
 
 //invocation
 #define SpI_SHOUT	"shout"
@@ -1569,10 +1242,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define Sp_TOTAL	"total"
 
 //casting costs
-#define Sp_RECHARGE	"recharge"
-#define Sp_CHARGES	"charges"
-#define Sp_HOLDVAR	"holdervar"
-
+#define Sp_RECHARGE	1
+#define Sp_CHARGES	2
+#define Sp_HOLDVAR	4
+//spell range
+#define SELFCAST -1
+#define GLOBALCAST -2
 ///////WIZ END/////////
 
 //Some alien checks for reagents for alien races.
@@ -1597,7 +1272,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_GALACTIC_COMMON "Galactic Common"
 #define LANGUAGE_HUMAN "Sol Common"
 #define LANGUAGE_UNATHI "Sinta'unathi"
-#define LANGUAGE_SIIK_TAJR "Siik'tajr"
+#define LANGUAGE_CATBEAST "Siik'tajr"
 #define LANGUAGE_SKRELLIAN "Skrellian"
 #define LANGUAGE_ROOTSPEAK "Rootspeak"
 #define LANGUAGE_TRADEBAND "Tradeband"
@@ -1608,7 +1283,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MONKEY "Monkey"
 #define LANGUAGE_VOX "Vox-pidgin"
 #define LANGUAGE_CULT "Cult"
-#define LANGUAGE_MOUSE "Mouse" // This broke the code, so fuck it
+#define LANGUAGE_MOUSE "Mouse"
+#define LANGUAGE_GOLEM "Golem"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1628,7 +1304,8 @@ var/proccalls = 1
 /proc/write_panic(a)
 	set background = 1
 	panicfile["[proccalls]"] << a
-	if(++proccalls > 200) proccalls = 1
+	if(++proccalls > 200)
+		proccalls = 1
 
 #else
 	#define writepanic(a) null << a
@@ -1679,6 +1356,7 @@ var/proccalls = 1
 #define FOOD_ANIMAL	2
 #define FOOD_SWEET	4
 #define FOOD_LIQUID	8
+#define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
 
 /*
  *
@@ -1789,6 +1467,11 @@ var/proccalls = 1
 #define ATTACK_BITE 1
 #define ATTACK_KICK 2
 
+//Special attack returns (for procs like kick_act and bite_act)
+#define SPECIAL_ATTACK_SUCCESS 0
+#define SPECIAL_ATTACK_CANCEL 1 //Default return for the procs; cancel the special attack and perform a normal click instead
+#define SPECIAL_ATTACK_FAILED 2
+
 // Defines for the map writer, moved here for reasons.
 #define DMM_IGNORE_AREAS 1
 #define DMM_IGNORE_TURFS 2
@@ -1813,3 +1496,5 @@ var/proccalls = 1
 #define GRASP_LEFT_HAND 2
 
 #define BLOB_CORE_PROPORTION 20
+
+#define DEFAULT FONT SIZE 4

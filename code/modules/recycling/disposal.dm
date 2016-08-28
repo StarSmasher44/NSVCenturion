@@ -107,7 +107,8 @@
 				to_chat(user, "You start slicing the floorweld off the disposal unit.")
 
 				if(do_after(user, src,20))
-					if(!src || !W.isOn()) return
+					if(!src || !W.isOn())
+						return
 					to_chat(user, "You sliced the floorweld off the disposal unit.")
 					var/obj/structure/disposalconstruct/C = new (src.loc)
 					src.transfer_fingerprints_to(C)
@@ -153,7 +154,8 @@
 				log_attack("<font color='red'>[usr] ([usr.ckey]) placed [GM] ([GM.ckey]) in a disposals unit.</font>")
 		return
 
-	if(!I)	return
+	if(!I)
+		return
 
 	if(user.drop_item(I, src))
 		user.visible_message("[user.name] places \the [I] into the [src].", "You place \the [I] into the [src].")
@@ -666,7 +668,8 @@
 	var/dpdir = 0		// bitmask of pipe directions
 	dir = 0				// dir will contain dominant direction for junction pipes
 	var/health = 10 	// health points 0-10
-	layer = 2.3			// slightly lower than wires and other pipes
+	layer = DISPOSALS_PIPE_LAYER
+	plane = ABOVE_TURF_PLANE
 	var/base_icon_state	// initial icon state on map
 
 	// new pipe, set the icon_state as on map
@@ -886,7 +889,8 @@
 				var/atom/wloc = W.loc
 				to_chat(user, "Slicing the disposal pipe.")
 				sleep(30)
-				if(!W.isOn()) return
+				if(!W.isOn())
+					return
 				if(user.loc == uloc && wloc == W.loc)
 					welded()
 				else
@@ -1385,7 +1389,8 @@
 			var/atom/wloc = W.loc
 			to_chat(user, "Slicing the disposal pipe.")
 			sleep(30)
-			if(!W.isOn()) return
+			if(!W.isOn())
+				return
 			if(user.loc == uloc && wloc == W.loc)
 				welded()
 			else
@@ -1531,7 +1536,8 @@
 				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 				to_chat(user, "You start slicing the floorweld off the disposal outlet.")
 				if(do_after(user, src,20))
-					if(!src || !W.isOn()) return
+					if(!src || !W.isOn())
+						return
 					to_chat(user, "You sliced the floorweld off the disposal outlet.")
 					var/obj/structure/disposalconstruct/C = new (src.loc)
 					src.transfer_fingerprints_to(C)

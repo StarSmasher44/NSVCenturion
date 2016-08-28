@@ -42,7 +42,7 @@
 			<A href='byond://?src=\ref[src];spell_choice=magicmissile'>Magic Missile</A> (10)<BR>
 			<I>This spell fires several, slow moving, magic projectiles at nearby targets. If they hit a target, it is paralyzed and takes minor damage.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=fireball'>Fireball</A> (10)<BR>
-			<I>This spell fires a fireball in the direction you're facing and does not require wizard garb. Be careful not to fire it at people that are standing next to you.</I><BR>
+			<I>This spell fires a fireball in the direction you're facing and does not require wizard garb. Be careful not to fire it at people that are standing next to you. Upgrading spell power makes Fireball targetable.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=lightning'>Lightning</A> (20)<BR>
 			<I>Become Zeus and throw lightning at your foes, once you've charged the spell focus it upon any being to unleash electric fury. Upgrading this will cause your lightning to arc.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=disabletech'>Disable Technology</A> (60)<BR>
@@ -76,9 +76,9 @@
 			<A href='byond://?src=\ref[src];spell_choice=clowncurse'>The Clown Curse</A> (30)<BR>
 			<I>This spell turns an adjacent target into a miserable clown. This spell does not require robes to cast.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=shoesnatch'>Shoe Snatching Charm</A> (15)<BR>
-			<I>This spell will remove your victim's shoes and materialize them in your hands. This spell does not require robes to cast.</I><BR>
+			<I>This spell will remove your victim's shoes and materialize them in your hands. This spell does not require robes to cast. Upgrading spell power causes the spell to summon glass shards around the victim, if they were wearing shoes.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=robesummon'>Summon Robes</A> (50)<BR>
-			<I>This spell will allow you to summon a new set of robes. Useful for stealthy wizards. This spell (quite obviously) does not require robes to cast.</I><BR>
+			<I>This spell will allow you to summon a new set of robes. Useful for stealthy wizards. This spell (quite obviously) does not require robes to cast. Upgrading spell power lets you summon a gem-encrusted hardsuit with an oxygen tank and a breath mask.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=fleshtostone'>Flesh to Stone</A> (60)<BR>
 			<I>This spell will curse a person to immediately turn into an unmoving statue. The effect will eventually wear off if the statue is not destroyed.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=arsenath'>Butt-Bot's Revenge</A> (50)<BR>
@@ -163,7 +163,8 @@
 				smoke = "Smoke", blind = "Blind", subjugation = "Subjugation", mindswap = "Mind Transfer", forcewall = "Forcewall", blink = "Blink", teleport = "Teleport", mutate = "Mutate",
 				etherealjaunt = "Ethereal Jaunt", knock = "Knock", horseman = "Curse of the Horseman", frenchcurse = "The French Curse", summonguns = "Summon Guns", staffchange = "Staff of Change",
 				mentalfocus = "Mental Focus", soulstone = "Six Soul Stone Shards and the spell Artificer", armor = "Mastercrafted Armor Set", staffanimate = "Staff of Animation", noclothes = "No Clothes",
-				fleshtostone = "Flesh to Stone", arsenath = "Butt-Bot's Revenge", timestop = "Time Stop", bundle = "Spellbook Bundle")
+				fleshtostone = "Flesh to Stone", arsenath = "Butt-Bot's Revenge", timestop = "Time Stop", bundle = "Spellbook Bundle", shoesnatch = "Shoe Snatching Charm", robesummon = "Summon Robes",\
+				)
 				var/already_knows = 0
 				for(var/spell/aspell in H.spell_list)
 					if(available_spells[href_list["spell_choice"]] == initial(aspell.name))
@@ -345,7 +346,7 @@
 							feedback_add_details("wizard_spell_learned","SS") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
 							new /obj/item/weapon/storage/belt/soulstone/full(get_turf(H))
 							add_spell(new/spell/aoe_turf/conjure/construct,H)
-							H.add_language("Cult")
+							H.add_language(LANGUAGE_CULT)
 							temp = "You have purchased a belt full of soulstones and have learned the artificer spell."
 							max_uses--
 						if("armor")
@@ -376,7 +377,7 @@
 							new /obj/item/weapon/scrying(get_turf(H))
 							if (!(M_XRAY in H.mutations))
 								H.mutations.Add(M_XRAY)
-								H.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
+								H.change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
 								H.see_in_dark = 8
 								H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 								to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")
@@ -602,9 +603,7 @@
 /obj/item/weapon/spellbook/oneuse/clown/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
 		to_chat(user, "<span class ='warning'>You suddenly feel funny!</span>")
-		var/obj/item/clothing/mask/gas/clown_hat/magicclown = new /obj/item/clothing/mask/gas/clown_hat
-		magicclown.canremove = 0
-		magicclown.unacidable = 1
+		var/obj/item/clothing/mask/gas/clown_hat/magicclown = new /obj/item/clothing/mask/gas/clown_hat/stickymagic
 		user.flash_eyes(visual = 1)
 		user.dna.SetSEState(CLUMSYBLOCK,1)
 		genemutcheck(user,CLUMSYBLOCK,null,MUTCHK_FORCED)
@@ -622,10 +621,7 @@
 /obj/item/weapon/spellbook/oneuse/mime/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
 		to_chat(user, "<span class ='warning'>You suddenly feel very quiet.</span>")
-		var/obj/item/clothing/mask/gas/mime/magicmime = new /obj/item/clothing/mask/gas/mime
-		magicmime.canremove = 0
-		magicmime.unacidable = 1
-		magicmime.muted = 1
+		var/obj/item/clothing/mask/gas/mime/magicmime = new /obj/item/clothing/mask/gas/mime/stickymagic
 		user.flash_eyes(visual = 1)
 		user.drop_from_inventory(user.wear_mask)
 		user.equip_to_slot_if_possible(magicmime, slot_wear_mask, 1, 1)
@@ -641,10 +637,7 @@
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/victim = user
 		to_chat(user, "<span class ='warning'>Your feet feel funny!</span>")
-		var/obj/item/clothing/shoes/clown_shoes/magicshoes = new /obj/item/clothing/shoes/clown_shoes
-		magicshoes.canremove = 0
-		magicshoes.wizard_garb = 1
-		magicshoes.unacidable = 1
+		var/obj/item/clothing/shoes/clown_shoes/magicshoes = new /obj/item/clothing/shoes/clown_shoes/stickymagic
 		user.flash_eyes(visual = 1)
 		user.drop_from_inventory(victim.shoes)
 		user.equip_to_slot(magicshoes, slot_shoes, 1, 1)

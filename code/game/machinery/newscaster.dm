@@ -136,8 +136,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 /obj/machinery/newscaster/New(var/loc, var/ndir, var/building = 1)
 	buildstage = building
 	if(!buildstage) //Already placed newscasters via mapping will not be affected by this
-		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 : -28)
-		pixel_y = (ndir & 3)? (ndir == 1 ? 28 : -28) : 0
+		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
+		pixel_y = (ndir & 3)? (ndir == 1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	allCasters += src
 	for(var/obj/machinery/newscaster/NEWSCASTER in allCasters) // Let's give it an appropriate unit number
@@ -607,7 +607,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			src.updateUsrDialog()
 
 		else if(href_list["upload_photo"])
-			if(!isAI(usr)) return
+			if(!isAI(usr))
+				return
 			if(photo)
 				EjectPhoto()
 				src.updateUsrDialog()
@@ -981,7 +982,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		photo = P
 
 /obj/machinery/newscaster/proc/EjectPhoto(mob/user as mob)
-	if(!photo) return
+	if(!photo)
+		return
 	if(istype(photo,/obj/item/weapon/photo))
 		var/obj/item/weapon/photo/P = photo
 		P.loc = src.loc

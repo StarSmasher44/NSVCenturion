@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 /obj/item/device/mmi
 	name = "Man-Machine Interface"
@@ -6,7 +6,7 @@
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mmi_empty"
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "biotech=3"
+	origin_tech = Tc_BIOTECH + "=3"
 
 	var/list/mommi_assembly_parts = list(
 		/obj/item/weapon/cell = 1,
@@ -66,7 +66,8 @@ obj/item/device/mmi/Destroy()
 		icon = null
 		invisibility = 101
 		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(get_turf(loc))
-		if(!M)	return
+		if(!M)
+			return
 		M.invisibility = 0
 		//M.custom_name = created_name
 		M.Namepick()
@@ -122,8 +123,8 @@ obj/item/device/mmi/Destroy()
 			if(ghost && ghost.client && ghost.can_reenter_corpse)
 				to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] seems slow to respond. Try again in a few seconds.</span>")
 				ghost << 'sound/effects/adminhelp.ogg'
-				to_chat(ghost, "<span class='interface'><b><font size = 3>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</b> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>")
+				to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</span> \
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				return TRUE
 			to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] is completely unresponsive; there's no point.</span>")
 			return TRUE
@@ -202,7 +203,7 @@ obj/item/device/mmi/Destroy()
 /obj/item/device/mmi/radio_enabled
 	name = "Radio-enabled Man-Machine Interface"
 	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity. This one comes with a built-in radio."
-	origin_tech = "biotech=4"
+	origin_tech = Tc_BIOTECH + "=4"
 
 	var/obj/item/device/radio/radio = null//Let's give it a radio.
 

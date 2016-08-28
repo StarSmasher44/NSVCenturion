@@ -31,7 +31,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "farmbot0"
 	icon_initial = "farmbot"
-	layer = 5.0
 	density = 1
 	anchored = 0
 	health = 50
@@ -190,7 +189,8 @@
 
 /obj/machinery/bot/farmbot/Emag(mob/user as mob)
 	..()
-	if(user) to_chat(user, "<span class='warning'>You short out [src]'s plant identifier circuits.</span>")
+	if(user)
+		to_chat(user, "<span class='warning'>You short out [src]'s plant identifier circuits.</span>")
 	spawn(0)
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
@@ -542,7 +542,6 @@
 	var/obj/item/weapon/farmbot_arm_assembly/A = new /obj/item/weapon/farmbot_arm_assembly
 
 	A.loc = src.loc
-	A.layer = 20
 	to_chat(user, "You add the robot arm to the [src]")
 	src.loc = A //Place the water tank into the assembly, it will be needed for the finished bot
 

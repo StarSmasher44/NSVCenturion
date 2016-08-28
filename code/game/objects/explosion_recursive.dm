@@ -34,10 +34,19 @@ proc/get_explosion_turf(var/turf/simulated/T)
 	explosion_turfs += ET
 	return ET
 
-proc/explosion_rec(turf/epicenter, power, flame_range)
-	if(power <= 0) return
+proc/explosion_rec(turf/epicenter, power)
+	var/loopbreak = 0
+	while(explosion_in_progress)
+		if(loopbreak >= 20)
+			return
+		CHECK_TICK
+		loopbreak++
+
+	if(power <= 0)
+		return
 	epicenter = get_turf(epicenter)
-	if(!epicenter) return
+	if(!epicenter)
+		return
 
 	message_admins("Explosion with size ([power]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 	log_game("Explosion with size ([power]) in area [epicenter.loc.name] ")
@@ -58,8 +67,10 @@ proc/explosion_rec(turf/epicenter, power, flame_range)
 		CHECK_TICK
 	//This step applies the ex_act effects for the explosion, as planned in the previous step.
 	for( var/datum/explosion_turf/ET in explosion_turfs )
-		if(ET.max_power <= 0) continue
-		if(!ET.turf) continue
+		if(ET.max_power <= 0)
+			continue
+		if(!ET.turf)
+			continue
 		var/tmp/turf/T = ET
 		var/dist = cheap_hypotenuse(T.x, T.y, epicenter.x, epicenter.y)
 

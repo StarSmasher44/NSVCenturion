@@ -140,9 +140,9 @@
 
 	if(src.tdir & 3)
 		pixel_x = 0
-		pixel_y = (src.tdir == 1 ? 24 : -24)
+		pixel_y = (src.tdir == 1 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
 	else
-		pixel_x = (src.tdir == 4 ? 24 : -24)
+		pixel_x = (src.tdir == 4 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
 		pixel_y = 0
 
 	if (building==0)
@@ -376,9 +376,11 @@
 			update_icon()
 			updating_icon = 0
 
-/obj/machinery/power/apc/spook()
-	if(spooky) return // Fuck you we're already spooky
-	if(!..()) return //If blessed, return
+/obj/machinery/power/apc/spook(mob/dead/observer/ghost)
+	if(spooky)
+		return // Fuck you we're already spooky
+	if(!..(ghost, TRUE))
+		return //If blessed, return
 
 	spooky=1
 	update_icon()
@@ -557,7 +559,8 @@
 		to_chat(user, "You start welding the APC frame...")
 		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 		if (do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user)) return
+			if(!src || !WT.remove_fuel(3, user))
+				return
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
 				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
 				user.visible_message(\
@@ -856,7 +859,8 @@
 	if(..())
 		return 0
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	if(!can_use(usr, 1))
 		return 0

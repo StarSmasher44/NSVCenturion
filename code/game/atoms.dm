@@ -2,7 +2,6 @@ var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
 /atom
-	layer = 2
 
 	var/ghost_read  = 1 // All ghosts can read
 	var/ghost_write = 0 // Only aghosts can write
@@ -62,8 +61,10 @@ var/global/list/ghdel_profiling = list()
 	appearance_flags = TILE_BOUND
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
-	if(!last_beamchecks) last_beamchecks = list()
-	if(!beams) beams = list()
+	if(!last_beamchecks)
+		last_beamchecks = list()
+	if(!beams)
+		beams = list()
 	if(!(B in beams))
 		beams.Add(B)
 	return 1
@@ -83,12 +84,12 @@ var/global/list/ghdel_profiling = list()
 
 	switch(xy)
 		if(1)
-			src.pixel_x += rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 		if(2)
-			src.pixel_y += rand(-intensity, intensity)
+			src.pixel_y += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 		if(3)
-			src.pixel_x += rand(-intensity, intensity)
-			src.pixel_y += rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity) * PIXEL_MULTIPLIER
+			src.pixel_y += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 
 	spawn(2)
 	src.pixel_x = old_pixel_x
@@ -155,7 +156,8 @@ var/global/list/ghdel_profiling = list()
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
-	if(istype(beams, /list) && beams.len) beams.len = 0
+	if(istype(beams, /list) && beams.len)
+		beams.len = 0
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)
@@ -197,6 +199,9 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/Bumped(AM as mob|obj)
 	return
+
+/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
+	return Bumped(W)
 
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
@@ -246,6 +251,9 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/projectile_check()
 	return
+
+//Override this to have source respond differently to visible_messages said by an atom A
+/atom/proc/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 
 /*
  *	atom/proc/search_contents_for(path,list/filter_path=null)
@@ -321,39 +329,42 @@ its easier to just keep the beam vertical.
 		var/Angle=round(Get_Angle(src,BeamTarget))
 		var/icon/I=new(icon,icon_state)
 		I.Turn(Angle)
-		var/DX=(32*BeamTarget.x+BeamTarget.pixel_x)-(32*x+pixel_x)
-		var/DY=(32*BeamTarget.y+BeamTarget.pixel_y)-(32*y+pixel_y)
+		var/DX=(WORLD_ICON_SIZE*BeamTarget.x+BeamTarget.pixel_x)-(WORLD_ICON_SIZE*x+pixel_x)
+		var/DY=(WORLD_ICON_SIZE*BeamTarget.y+BeamTarget.pixel_y)-(WORLD_ICON_SIZE*y+pixel_y)
 		var/N=0
 		var/length=round(sqrt((DX)**2+(DY)**2))
-		for(N,N<length,N+=32)
+		for(N,N<length,N+=WORLD_ICON_SIZE)
 			var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,loc)
 			X.BeamSource=src
-			if(N+32>length)
+			if(N+WORLD_ICON_SIZE>length)
 				var/icon/II=new(icon,icon_state)
-				II.DrawBox(null,1,(length-N),32,32)
+				II.DrawBox(null,1,(length-N),WORLD_ICON_SIZE,WORLD_ICON_SIZE)
 				II.Turn(Angle)
 				X.icon=II
-			else X.icon=I
-			var/Pixel_x=round(sin(Angle)+32*sin(Angle)*(N+16)/32)
-			var/Pixel_y=round(cos(Angle)+32*cos(Angle)*(N+16)/32)
-			if(DX==0) Pixel_x=0
-			if(DY==0) Pixel_y=0
-			if(Pixel_x>32)
-				for(var/a=0, a<=Pixel_x,a+=32)
+			else
+				X.icon=I
+			var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+			var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+			if(DX==0)
+				Pixel_x=0
+			if(DY==0)
+				Pixel_y=0
+			if(Pixel_x>WORLD_ICON_SIZE)
+				for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
 					X.x++
-					Pixel_x-=32
-			if(Pixel_x<-32)
-				for(var/a=0, a>=Pixel_x,a-=32)
+					Pixel_x-=WORLD_ICON_SIZE
+			if(Pixel_x<-WORLD_ICON_SIZE)
+				for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
 					X.x--
-					Pixel_x+=32
-			if(Pixel_y>32)
-				for(var/a=0, a<=Pixel_y,a+=32)
+					Pixel_x+=WORLD_ICON_SIZE
+			if(Pixel_y>WORLD_ICON_SIZE)
+				for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
 					X.y++
-					Pixel_y-=32
-			if(Pixel_y<-32)
-				for(var/a=0, a>=Pixel_y,a-=32)
+					Pixel_y-=WORLD_ICON_SIZE
+			if(Pixel_y<-WORLD_ICON_SIZE)
+				for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
 					X.y--
-					Pixel_y+=32
+					Pixel_y+=WORLD_ICON_SIZE
 			X.pixel_x=Pixel_x
 			X.pixel_y=Pixel_y
 			var/turf/TT = get_turf(X.loc)
@@ -558,8 +569,10 @@ its easier to just keep the beam vertical.
 	return
 */
 /atom/proc/add_hiddenprint(mob/living/M as mob)
-	if(isnull(M)) return
-	if(isnull(M.key)) return
+	if(isnull(M))
+		return
+	if(isnull(M.key))
+		return
 	if (!( src.flags ) & FPRINT)
 		return
 	if (ishuman(M))
@@ -583,9 +596,12 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/add_fingerprint(mob/living/M as mob)
-	if(isnull(M)) return
-	if(isAI(M)) return
-	if(isnull(M.key)) return
+	if(isnull(M))
+		return
+	if(isAI(M))
+		return
+	if(isnull(M.key))
+		return
 	if (!( src.flags ) & FPRINT)
 		return
 	if (ishuman(M))
@@ -724,7 +740,8 @@ its easier to just keep the beam vertical.
 
 
 /atom/proc/get_global_map_pos()
-	if(!islist(global_map) || isemptylist(global_map)) return
+	if(!islist(global_map) || isemptylist(global_map))
+		return
 	var/cur_x = null
 	var/cur_y = null
 	var/list/y_arr = null
@@ -769,13 +786,21 @@ its easier to just keep the beam vertical.
 		newarea = "[newarea.name]"
 
 //Called in /spell/aoe_turf/boo/cast() (code/modules/mob/dead/observer/spells.dm)
-/atom/proc/spook()
-	if(blessed)
+/atom/proc/spook(mob/dead/observer/ghost, var/log_this = FALSE)
+	if(!can_spook())
 		return 0
+	if(log_this)
+		investigation_log(I_GHOST, "|| was Boo!'d by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return 1
+
+/atom/proc/can_spook()
+	return !blessed
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
 	blessed = 1
 
 /atom/proc/update_icon()
+
+/atom/proc/acidable()
+	return 0

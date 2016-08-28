@@ -28,7 +28,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
 
@@ -156,6 +156,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	attack_verb = list("burns", "singes")
 	heat_production = 1000
 	light_color = LIGHT_COLOR_FIRE
+	slot_flags = SLOT_MASK|SLOT_EARS
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/weapon/cigbutt
@@ -319,7 +320,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	reagents.handle_reactions()
 	//This ain't ready yet.
 	//overlays.len = 0
-	//overlays += image('icons/mob/mask.dmi', overlay_on, LIGHTING_LAYER+1)
+	//overlays += image('icons/mob/mask.dmi', overlay_on, ABOVE_LIGHTING_LAYER)
 	var/turf/T = get_turf(src)
 	T.visible_message(flavor_text)
 
@@ -329,6 +330,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_wear_mask(0)
+		M.update_inv_ears(0)
 		M.update_inv_hands()
 
 /obj/item/clothing/mask/cigarette/process()
@@ -405,11 +407,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon_state = "cigar"
 	overlay_on = "cigarlit"
 	flags = FPRINT
+	slot_flags = SLOT_MASK
 	type_butt = /obj/item/weapon/cigbutt/cigarbutt
 	item_state = "cigar"
 	smoketime = 1500
 	chem_volume = 20
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
 	name = "Cohiba Robusto Cigar"
@@ -437,7 +440,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	name = "cigar butt"
 	desc = "A manky old cigar butt."
 	icon_state = "cigarbutt"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /*
 //I'll light my cigar with an energy sword if I want to, thanks
@@ -459,6 +462,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "bluntlit"
 	type_butt = /obj/item/weapon/cigbutt/bluntbutt
 	item_state = "blunt"
+	slot_flags = SLOT_MASK
+	species_fit = list(GREY_SHAPED)
 	attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
 	chem_volume = 50 //It's a fat blunt, a really fat blunt
@@ -516,7 +521,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	flags = FPRINT
 	icon_state = "pipe"
 	item_state = "pipe"
+	slot_flags = SLOT_MASK
 	overlay_on = "pipelit"
+	species_fit = list(GREY_SHAPED)
 	smoketime = 100
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")

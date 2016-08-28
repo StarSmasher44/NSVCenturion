@@ -82,7 +82,8 @@
 							var/imageloc = synd_mind_1.current
 							if(istype(synd_mind_1.current.loc,/obj/mecha))
 								imageloc = synd_mind_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+							I.plane = SYNDIE_ANTAG_HUD_PLANE
 							synd_mind.current.client.images += I
 
 /datum/game_mode/proc/update_synd_icons_added(datum/mind/synd_mind)
@@ -95,14 +96,16 @@
 					var/imageloc = synd_mind.current
 					if(istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd.current.client.images += I
 			if(synd_mind.current)
 				if(synd_mind.current.client)
 					var/imageloc = synd_mind.current
 					if(istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd_mind.current.client.images += I
 
 		update_all_synd_icons()
@@ -179,7 +182,8 @@
 		the_bomb.r_code = nuke_code
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed) send_intercept()
+		if(!mixed)
+			send_intercept()
 
 	return ..()
 
@@ -277,8 +281,10 @@
 			synd_mob.internals.icon_state = "internal1"
 
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/card/id/syndicate(synd_mob), slot_wear_id)
-	if(synd_mob.backbag == 2) synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(synd_mob), slot_back)
-	if(synd_mob.backbag == 3 || synd_mob.backbag == 4) synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_sec(synd_mob), slot_back)
+	if(synd_mob.backbag == 2)
+		synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(synd_mob), slot_back)
+	if(synd_mob.backbag == 3 || synd_mob.backbag == 4)
+		synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_sec(synd_mob), slot_back)
 	//if(synd_mob.backbag == 4) synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(synd_mob), slot_back)
 	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm(synd_mob), slot_in_backpack)
 	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm(synd_mob), slot_in_backpack)

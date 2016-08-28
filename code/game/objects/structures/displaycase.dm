@@ -68,7 +68,6 @@
 	desc = "A display case for prized possessions. It tempts you to kick it."
 	density = 1
 	anchored = 1
-	unacidable = 1//Dissolving the case would also delete the gun.
 	var/health = 30
 	var/obj/item/occupant = null
 	var/destroyed = 0
@@ -148,7 +147,8 @@
 /obj/structure/displaycase/blob_act()
 	if (prob(75))
 		getFromPool(/obj/item/weapon/shard, loc)
-		if(occupant) dump()
+		if(occupant)
+			dump()
 		qdel(src)
 
 /obj/structure/displaycase/proc/healthcheck()
@@ -173,8 +173,8 @@
 		var/icon/occupant_icon=getFlatIcon(occupant)
 		occupant_icon.Scale(19,19)
 		occupant_overlay = image(occupant_icon)
-		occupant_overlay.pixel_x=8
-		occupant_overlay.pixel_y=8
+		occupant_overlay.pixel_x= 8 * PIXEL_MULTIPLIER
+		occupant_overlay.pixel_y= 8 * PIXEL_MULTIPLIER
 		if(locked)
 			occupant_overlay.alpha=128//ChangeOpacity(0.5)
 		//underlays += occupant_overlay
@@ -278,6 +278,9 @@
 			user.visible_message("[user.name] gently runs their hands over \the [src] in appreciation of its contents.", \
 				"You gently run your hands over \the [src] in appreciation of its contents.", \
 				"You hear someone streaking glass with their greasy hands.")
+
+/obj/structure/displaycase/acidable()
+	return 0
 
 
 /obj/structure/displaycase/broken

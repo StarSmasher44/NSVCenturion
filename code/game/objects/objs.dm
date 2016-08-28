@@ -3,7 +3,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
 	var/crit_fail = 0
-	var/unacidable = 0 //universal "unacidabliness" var, here so you can use it in any obj.
 	animate_movement = 2
 	var/throwforce = 1
 	var/siemens_coefficient = 0 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
@@ -26,7 +25,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/holomap = FALSE // Whether we should be on the holomap.
 	var/auto_holomap = FALSE // Whether we automatically soft-add ourselves to the holomap in New(), make sure this is false is something does it manually.
-	plane = PLANE_OBJ
+	plane = OBJ_PLANE
 
 /obj/New()
 	..()
@@ -179,7 +178,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
-	else step_towards(src, S)
+	else
+		step_towards(src, S)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
@@ -308,7 +308,7 @@ a {
 
 /obj/proc/wrenchAnchor(var/mob/user) //proc to wrench an object that can be secured
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored)
+		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return -1
 	if(!anchored)
@@ -358,13 +358,24 @@ a {
 	return 0
 
 /**
- * If a mob logouts/logins in side of an object you can use this proc.
+ * Called when a mob inside this obj's contents logs out.
  */
-/obj/proc/on_log()
-	if (isobj(loc))
+/obj/proc/on_logout(var/mob/M)
+	if(isobj(loc))
 		var/obj/location = loc
-		location.on_log()
+		location.on_logout(M)
+
+/**
+ * Called when a mob inside this obj's contents logs in.
+ */
+/obj/proc/on_login(var/mob/M)
+	if(isobj(loc))
+		var/obj/location = loc
+		location.on_login(M)
 
 // Dummy to give items special techlist for the purposes of the Device Analyser, in case you'd ever need them to give them different tech levels depending on special checks.
 /obj/proc/give_tech_list()
 	return null
+
+/obj/acidable()
+	return !(flags & INVULNERABLE)

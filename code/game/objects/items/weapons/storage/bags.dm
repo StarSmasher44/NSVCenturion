@@ -98,7 +98,7 @@
 	name = "\improper Mining Satchel" //need the improper for the
 	desc = "This little bugger can be used to store and transport ores."
 	icon = 'icons/obj/mining.dmi'
-	icon_state = "satchel"
+	icon_state = "mining_satchel"
 	slot_flags = SLOT_BELT | SLOT_POCKET
 	w_class = W_CLASS_MEDIUM
 	storage_slots = 50
@@ -169,7 +169,7 @@
 	icon_state = "pcollector"
 	name = "Pill Collector"
 	item_state = "pcollector"
-	origin_tech = "biotech=2;materials=1"
+	origin_tech = Tc_BIOTECH + "=2;" + Tc_MATERIALS + "=1"
 	storage_slots = 50; //the number of plant pieces it can carry.
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
@@ -214,7 +214,8 @@
 // Modified handle_item_insertion.  Would prefer not to, but...
 	handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
 		var/obj/item/stack/sheet/S = W
-		if(!istype(S)) return 0
+		if(!istype(S))
+			return 0
 
 		var/amount
 		var/inserted = 0
@@ -296,7 +297,8 @@
 // Instead of removing
 	remove_from_storage(obj/item/W as obj, atom/new_location)
 		var/obj/item/stack/sheet/S = W
-		if(!istype(S)) return 0
+		if(!istype(S))
+			return 0
 
 		//I would prefer to drop a new stack, but the item/attack_hand code
 		// that calls this can't recieve a different object than you clicked on.

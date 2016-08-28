@@ -15,8 +15,8 @@
 		sleep(30)
 	update_seed()
 	..()
-	pixel_x = rand(-3,3)
-	pixel_y = rand(-3,3)
+	pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
+	pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
 
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()
@@ -26,7 +26,8 @@
 
 //Updates strings and icon appropriately based on seed datum.
 /obj/item/seeds/proc/update_appearance()
-	if(!seed) return
+	if(!seed)
+		return
 	icon_state = seed.packet_icon
 	src.name = "packet of [seed.seed_name] [seed.seed_noun]"
 	src.desc = "It has a picture of [seed.display_name] on the front."

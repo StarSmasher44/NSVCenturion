@@ -1,8 +1,8 @@
 /turf
 	icon = 'icons/turf/floors.dmi'
 	level = 1.0
-	plane = PLANE_TURF
-
+	plane = TURF_PLANE
+	layer = TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	luminosity = 0
 
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
@@ -134,21 +134,18 @@
 		return
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
-	if(ismob(A))
-		if(A.areaMaster && A.areaMaster.has_gravity == 0)
-			inertial_drift(A)
-	/*
-		if(A.flags & NOGRAV)
-			inertial_drift(A)
-	*/
 
-		else if(!istype(src, /turf/space))
-			A:inertia_dir = 0
+	if(!src.has_gravity())
+		inertial_drift(A)
+	else
+		A.inertia_dir = 0
+
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj as mob|obj|turf|area in range(1))
-			if(objects > loopsanity)	break
+			if(objects > loopsanity)
+				break
 			objects++
 			spawn( 0 )
 				if ((A && Obj) && Obj.flags & PROXMOVE)
@@ -162,7 +159,8 @@
 
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
 		// if(ticker.mode.name == "nuclear emergency")	return
-		if(A.z > 6) return
+		if(A.z > 6)
+			return
 		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE - 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE - 1))
 
 			var/list/contents_brought = list()
@@ -176,7 +174,7 @@
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
 			for(var/obj/item/weapon/disk/nuclear in contents_brought)
-				locked_to_current_z = 1
+				locked_to_current_z = map.zMainStation
 				break
 
 			//Check if it's a mob pulling an object
@@ -194,7 +192,7 @@
 			for(var/mob/living/silicon/robot/mommi in contents_brought)
 				if(mommi.locked_to_z != 0)
 					if(src.z == mommi.locked_to_z)
-						locked_to_current_z = 1
+						locked_to_current_z = map.zMainStation
 					else
 						to_chat(mommi, "<span class='warning'>You find your way back.</span>")
 						move_to_z = mommi.locked_to_z
@@ -260,44 +258,12 @@
 	return 0
 
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
-	if(!(A.last_move))	return
-	if(istype(A, /obj/spacepod) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
-		var/obj/spacepod/SP = A
-		if(SP.Process_Spacemove(1))
-			SP.inertia_dir = 0
-			return
-		spawn(5)
-			if((SP && (SP.loc == src)))
-				if(SP.inertia_dir)
-					SP.Move(get_step(SP, SP.inertia_dir), SP.inertia_dir)
-					return
-	if(istype(A, /obj/structure/bed/chair/vehicle/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
-		var/obj/structure/bed/chair/vehicle/JC = A //A bomb!
-		if(JC.Process_Spacemove(1))
-			JC.inertia_dir = 0
-			return
-		spawn(5)
-			if((JC && (JC.loc == src)))
-				if(JC.inertia_dir)
-					step(JC, JC.inertia_dir)
-					return
-				JC.inertia_dir = JC.last_move
-				step(JC, JC.inertia_dir)
-	if((istype(A, /mob/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1)))
-		var/mob/M = A
-		if(M.Process_Spacemove(1))
-			M.inertia_dir  = 0
-			return
-		spawn(5)
-			if((M && !(M.anchored) && !(M.pulledby) && (M.loc == src)))
-				var/mob/living/carbon/carbons = M
-				if(istype(carbons))
-					carbons.update_minimap() //Should this even be here, oh well whatever
-				if(M.inertia_dir)
-					step(M, M.inertia_dir)
-					return
-				M.inertia_dir = M.last_move
-				step(M, M.inertia_dir)
+	if(!(A.last_move))
+		return
+
+	if(src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy - 1))
+		A.process_inertia(src)
+
 	return
 
 /turf/proc/levelupdate()
@@ -376,7 +342,8 @@
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
-	if(connections) connections.erase_all()
+	if(connections)
+		connections.erase_all()
 
 	if(istype(src,/turf/simulated))
 		//Yeah, we're just going to rebuild the whole thing.
@@ -384,7 +351,8 @@
 		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
 		env = S.air //Get the air before the change
-		if(S.zone) S.zone.rebuild()
+		if(S.zone)
+			S.zone.rebuild()
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
@@ -534,7 +502,8 @@
 /turf/proc/kill_creatures(mob/U = null)//Will kill people/creatures and damage mechs./N
 //Useful to batch-add creatures to the list.
 	for(var/mob/living/M in src)
-		if(M==U)	continue//Will not harm U. Since null != M, can be excluded to kill everyone.
+		if(M==U)
+			continue//Will not harm U. Since null != M, can be excluded to kill everyone.
 		spawn(0)
 			M.gib()
 	for(var/obj/mecha/M in src)//Mecha are not gibbed but are damaged.
@@ -639,7 +608,8 @@
 //  possible. It results in more efficient (CPU-wise) pathing
 //  for bots and anything else that only moves in cardinal dirs.
 /turf/proc/Distance_cardinal(turf/T)
-	if(!src || !T) return 0
+	if(!src || !T)
+		return 0
 	return abs(src.x - T.x) + abs(src.y - T.y)
 
 ////////////////////////////////////////////////////
@@ -718,6 +688,7 @@
 // Return high values to make movement slower
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
+
 /*
 /turf/proc/update_cliff()
 	if(cliff_images) //Not cut_overlays() because turf smoothing gets royally fugged.
@@ -748,3 +719,13 @@
 	var/turf/simulated/T = get_step(src,NORTH)
 	if(istype(T) && (!istype(T,/turf/simulated/open) || T==ignore))
 		overlays += image(icon ='icons/turf/cliff.dmi', icon_state = "metal", layer = TURF_LAYER+0.1)
+
+/turf/proc/has_gravity(mob/M)
+	if(istype(M) && M.CheckSlip() == -1) //Wearing magboots - good enough
+		return 1
+
+	var/area/A = loc
+	if(istype(A))
+		return A.has_gravity
+
+	return 1

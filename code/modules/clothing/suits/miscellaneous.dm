@@ -15,7 +15,7 @@
 	icon_state = "bluetag"
 	item_state = "bluetag"
 	blood_overlay_type = "armor"
-	origin_tech = "materials=1;magnets=2"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/gun/energy/laser/bluetag)
 	siemens_coefficient = 3.0
@@ -26,7 +26,7 @@
 	icon_state = "redtag"
 	item_state = "redtag"
 	blood_overlay_type = "armor"
-	origin_tech = "materials=1;magnets=2"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/gun/energy/laser/redtag)
 	siemens_coefficient = 3.0
@@ -175,7 +175,7 @@
 	desc = "A suit that completely restrains the wearer."
 	icon_state = "straight_jacket"
 	item_state = "straight_jacket"
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
 /obj/item/clothing/suit/ianshirt
@@ -412,11 +412,11 @@
 		return ..()
 	if((src == H.wear_suit) && H.flying)
 		H.flying = 0
-		animate(H, pixel_y = pixel_y + 10 , time = 1, loop = 1)
+		animate(H, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(H, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(H)
 		if(H.lying)//aka. if they have just been stunned
-			H.pixel_y -= 6
+			H.pixel_y -= 6 * PIXEL_MULTIPLIER
 	..()
 
 /obj/item/clothing/suit/clownpiece/flying/equipped(var/mob/user, var/slot)
@@ -424,16 +424,16 @@
 	if(!istype(H)) return
 	if((slot == slot_wear_suit) && !user.flying)
 		user.flying = 1
-		animate(user, pixel_y = pixel_y + 10 , time = 10, loop = 1, easing = SINE_EASING)
+		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
 
 /obj/item/clothing/suit/clownpiece/flying/dropped(mob/user as mob)
 	if(user.flying)
 		user.flying = 0
-		animate(user, pixel_y = pixel_y + 10 , time = 1, loop = 1)
+		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(user)
 		if(user.lying)//aka. if they have just been stunned
-			user.pixel_y -= 6
+			user.pixel_y -= 6 * PIXEL_MULTIPLIER
 	..()
 
 
@@ -457,6 +457,8 @@
 	icon_state = "cjumper-green"
 
 /obj/item/clothing/suit/spaceblanket
+	plane = ABOVE_OBJ_PLANE
+	layer = BLANKIES_LAYER
 	w_class = W_CLASS_SMALL
 	icon_state = "shittyuglyawfulBADblanket"
 	name = "space blanket"
