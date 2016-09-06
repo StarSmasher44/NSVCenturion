@@ -203,4 +203,4 @@
 #define is_in_valid_nest(egg) (isturf(egg.loc))
 
 
-#define CHECK_TICK if(world.tick_usage > 90) sleep(world.tick_lag)
+
