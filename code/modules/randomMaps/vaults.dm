@@ -120,4 +120,5 @@
 			space.contents.Add(TURF)
 			TURF.change_area(A, space)
 
+		CHECK_TICK
 	message_admins("<span class='info'>Loaded [successes] vaults successfully, [failures] failures.</span>")

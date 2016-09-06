@@ -162,7 +162,7 @@
 		to_chat(user, "<span class='notice'>Unable to connect to Syndicate Command. Please wait and try again later or use the teleporter on your uplink to get your points refunded.</span>")
 
 /obj/item/weapon/antag_spawner/borg_tele/spawn_antag(var/client/C, var/turf/T, var/type = "")
-	var/datum/effect/effect/system/spark_spread/S = new /datum/effect/effect/system/spark_spread
+	var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 	S.set_up(4, 1, src)
 	S.start()
 	var/mob/living/silicon/robot/R = new /mob/living/silicon/robot/syndicate(T)

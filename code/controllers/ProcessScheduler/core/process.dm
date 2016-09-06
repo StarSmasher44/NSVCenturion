@@ -76,6 +76,7 @@
 
 	// Records the world.tick_usage (0 to 100) at which the process last began running
 	/var/tmp/tick_start = 0
+	/var/tmp/tick_max = 0
 
 	// Records the number of times this process has been killed and restarted
 	var/tmp/times_killed
@@ -109,6 +110,7 @@ datum/controller/process/proc/started()
 
 	// Initialize tick_start so we can know when to sleep
 	tick_start = world.tick_usage
+	tick_max = min(tick_start + tick_allowance, TICK_LIMIT_UPPER) // So 98 at most if no other way.
 
 	// Initialize defer count
 	cpu_defer_count = 0
@@ -195,6 +197,9 @@ datum/controller/process/proc/scheck(var/tickId = 0)
 		handleHung()
 		CRASH("Process [name] hung and was restarted.")
 
+//	if(world.tick_usage >= tick_max)
+//		finished() // Cut him loose, he's done enough for this tick.
+//		return
 	if(!MC_TICK_CHECK)
 		return
 	else

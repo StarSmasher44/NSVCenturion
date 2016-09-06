@@ -112,7 +112,7 @@
 /obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
 	if(isEmag(W) && !emagged)
 		emagged = 1
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(5, 1, src)
 		s.start()
 		to_chat(user, "<span class = 'caution'>You emag the RCS. Click on it to toggle between modes.</span>")

@@ -85,7 +85,7 @@ for reference:
 		src.emagged = 1
 		src.req_access = 0
 		to_chat(user, "You break the ID authentication lock on the [src].")
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(2, 1, src)
 		s.start()
 		desc = "A deployable barrier. Swipe your ID card to lock/unlock it. Seems like it's malfunctioning"
@@ -152,7 +152,7 @@ for reference:
 /obj/machinery/deployable/barrier/proc/explode()
 	visible_message("<span class='danger'>[src] blows apart!</span>")
 
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 	s.set_up(3, 1, src)
 	s.start()
 

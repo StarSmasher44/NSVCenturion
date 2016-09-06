@@ -407,7 +407,7 @@ Class Procs:
 	var/ghost_flags=0
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
-	if(canGhostRead(usr,src,ghost_flags))	
+	if(canGhostRead(usr,src,ghost_flags))
 		return src.attack_ai(user)
 
 /obj/machinery/attack_paw(mob/user as mob)
@@ -614,7 +614,7 @@ Class Procs:
 		return 0
 	if(!prob(prb))
 		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 	s.set_up(5, 1, src)
 	s.start()
 	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely

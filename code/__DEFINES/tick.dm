@@ -1,5 +1,6 @@
+#define TICK_LIMIT_UPPER 98
 #define TICK_LIMIT_RUNNING 90
-#define TICK_LIMIT_TO_RUN 85
+#define TICK_LIMIT_TO_RUN 87
 
 #define MC_TICK_CHECK ( world.tick_usage > TICK_LIMIT_TO_RUN ? 1 : 0 )
 #define TICK_USAGE_HIGH ( world.tick_usage > TICK_LIMIT_RUNNING ? 1 : 0)

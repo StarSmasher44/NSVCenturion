@@ -21,6 +21,7 @@
 /datum/controller/process/lighting/doWork()
 	// Counters
 	var/light_updates   = 0
+//	var/static_updates = 0
 	var/corner_updates  = 0
 	var/overlay_updates = 0
 
@@ -48,12 +49,12 @@
 		scheck()
 		CHECK_TICK
 	//Here we process static lights, a lot less often so a lot less CPU.
-	if(ticks % 4 == 0) // Once every 3 ticks, this could be tweaked, but I wouldn't go any higher.
+	if(ticks % 2 == 0) // Once every 2 ticks, this could be tweaked, but I wouldn't go any higher than 3.
 		var/list/lighting_update_lights_static_old = lighting_update_lights_static //We use a different list so any additions to the update lists during a delay from scheck() don't cause things to be cut from the list without being updated.
 		lighting_update_lights_static = list()
 		for(var/datum/light_source/L in lighting_update_lights_static_old)
-//			if(light_updates >= MAX_LIGHT_UPDATES_PER_WORK)
-//				lighting_update_lights += L
+//			if(static_updates >= 300)
+//				lighting_update_lights_static += L
 //				continue // DON'T break, we're adding stuff back into the update queue.
 			if(L.check() || L.destroyed || L.force_update)
 				L.remove_lum()
@@ -67,7 +68,7 @@
 			L.force_update = FALSE
 			L.needs_update = FALSE
 
-//			light_updates++
+//			static_updates++
 
 			scheck()
 			CHECK_TICK

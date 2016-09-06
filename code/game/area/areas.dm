@@ -385,7 +385,9 @@
 
 /area/proc/set_emergency_lighting(var/enable)
 	for(var/obj/machinery/light/M in src)
-		M.set_emergency_lighting(enable)
+		M.power_channel = ENVIRON // Fixx.
+		M.emergency_mode = enable
+		M.power_change()
 
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = Obj.areaMaster

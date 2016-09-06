@@ -508,8 +508,8 @@ proc/establish_old_db_connection()
 	var/count = 0
 	for(var/Z = 1 to world.maxz)
 		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
-			if(!(count % 50000))
-				sleep(-1)
+			if(count % 5000)
+				CHECK_TICK
 			count++
 			T.initialize()
 			turfs[count] = T

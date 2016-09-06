@@ -1375,6 +1375,7 @@ var/list/slot_equipment_priority = list( \
 			stat(null, "CPU:\t[world.cpu]")
 			stat(null,"Tick Usage:\t[world.tick_usage]")
 			stat(null, "Instances:\t[world.contents.len]")
+			stat(null, "Pool List:\t[masterdatumPool.len]")
 			stat(null, FUCK)
 			if(!src.stat_fucked)
 				if (garbageCollector)

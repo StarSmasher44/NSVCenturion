@@ -64,7 +64,7 @@
 		//Shock chance
 		var/obj/structure/cable/N = T.get_cable_node()
 		if (prob(50) && electrocute_mob(user, N, N))
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 			s.set_up(5, 1, src)
 			s.start()
 			return 0

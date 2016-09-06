@@ -4,15 +4,17 @@
 var/global/savefile/SHash = new("data/hashcheck.sav")
 
 /client
-	var/CHash
+	var/savefile/CHash
 
 /client/New()
 	..()
-	CHash = Import()
-	if(!CHash)
-		MakeCHash()
-	else
-		CheckFile()
+	spawn(50) // Make sure all is loaded
+		if(CHash = Import(CHash))
+			world.log << "CHASH = [CHash]"
+			CheckFile()
+		else
+			MakeCHash()
+			CheckFile()
 
 /client/proc/MakeCHash()
 	if(src)
@@ -27,6 +29,8 @@ var/global/savefile/SHash = new("data/hashcheck.sav")
 		SHash["[ckey]"] << clienthash
 		SHash["[ckey]+CID"] << computer_id
 		SHash["[ckey]+IP"] << address
+		sleep(-1)
+		CheckFile() // Check for validity
 
 /client/proc/CheckFile()
 	if(src && CHash)
@@ -39,8 +43,8 @@ var/global/savefile/SHash = new("data/hashcheck.sav")
 		SHash["[ckey]"] >> serverhash // Server's Code
 		SHash["[ckey]+CID"] >> oldcid
 		SHash["[ckey]+IP"] >> oldip
-		if(clienthash != serverhash) // Mismatch, display admins all the shit
-			message_admins("<font color='red'>Hash Mismatch!</font>",1)
+		if(clienthash != serverhash || !CHash["[ckey]"] != ckey || !CHash["[ckey]+CID"] != computer_id || !CHash["[ckey]+IP"] != address) // Mismatch, display admins all the shit
+			message_admins("<font color='red'>Hash Mismatch! (Bad Hash Compare)</font>",1)
 			message_admins("<font color='red'>Registered: C: [ckey], ID: [oldcid], IP: [oldip]</font>",1)
 			message_admins("<font color='red'>New/Current: C: [ckey], ID: [computer_id], IP: [address]</font>",1)
 		src.MakeCHash() // Update info again, hope admins saw it.

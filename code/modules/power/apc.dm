@@ -272,23 +272,24 @@
 			icon_state = "apcewires"
 
 
-
+	var/list/overlays_to_add = list()
 	if(!(update_state & UPSTATE_ALLGOOD))
 		if(overlays.len)
-			overlays = 0
+			overlays = null
 			return
 	if(update & 2)
 
 		if(overlays.len)
-			overlays = 0
+			overlays = null
 
 		if(!(stat & (BROKEN|MAINT)) && update_state & UPSTATE_ALLGOOD)
-			overlays += status_overlays_lock[locked+1]
-			overlays += status_overlays_charging[charging+1]
+			overlays_to_add += status_overlays_lock[locked+1]
+			overlays_to_add += status_overlays_charging[charging+1]
 			if(operating)
-				overlays += status_overlays_equipment[equipment+1]
-				overlays += status_overlays_lighting[lighting+1]
-				overlays += status_overlays_environ[environ+1]
+				overlays_to_add += status_overlays_equipment[equipment+1]
+				overlays_to_add += status_overlays_lighting[lighting+1]
+				overlays_to_add += status_overlays_environ[environ+1]
+		overlays = overlays_to_add
 
 
 /obj/machinery/power/apc/proc/check_updates()
@@ -530,7 +531,7 @@
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 50) && opened && terminal && has_electronics != 2 && !T.intact)
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+				var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 				s.set_up(5, 1, src)
 				s.start()
 				return
@@ -1031,7 +1032,7 @@
 				smoke.set_up(3, 0, src.loc)
 				smoke.attach(src)
 				smoke.start()
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+				var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 				s.set_up(3, 1, src)
 				s.start()
 				for(var/mob/M in viewers(src))

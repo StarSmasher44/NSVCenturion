@@ -93,14 +93,14 @@
 	//repair a bit of damage
 	if(health != maxHealth && prob(3))
 		src.visible_message("<span class='warning'>  [bicon(src)] [src] shudders and shakes as some of it's damaged systems come back online.</span>")
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(3, 1, src)
 		s.start()
 		health += rand(25,100)
 
 	//spark for no reason
 	if(prob(5))
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(3, 1, src)
 		s.start()
 
@@ -145,7 +145,7 @@
 			src.visible_message("<span class='warning'> [bicon(src)] [src] begins to spark and shake violenty!</span>")
 		else
 			src.visible_message("<span class='warning'> [bicon(src)] [src] sparks and shakes like it's about to explode!</span>")
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(3, 1, src)
 		s.start()
 
@@ -182,7 +182,7 @@
 		from_event.drones_list -= src
 		from_event = null
 	if(has_loot)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(3, 1, src)
 		s.start()
 		var/obj/O

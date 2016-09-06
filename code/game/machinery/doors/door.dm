@@ -333,7 +333,7 @@ var/list/all_doors = list()
 				qdel(src)
 		if(3.0)
 			if(prob(80))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+				var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 				s.set_up(2, 1, src)
 				s.start()
 	return
