@@ -297,9 +297,6 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Show Tooltips:</b> <a href='?_src_=prefs;preference=tooltips'><b>[(tooltips) ? "Yes" : "No"]</b></a><br>
 	"}
 
-	if(config.allow_Metadata)
-		dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
-
 	dat += "</td><td width='300px' height='300px' valign='top'><h2>Antagonist Settings</h2>"
 
 	if(jobban_isbanned(user, "Syndicate"))
@@ -1193,10 +1190,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 					language = input("Please select a secondary language", "Character Generation", null) in new_languages
 
-				if("metadata")
-					var/new_metadata = input(user, "Enter any information you'd like others to see, such as Roleplay-preferences:", "Game Preference" , metadata)  as message|null
-					if(new_metadata)
-						metadata = sanitize(copytext(new_metadata,1,MAX_MESSAGE_LEN))
 
 				if("hair")
 					if(species == "Human" || species == "Unathi")
@@ -1582,7 +1575,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.f_style = f_style
 
 
-	character.skills = skills
+//	character.skills = skills
 
 	// Destroy/cyborgize organs
 

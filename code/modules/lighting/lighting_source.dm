@@ -29,6 +29,7 @@
 	var/needs_update    // Whether we are queued for an update.
 	var/destroyed       // Whether we are destroyed and need to stop emitting light.
 	var/force_update
+	var/slowupdate
 
 /datum/light_source/New(var/atom/owner, var/atom/top)
 	source_atom = owner // Set our new owner.
@@ -42,6 +43,8 @@
 			top.light_sources     = list()
 
 		top_atom.light_sources += src
+	if(istype(source_atom, /obj/machinery/light))
+		slowupdate = 1
 
 	source_turf = top_atom
 	light_power = source_atom.light_power
@@ -88,10 +91,18 @@
 #define effect_update(BYOND)            \
 	if (!needs_update)                  \
 	{                                   \
-		lighting_update_lights += src;  \
-		needs_update            = TRUE; \
+		AddToList()                     \
 	}
 #endif
+
+// This proc adds the lighting to the proper list, as I couldn't get it to work on a define
+/datum/light_source/proc/AddToList()
+	if(slowupdate)
+		lighting_update_lights_static += src;
+		needs_update = TRUE;
+	else
+		lighting_update_lights += src;
+		needs_update = TRUE;
 
 // This proc will cause the light source to update the top atom, and add itself to the update queue.
 /datum/light_source/proc/update(var/atom/new_top_atom)

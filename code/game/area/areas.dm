@@ -377,6 +377,18 @@
 		if(ENVIRON)
 			used_environ += amount
 
+/area/proc/set_lightswitch(var/new_switch)
+	if(lightswitch != new_switch)
+		lightswitch = new_switch
+		updateicon()
+		power_change()
+
+/area/proc/set_emergency_lighting(var/enable)
+	for(var/obj/machinery/light/M in src)
+		M.power_channel = ENVIRON // Fixx.
+		M.emergency_mode = enable
+		M.power_change()
+
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src

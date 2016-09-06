@@ -208,7 +208,7 @@
 		else
 			return
 	var/L = get_turf(target)
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 	s.set_up(5, 1, L)
 	s.start()
 
@@ -315,7 +315,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 				qdel(telepad.amplifier)
 				telepad.amplifier = null
 				src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(5, 1, telepad)
 		s.start()
 		flick("pad-beam", telepad)

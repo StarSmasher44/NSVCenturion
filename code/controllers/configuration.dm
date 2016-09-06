@@ -40,9 +40,8 @@
 	var/traitor_scaling = 0 			//if amount of traitors scales based on amount of players
 	var/protect_roles_from_antagonist = 0// If security and such can be tratior/cult/other
 	var/continous_rounds = 0			// Gamemodes which end instantly will instead keep on going until the round ends by escape shuttle or nuke.
-	var/allow_Metadata = 0				// Metadata is supported.
 	var/popup_admin_pm = 0				//adminPMs to non-admins show in a pop-up 'reply' window when set to 1.
-	var/Ticklag = 0.9
+	var/Ticklag = 0.33
 	var/socket_talk	= 0					// use socket_talk to communicate with other processes
 	var/list/resource_urls = null
 	var/antag_hud_allowed = 0			// Ghosts can turn on Antagovision to see a HUD of who is the bad guys this round.
@@ -179,10 +178,13 @@
 	var/error_limit = 9 // How many occurrences before the next will silence them
 	var/error_silence_time = 6000 // How long a unique error will be silenced for
 	var/error_msg_delay = 50 // How long to wait between messaging admins about occurrences of a unique error
+	var/use_overmap = 0
+
 
 	// Discord crap.
 	var/discord_url
 	var/discord_password
+
 
 /datum/configuration/New()
 	. = ..()
@@ -362,7 +364,8 @@
 
 				if ("nudge_script_path")
 					config.nudge_script_path = value
-
+				if("use_overmap")
+					config.use_overmap = 1
 				if ("hostedby")
 					config.hostedby = value
 
@@ -389,9 +392,6 @@
 
 				if ("feature_object_spell_system")
 					config.feature_object_spell_system = 1
-
-				if ("allow_metadata")
-					config.allow_Metadata = 1
 
 				if ("traitor_scaling")
 					config.traitor_scaling = 1

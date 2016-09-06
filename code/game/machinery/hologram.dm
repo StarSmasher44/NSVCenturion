@@ -48,11 +48,10 @@ var/const/HOLOPAD_MODE = 0
 		if(last_request + 200 < world.time) //don't spam the AI with requests you jerk!
 			last_request = world.time
 			to_chat(user, "<span class='notice'>You request an AI's presence.</span>")
-			var/area/area = get_area(src)
 			for(var/mob/living/silicon/ai/AI in living_mob_list)
 				if(!AI.client)
 					continue
-				to_chat(AI, "<span class='info'>Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>.</span>")
+				to_chat(AI, "<span class='info'>Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [MyArea]</a>.</span>")
 		else
 			to_chat(user, "<span class='notice'>A request for AI presence was already sent recently.</span>")
 
@@ -134,10 +133,10 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 				else if (HOLOPAD_MODE == 1)
 
-					var/area/holo_area = get_area(src)
+
 					var/area/eye_area = get_area(master.eyeobj)
 
-					if(eye_area == holo_area)
+					if(eye_area == MyArea)
 						return 1
 
 		clear_holo()//If not, we want to get rid of the hologram.

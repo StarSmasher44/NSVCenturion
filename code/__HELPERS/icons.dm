@@ -141,3 +141,25 @@ proc/adjust_brightness(var/color, var/value)
 			if (I.GetPixel(x_pixel, y_pixel))
 				return y_pixel - 1
 	return null
+
+/atom/proc/cut_overlays()
+	overlays.Cut()
+	overlays += priority_overlays
+
+/atom/proc/add_overlay(image, priority = 0)
+	if(image in overlays)
+		return
+	var/list/new_overlays = overlays.Copy()
+	if(priority)
+		if(!priority_overlays)
+			priority_overlays = list()
+		priority_overlays += image
+		new_overlays += image
+	else
+		if(priority_overlays)
+			new_overlays -= priority_overlays
+			new_overlays += image
+			new_overlays += priority_overlays
+		else
+			new_overlays += image
+	overlays = new_overlays

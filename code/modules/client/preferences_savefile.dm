@@ -422,7 +422,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	job_engsec_low		= text2num(preference_list["job_engsec_low"])
 
 
-	metadata			= sanitize_text(metadata, initial(metadata))
 	real_name			= reject_bad_name(real_name)
 
 	if(isnull(species))
@@ -556,7 +555,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	//S["skin_style"]			>> skin_style
 
 	//Sanitize
-	metadata		= sanitize_text(metadata, initial(metadata))
 	real_name		= reject_bad_name(real_name)
 	if(isnull(species))
 		species = "Human"

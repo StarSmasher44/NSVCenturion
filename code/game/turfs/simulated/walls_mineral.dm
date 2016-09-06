@@ -5,6 +5,7 @@
 	explosion_block = 1
 	var/last_event = 0
 	var/active = null
+	cliff_icon_state = ""
 
 /turf/simulated/wall/mineral/wood
 	name = "wooden wall"
@@ -161,7 +162,7 @@
 /*
 /turf/simulated/wall/mineral/proc/shock()
 	if (electrocute_mob(user, C, src))
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(5, 1, src)
 		s.start()
 		return 1

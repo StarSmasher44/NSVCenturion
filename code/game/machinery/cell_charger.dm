@@ -99,7 +99,7 @@
 /obj/machinery/cell_charger/attack_hand(mob/user)
 	if(charging)
 		if(emagged) //Oh shit nigger what are you doing
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 			s.set_up(5, 1, src)
 			s.start()
 			spawn(15)

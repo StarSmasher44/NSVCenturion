@@ -1356,7 +1356,9 @@ var/list/slot_equipment_priority = list( \
 		if (statpanel("Status"))	//not looking at that panel
 			stat(null, "Location:\t([x], [y], [z])")
 			stat(null, "CPU:\t[world.cpu]")
+			stat(null,"Tick Usage:\t[world.tick_usage]")
 			stat(null, "Instances:\t[world.contents.len]")
+			stat(null, "Pool List:\t[masterdatumPool.len]")
 			stat(null, FUCK)
 			if(!src.stat_fucked)
 				if (garbageCollector)
@@ -1367,7 +1369,7 @@ var/list/slot_equipment_priority = list( \
 					stat(null, "\thard delete - [garbageCollector.hard_dels]")
 				else
 					stat(null, "Garbage Controller is not running.")
-
+/*
 				if(processScheduler && processScheduler.getIsRunning())
 					var/datum/controller/process/process
 
@@ -1387,7 +1389,7 @@ var/list/slot_equipment_priority = list( \
 					stat(null, "GAR\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
 
 					process = processScheduler.getProcess("lighting")
-					stat(null, "LIG\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
+					stat(null, "LIG([lighting_update_lights.len]||S:[lighting_update_lights_static.len]\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
 
 					process = processScheduler.getProcess("supply shuttle")
 					stat(null, "SUP\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
@@ -1423,6 +1425,10 @@ var/list/slot_equipment_priority = list( \
 					stat(null, "EVE([events.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
 				else
 					stat(null, "processScheduler is not running.")
+*/
+			if(processScheduler)
+				processScheduler.statProcesses()
+
 	if(client && client.inactivity < (1200))
 		if(listed_turf)
 			if(get_dist(listed_turf,src) > 1)

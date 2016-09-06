@@ -132,7 +132,7 @@ var/global/ZAS_Settings/zas_settings = new
 // N3X15 - Added back in so we can tweak performance.
 /datum/ZAS_Setting/airflow_push
 	name="Airflow - Push"
-	value = 0
+	value = 1
 	desc="1=yes please rape my server, 0=no"
 	valtype=ZAS_TYPE_BOOLEAN
 

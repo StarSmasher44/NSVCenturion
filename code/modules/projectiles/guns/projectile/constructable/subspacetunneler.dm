@@ -199,7 +199,7 @@
 
 /obj/item/weapon/subspacetunneler/proc/send(turf/T as turf, mob/living/user as mob|obj, params, reflex = 0)
 	if(stored_items.len)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(3, 1, src)
 		s.start()
 		var/choose = (stored_items.len > 1 ? rand(1,stored_items.len) : 1)
@@ -290,7 +290,7 @@
 	update_icon()
 
 /obj/item/weapon/subspacetunneler/proc/consume_crystal(mob/user)
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 	s.set_up(3, 1, src)
 	s.start()
 	var/obj/item/bluespace_crystal/B = loaded_crystal

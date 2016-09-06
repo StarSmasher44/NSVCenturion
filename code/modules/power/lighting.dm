@@ -131,6 +131,8 @@ var/global/list/obj/machinery/light/alllights = list()
 								// this is used to calc the probability the light burns out
 
 	var/rigged = 0				// true if rigged to explode
+	var/static_light = 1
+	var/emergency_mode = 0
 
 	// No ghost interaction.
 	ghost_read=0
@@ -239,25 +241,15 @@ var/global/list/obj/machinery/light/alllights = list()
 
 
 	update_icon()
+	if(emergency_mode)
+		set_light((brightness_range/2)-1, 2, "#da0205")
+	else
+		set_light(initial(brightness_range), initial(brightness_power), null)
+		power_channel = initial(power_channel)
 	if(on)
-		if(light_range != brightness_range || light_power != brightness_power || light_color != brightness_color)
-			switchcount++
-			if(rigged)
-				if(status == LIGHT_OK && trigger)
-
-					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-
-					explode()
-			else if( prob( min(60, switchcount*switchcount*0.01) ) )
-				if(status == LIGHT_OK && trigger)
-					status = LIGHT_BURNED
-					icon_state = "l[base_state]-burned"
-					on = 0
-					set_light(0)
-			else
-				use_power = 2
-				set_light(brightness_range, brightness_power, brightness_color)
+		use_power = 2
+		if(trigger)
+			switch_check()
 	else
 		use_power = 1
 		set_light(0)
@@ -266,11 +258,33 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(on != on_gs)
 		on_gs = on
 		if(on)
-			static_power_used = cost * 20 //20W per unit luminosity
-			addStaticPower(static_power_used, STATIC_LIGHT)
+			if(emergency_mode)
+				static_power_used = cost * 8 //8W per unit luminosity, back-up lights.
+				addStaticPower(static_power_used, STATIC_ENVIRON)
+				removeStaticPower(static_power_used, STATIC_LIGHT)
+			else
+				static_power_used = cost * 20 //20W per unit luminosity
+				addStaticPower(static_power_used, STATIC_LIGHT)
+				removeStaticPower(static_power_used, STATIC_ENVIRON)
 		else
-			removeStaticPower(static_power_used, STATIC_LIGHT)
+			if(emergency_mode)
+				removeStaticPower(static_power_used, STATIC_ENVIRON)
+			else
+				removeStaticPower(static_power_used, STATIC_LIGHT)
 
+/obj/machinery/light/proc/switch_check()
+	if(status != LIGHT_OK)
+		return //already busted
+
+	switchcount++
+	if(rigged)
+		log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+		message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+
+		explode()
+	else if( prob( min(60, switchcount*switchcount*0.01) ) )
+
+		broken()
 
 /*
  * Attempt to set the light's on/off status.
@@ -404,7 +418,12 @@ var/global/list/obj/machinery/light/alllights = list()
  * TRUE if area has power and lightswitch is on otherwise FALSE.
  */
 /obj/machinery/light/proc/has_power()
-	return areaMaster.lightswitch && areaMaster.power_light
+
+	switch(power_channel)
+		if(LIGHT)
+			return areaMaster.lightswitch && areaMaster.power_light
+		if(ENVIRON)
+			return areaMaster.lightswitch && areaMaster.power_environ
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
 	if(flickering)
@@ -574,8 +593,11 @@ var/global/list/obj/machinery/light/alllights = list()
  */
 /obj/machinery/light/power_change()
 	spawn(10)
-		seton(areaMaster.lightswitch && areaMaster.power_light)
-
+		switch(power_channel)
+			if(LIGHT)
+				seton(areaMaster.lightswitch && areaMaster.power_light)
+			if(ENVIRON)
+				seton(areaMaster.lightswitch && areaMaster.power_environ)
 // called when on fire
 
 /obj/machinery/light/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)

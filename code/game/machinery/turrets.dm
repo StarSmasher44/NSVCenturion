@@ -82,11 +82,11 @@
 
 
 /obj/machinery/turret/proc/get_protected_area()
-	var/area/TP = get_area(src)
-	if(istype(TP) && TP.turret_protected)
-		return TP
-	if(TP && !TP.turret_protected)
-		message_admins("DEBUG: [src] deleted itself because turret_protected var not set on area [TP].")
+
+	if(MyArea.turret_protected)
+		return MyArea
+	if(!MyArea.turret_protected)
+		message_admins("DEBUG: [src] deleted itself because turret_protected var not set on area [MyArea].")
 		qdel(src)
 	return
 

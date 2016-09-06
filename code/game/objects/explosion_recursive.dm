@@ -29,19 +29,18 @@ proc/get_explosion_turf(var/turf/T)
 	for( var/datum/explosion_turf/ET in explosion_turfs )
 		if( T == ET.turf )
 			return ET
-	var/datum/explosion_turf/ET = new()
+//	var/datum/explosion_turf/ET = new()
+	var/datum/explosion_turf/ET = getFromPool(/datum/explosion_turf)
 	ET.turf = T
 	explosion_turfs += ET
 	return ET
 
-proc/explosion_rec(turf/epicenter, power)
-
-
+proc/explosion_rec(turf/epicenter, power, flame_range)
 	var/loopbreak = 0
 	while(explosion_in_progress)
-		if(loopbreak >= 15)
-			return
-		sleep(10)
+		if(loopbreak > 15)
+			loopbreak = 0
+			sleep(3)
 		loopbreak++
 
 	if(power <= 0)
@@ -53,8 +52,9 @@ proc/explosion_rec(turf/epicenter, power)
 	message_admins("Explosion with size ([power]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 	log_game("Explosion with size ([power]) in area [epicenter.loc.name] ")
 
-	playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(power*2,1) )
-	playsound(epicenter, "explosion", 100, 1, round(power,1) )
+	spawn(0)
+		playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(power*2,1) )
+		playsound(epicenter, "explosion", 100, 1, round(power,1) )
 
 	explosion_in_progress = 1
 	explosion_turfs = list()
@@ -65,8 +65,11 @@ proc/explosion_rec(turf/epicenter, power)
 	//This steap handles the gathering of turfs which will be ex_act() -ed in the next step. It also ensures each turf gets the maximum possible amount of power dealt to it.
 	for(var/direction in cardinal)
 		var/turf/T = get_step(epicenter, direction)
-		T.explosion_spread(power - epicenter.explosion_resistance, direction)
-
+//		if(prob(40) && !istype(T, /turf/space) && !T:density)
+//			getFromPool(/obj/fire, T) //Mostly for ambience!
+		spawn(0)
+			T.explosion_spread(power - epicenter.explosion_resistance, direction)
+		CHECK_TICK
 	//This step applies the ex_act effects for the explosion, as planned in the previous step.
 	for( var/datum/explosion_turf/ET in explosion_turfs )
 		if(ET.max_power <= 0)
@@ -85,9 +88,9 @@ proc/explosion_rec(turf/epicenter, power)
 		ET.turf.ex_act(severity)
 		if(!ET.turf)
 			ET.turf = locate(x,y,z)
-		for( var/atom/A in ET.turf )
+		for( var/atom/movable/A in ET.turf )
 			A.ex_act(severity)
-
+		CHECK_TICK
 	explosion_in_progress = 0
 
 /turf
@@ -147,11 +150,14 @@ proc/explosion_rec(turf/epicenter, power)
 			side_spread_power -= O.explosion_resistance
 
 	var/turf/T = get_step(src, direction)
-	T.explosion_spread(spread_power, direction)
-	T = get_step(src, turn(direction,90))
-	T.explosion_spread(side_spread_power, turn(direction,90))
-	T = get_step(src, turn(direction,-90))
-	T.explosion_spread(side_spread_power, turn(direction,90))
+	spawn(0)
+		T.explosion_spread(spread_power, direction)
+		T = get_step(src, turn(direction,90))
+		T.explosion_spread(side_spread_power, turn(direction,90))
+		T = get_step(src, turn(direction,-90))
+		T.explosion_spread(side_spread_power, turn(direction,90))
+	if(prob(42) && !istype(T, /turf/space) && !T:density)
+		getFromPool(/obj/fire, T) //Mostly for ambience!
 
 	/*
 	for(var/direction in cardinal)

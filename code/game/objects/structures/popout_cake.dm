@@ -128,7 +128,7 @@
 		sleep(10)
 
 		//Idea for the future: put actual confetti here
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 		s.set_up(6, 0, get_turf(src)) //6 sparks in all directions
 		s.start()
 

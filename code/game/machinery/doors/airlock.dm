@@ -455,10 +455,10 @@ About the new airlock wires panel:
 		return 0	//Already shocked someone recently?
 	if(!prob(prb))
 		return 0 //you lucked out, no shock for you
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 	s.set_up(5, 1, src)
 	s.start() //sparks always.
-	if(electrocute_mob(user, get_area(src), src))
+	if(electrocute_mob(user, MyArea, src))
 		hasShocked = 1
 		spawn(10)
 			hasShocked = 0
@@ -676,7 +676,7 @@ About the new airlock wires panel:
 		if (istype(mover, /obj/item))
 			var/obj/item/i = mover
 			if (i.materials && (i.materials.getAmount(MAT_IRON) > 0))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+				var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 				s.set_up(5, 1, src)
 				s.start()
 	return ..()

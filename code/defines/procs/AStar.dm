@@ -218,7 +218,7 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 					T.PNode.g = newg
 					T.PNode.calc_f()
 					open.ReSort(T.PNode)//reorder the changed element in the list
-
+		CHECK_TICK
 	}
 
 	//cleaning after us

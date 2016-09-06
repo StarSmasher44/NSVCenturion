@@ -42,7 +42,8 @@
 		if (light) // Update the light or create it if it does not exist.
 			light.update(.)
 		else
-			light = new/datum/light_source(src, .)
+			light = getFromPool(/datum/light_source, src, .)
+//			light = new/datum/light_source(src, .)
 
 // Incase any lighting vars are on in the typepath we turn the light on in New().
 /atom/New()

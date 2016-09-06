@@ -67,6 +67,8 @@
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
 
+	var/cliff_icon_state = "" //icon state for this turf's "cliff" in cliffs.dmi, displayed on the turf below this one (y-1)
+	var/draw_cliff = FALSE
 
 
 /turf/examine(mob/user)
@@ -83,9 +85,8 @@
 		var/area/A = loc
 		A.area_turfs += src
 	for(var/atom/movable/AM as mob|obj in src)
-		spawn( 0 )
-			src.Entered(AM)
-			return
+		src.Entered(AM)
+		return
 
 /turf/proc/initialize()
 	return

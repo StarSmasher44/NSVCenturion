@@ -49,9 +49,9 @@
 	//Special attacks (bite, kicks, ...)
 	var/attack_type = NORMAL_ATTACK
 
-	var/used_skillpoints = 0
-	var/skill_specialization = null
-	var/list/skills = null
+//	var/used_skillpoints = 0
+//	var/skill_specialization = null
+//	var/list/skills = null
 
 	var/icon/stand_icon = null
 	var/icon/lying_icon = null

@@ -100,7 +100,7 @@ var/global/dmm_suite/preloader/_preloader = null
 
 			ycrd--
 
-			sleep(-1)
+			CHECK_TICK
 
 		if(map_element)
 			map_element.height = y_depth
@@ -109,7 +109,7 @@ var/global/dmm_suite/preloader/_preloader = null
 		//reached End Of File
 		if(findtext(tfile,quote+"}",zpos,0)+2==tfile_len)
 			break
-		sleep(-1)
+		CHECK_TICK
 
 	return spawned_atoms
 

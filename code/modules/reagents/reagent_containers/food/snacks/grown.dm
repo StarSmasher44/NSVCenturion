@@ -237,7 +237,7 @@
 	var/inner_teleport_radius = potency/15 //At base potency, nothing will happen, since the radius is 0.
 	if(inner_teleport_radius < 1)
 		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	var/datum/effect/effect/system/spark_spread/s = getFromPool(/datum/effect/effect/system/spark_spread)
 
 	var/list/turfs = new/list()
 	//This could likely use some standardization but I have no idea how to not break it.

@@ -5,6 +5,8 @@
 // fun if you want to typecast humans/monkeys/etc without writing long path-filled lines.
 #define ishuman(A) istype(A, /mob/living/carbon/human)
 
+#define islist(A) istype(A, /list)
+
 #define isjusthuman(A) (ishuman(A) && A.species && istype(A.species, /datum/species/human))
 
 #define ismonkey(A) istype(A, /mob/living/carbon/monkey)

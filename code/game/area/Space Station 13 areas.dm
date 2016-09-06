@@ -112,6 +112,8 @@ proc/process_adminbus_teleport_locs()
 
 	sortTim(adminbusteleportlocs, /proc/cmp_text_dsc)
 
+/area/space/updateicon()
+	return
 
 /*-----------------------------------------------------------------------------*/
 
@@ -127,7 +129,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/engineering/
 
-/area/turret_protected/
+/area/turret_protected
 
 /area/arrival
 	requires_power = 0

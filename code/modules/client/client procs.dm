@@ -159,10 +159,10 @@
 		return
 
 	// Change the way they should download resources.
-	if(config.resource_urls)
-		src.preload_rsc = pick(config.resource_urls)
-	else
-		src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
+
+//	if(config.resource_urls)
+//		src.preload_rsc = pick(config.resource_urls)
+//	else src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
 
 	to_chat(src, "<span class='warning'>If the title screen is black, resources are still downloading. Please be patient until the title screen appears.</span>")
 
@@ -375,7 +375,7 @@
 	if(adv_camera && minimapinit)
 		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)
-		sleep(1)
+		CHECK_TICK
 	vote.interface.sendAssets(src)
 
 /proc/get_role_desire_str(var/rolepref)

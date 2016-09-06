@@ -4,7 +4,7 @@
 	icon_state = "co2"
 	name = "Pressure Tank"
 	desc = "A large vessel containing pressurized gas."
-	starting_volume = 2000 //in liters, 1 meters by 1 meters by 2 meters
+	starting_volume = 10000 //in liters, 1 meters by 1 meters by 2 meters
 	dir = SOUTH
 	initialize_directions = SOUTH
 	density = 1

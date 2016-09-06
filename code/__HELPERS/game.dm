@@ -7,20 +7,11 @@
 	src:Topic(href, href_list)
 	return null
 
-/proc/get_area(const/atom/O)
-	if (isnull(O))
+/proc/get_area(atom/A)
+	if(!istype(A))
 		return
-
-	var/atom/A = O
-
-	for (var/i = 0, ++i <= 16)
-		if (isarea(A))
-			return A
-
-		if (istype(A))
-			A = A.loc
-		else
-			return
+	for(A, A && !isarea(A), A=A.loc); //semicolon is for the empty statement
+	return A
 
 /proc/get_area_master(const/O)
 	var/area/A = get_area(O)

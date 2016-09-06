@@ -138,9 +138,10 @@ var/savefile/panicfile
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
-
+	sleep(-1)
 	processScheduler = new
 	master_controller = new /datum/controller/game_controller()
+//	travel = new /datum/travel()
 
 	spawn(1)
 		turfs = new/list(maxx*maxy*maxz)
@@ -366,15 +367,13 @@ var/savefile/panicfile
 	var/s = ""
 
 	if (config && config.server_name)
-		s += "<b>[config.server_name]</b> &#8212; "
+		s += "<b><big>[config.server_name]</big></b> &#8212; "
 
-
-	s += {"<b>[station_name()]</b>"
-		(
-		<a href=\"http://\">" //Change this to wherever you want the hub to link to
-		Default"  //Replace this with something else. Or ever better, delete it and uncomment the game version
-		</a>
-		)"}
+	s += " ("
+	s += "<a href=\"http://\">" //Change this to wherever you want the hub to link to.
+	s += "N/A"  //Replace this with something else. Or ever better, delete it and uncomment the game version.
+	s += "</a>"
+	s += ")"
 	var/list/features = list()
 
 	if(ticker)
@@ -411,7 +410,7 @@ var/savefile/panicfile
 	*/
 
 	if (!host && config && config.hostedby)
-		features += "hosted by <b>[config.hostedby]</b>"
+		features += "<b>[config.hostedby]</b>"
 
 	if (features)
 		s += ": [jointext(features, ", ")]"
@@ -509,8 +508,8 @@ proc/establish_old_db_connection()
 	var/count = 0
 	for(var/Z = 1 to world.maxz)
 		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
-			if(!(count % 50000))
-				sleep(world.tick_lag)
+			if(count % 5000)
+				CHECK_TICK
 			count++
 			T.initialize()
 			turfs[count] = T
