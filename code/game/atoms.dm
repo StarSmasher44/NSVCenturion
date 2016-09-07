@@ -36,9 +36,6 @@ var/global/list/ghdel_profiling = list()
 
 	var/list/beams
 
-	//overlays that should remain on top and not normally be removed, like c4.
-	var/list/priority_overlays
-
 	// EVENTS
 	/////////////////////////////
 	// On Destroy()
@@ -772,9 +769,9 @@ its easier to just keep the beam vertical.
 /mob/living/carbon/human/setGender(gend = FEMALE)
 	if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
 		CRASH("SOMEBODY SET A BAD GENDER ON [src] [gend]")
-	var/old_gender = src.gender
+	// var/old_gender = src.gender
 	src.gender = gend
-	testing("Set [src]'s gender to [gend], old gender [old_gender] previous gender [prev_gender]")
+	// testing("Set [src]'s gender to [gend], old gender [old_gender] previous gender [prev_gender]")
 
 /atom/proc/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
@@ -804,3 +801,6 @@ its easier to just keep the beam vertical.
 
 /atom/proc/acidable()
 	return 0
+
+/atom/proc/holomapAlwaysDraw()
+	return 1
