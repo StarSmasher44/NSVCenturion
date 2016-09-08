@@ -662,6 +662,7 @@
 	I.loc = src
 	I.dir = AM.dir
 	I.alpha = 128
+	I.plane = HOLOMAP_PLANE
 
 	if (!holomap_data)
 		holomap_data = list()
