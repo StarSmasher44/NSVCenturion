@@ -280,7 +280,6 @@ SELECT
     players.age,
     players.species,
     players.language,
-    players.flavor_text,
     players.med_record,
     players.sec_record,
     players.gen_record,
@@ -369,7 +368,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	age 				= text2num(preference_list["age"])
 	species				= preference_list["species"]
 	language			= preference_list["language"]
-	flavor_text			= preference_list["flavor_text"]
 	med_record			= preference_list["med_record"]
 	sec_record			= preference_list["sec_record"]
 	gen_record			= preference_list["gen_record"]
@@ -539,7 +537,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	S["job_engsec_low"]		>> job_engsec_low
 
 	//Miscellaneous
-	S["flavor_text"]		>> flavor_text
 	S["med_record"]			>> med_record
 	S["sec_record"]			>> sec_record
 	S["gen_record"]			>> gen_record
@@ -682,18 +679,18 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
 	if(check.Execute(db))
-		if(!check.NextRow())          //1           2           3         4         5           6      7   8       9        10          11         12         13         14                15           16
-			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name,random_name,gender,age,species,language,flavor_text,med_record,sec_record,gen_record,player_alt_titles,disabilities,nanotrasen_relation) \
-				   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-				                        ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation)
+		if(!check.NextRow())          //1           2           3         4         5           6      7   8       9        10          11         12         13               14          15
+			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name,random_name,gender,age,species,language,med_record,sec_record,gen_record,player_alt_titles,disabilities,nanotrasen_relation) \
+				   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				                        ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation)
 			if(!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Character")
 		else
-			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=? WHERE player_ckey = ? AND player_slot = ?",\
-									  metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, ckey, slot)
+			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,gender=?,age=?,species=?,language=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=? WHERE player_ckey = ? AND player_slot = ?",\
+									  metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, ckey, slot)
 			if(!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
@@ -816,7 +813,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	S["age"]                   << age
 	S["species"]               << species
 	S["language"]              << language
-	S["flavor_text"]           << flavor_text
 	S["med_record"]            << med_record
 	S["sec_record"]            << sec_record
 	S["gen_record"]            << gen_record
