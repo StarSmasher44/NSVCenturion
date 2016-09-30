@@ -1129,8 +1129,41 @@
 				lighting = autoset(lighting, 0)
 				environ = autoset(environ, 0)
 
-		// Set channels depending on how much charge we have left
-		update_channels()
+
+		// set channels depending on how much charge we have left
+
+		// Allow the APC to operate as normal if the cell can charge
+		if(charging && longtermpower < 10)
+			longtermpower += 1
+		else if(longtermpower > -10)
+			longtermpower -= 2
+
+
+		if(cell.charge <= 0)					// zero charge, turn all off
+			equipment = autoset(equipment, 0)
+			lighting = autoset(lighting, 0)
+			environ = autoset(environ, 0)
+			if(areaMaster.poweralm && make_alerts)
+				areaMaster.poweralert(0, src)
+		else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
+			equipment = autoset(equipment, 2)
+			lighting = autoset(lighting, 2)
+			environ = autoset(environ, 1)
+			if(areaMaster.poweralm && make_alerts)
+				areaMaster.poweralert(0, src)
+		else if(cell.percent() < 30 && longtermpower < 0)			// <30%, turn off equipment
+			equipment = autoset(equipment, 2)
+			lighting = autoset(lighting, 1)
+			environ = autoset(environ, 1)
+			if(areaMaster.poweralm && make_alerts)
+				areaMaster.poweralert(0, src)
+		else									// otherwise all can be on
+			equipment = autoset(equipment, 1)
+			lighting = autoset(lighting, 1)
+			environ = autoset(environ, 1)
+			if(cell.percent() > 75 && !areaMaster.poweralm && make_alerts)
+				areaMaster.poweralert(1, src)
+>>>>>>> Fixing bugs: Faster than you can merge edition (#12050)
 
 		// now trickle-charge the cell
 
