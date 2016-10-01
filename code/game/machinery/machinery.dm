@@ -389,8 +389,7 @@ Class Procs:
 	src.add_fingerprint(usr)
 	src.add_hiddenprint(usr)
 
-	handle_multitool_topic(href,href_list,usr)
-	return 0
+	return handle_multitool_topic(href,href_list,usr)
 
 /obj/machinery/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
