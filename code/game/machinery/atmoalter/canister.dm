@@ -31,7 +31,10 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 
-	var/update_flag = 0
+	//Icon Update Code
+	var/global/list/status_overlays_pressure = list()
+	var/global/list/status_overlays_other = list()
+	var/overlay_status = 0
 
 	var/log="" // Bad boys, bad boys.
 
@@ -75,67 +78,79 @@
 	canister_color = "grey"
 	can_label = 0
 
-/obj/machinery/portable_atmospherics/canister/proc/check_change()
-	var/old_flag = update_flag
-	update_flag = 0
-	if(holding)
-		update_flag |= 1
-	if(connected_port)
-		update_flag |= 2
+/obj/machinery/portable_atmospherics/canister/update_icon()
+	if(destroyed)
+		icon_state = "[canister_color]-1"
+		overlays.len = 0
+		return
+
+	if (canister_color != old_color)
+		icon_state = "[canister_color]"
+		old_color = canister_color
 
 	var/tank_pressure = air_contents.return_pressure()
-	if(tank_pressure < 10)
-		update_flag |= 4
-	else if(tank_pressure < ONE_ATMOSPHERE)
-		update_flag |= 8
-	else if(tank_pressure < 15*ONE_ATMOSPHERE)
-		update_flag |= 16
-	else
-		update_flag |= 32
+	if(check_updates(tank_pressure))
+		if(overlays.len)
+			overlays = 0
 
-	if(update_flag == old_flag)
-		return 1
-	else
-		return 0
+		overlay_status = 0
 
+		if (holding)
+			overlays += other_overlays(1)
+			overlay_status |= OVERLAY_HOLDING
 
-/obj/machinery/portable_atmospherics/canister/update_icon()
-/*
-update_flag
-1 = holding
-2 = connected_port
-4 = tank_pressure < 10
-8 = tank_pressure < ONE_ATMOS
-16 = tank_pressure < 15*ONE_ATMOS
-32 = tank_pressure go boom.
-*/
+		if (connected_port)
+			overlays += other_overlays(2)
+			overlay_status |= OVERLAY_CONNECTED
 
-	if (src.destroyed)
-		src.overlays = 0
-		src.icon_state = text("[]-1", src.canister_color)
-		return
-
-	if(icon_state != "[canister_color]")
-		icon_state = "[canister_color]"
-
-	if(check_change()) //Returns 1 if no change needed to icons.
-		return
-
-	src.overlays = 0
-
-	if(update_flag & 1)
-		overlays += "can-open"
-	if(update_flag & 2)
-		overlays += "can-connector"
-	if(update_flag & 4)
-		overlays += "can-o0"
-	if(update_flag & 8)
-		overlays += "can-o1"
-	else if(update_flag & 16)
-		overlays += "can-o2"
-	else if(update_flag & 32)
-		overlays += "can-o3"
+		switch(tank_pressure)
+			if(15 * ONE_ATMOSPHERE to INFINITY)
+				overlays += pressure_overlays(4)
+				overlay_status |= OVERLAY_HIGH_PRESSURE
+			if(ONE_ATMOSPHERE to 15 * ONE_ATMOSPHERE)
+				overlays += pressure_overlays(3)
+				overlay_status |= OVERLAY_MEDIUM_PRESSURE
+			if(10 to ONE_ATMOSPHERE)
+				overlays += pressure_overlays(2)
+				overlay_status |= OVERLAY_LOW_PRESSURE
+			else
+				overlays += pressure_overlays(1)
+				overlay_status |= OVERLAY_NO_PRESSURE
 	return
+
+/obj/machinery/portable_atmospherics/canister/proc/pressure_overlays(var/state)
+	var/static/list/status_overlays_pressure = list(
+		image(icon, "can-o0"),
+		image(icon, "can-o1"),
+		image(icon, "can-o2"),
+		image(icon, "can-o3")
+	)
+
+	return status_overlays_pressure[state]
+
+/obj/machinery/portable_atmospherics/canister/proc/other_overlays(var/state)
+	var/static/list/status_overlays_other = list(
+		image(icon, "can-open"),
+		image(icon, "can-connector")
+	)
+
+	return status_overlays_other[state]
+
+/obj/machinery/portable_atmospherics/canister/proc/check_updates(tank_pressure = 0)
+	if((overlay_status & OVERLAY_HOLDING) != holding)
+		return 1
+	if((overlay_status & OVERLAY_CONNECTED) != connected_port)
+		return 1
+	if((overlay_status & OVERLAY_HIGH_PRESSURE) && tank_pressure < 15*ONE_ATMOSPHERE)
+		return 1
+	if((overlay_status & OVERLAY_MEDIUM_PRESSURE) && (tank_pressure < ONE_ATMOSPHERE || tank_pressure > 15*ONE_ATMOSPHERE))
+		return 1
+	if((overlay_status & OVERLAY_LOW_PRESSURE) && (tank_pressure < 10 || tank_pressure > ONE_ATMOSPHERE))
+		return 1
+	if((overlay_status & OVERLAY_NO_PRESSURE) && tank_pressure > 10)
+		return 1
+	return 0
+
 
 /obj/machinery/portable_atmospherics/canister/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > temperature_resistance)
