@@ -1548,3 +1548,5 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
 
+
+#define DEFAULT_BLOOD "#A10808"
