@@ -135,6 +135,8 @@
 
 #define isatom(A) (istype(A, /atom))
 
+#define isatommovable(A) (istype(A, /atom/movable))
+
 #define ismatrix(A) (istype(A, /matrix))
 
 //Macros for antags
