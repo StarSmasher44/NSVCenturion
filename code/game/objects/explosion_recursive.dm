@@ -52,9 +52,8 @@ proc/explosion_rec(turf/epicenter, power, flame_range)
 	message_admins("Explosion with size ([power]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 	log_game("Explosion with size ([power]) in area [epicenter.loc.name] ")
 
-	spawn(0)
-		playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(power*2,1) )
-		playsound(epicenter, "explosion", 100, 1, round(power,1) )
+	playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(power*2,1) )
+	playsound(epicenter, "explosion", 100, 1, round(power,1) )
 
 	explosion_in_progress = 1
 	explosion_turfs = list()
@@ -67,8 +66,8 @@ proc/explosion_rec(turf/epicenter, power, flame_range)
 		var/turf/T = get_step(epicenter, direction)
 //		if(prob(40) && !istype(T, /turf/space) && !T:density)
 //			getFromPool(/obj/fire, T) //Mostly for ambience!
-		spawn(0)
-			T.explosion_spread(power - epicenter.explosion_resistance, direction)
+//		spawn(0)
+		T.explosion_spread(power - epicenter.explosion_resistance, direction)
 		CHECK_TICK
 	//This step applies the ex_act effects for the explosion, as planned in the previous step.
 	for( var/datum/explosion_turf/ET in explosion_turfs )
@@ -150,12 +149,11 @@ proc/explosion_rec(turf/epicenter, power, flame_range)
 			side_spread_power -= O.explosion_resistance
 
 	var/turf/T = get_step(src, direction)
-	spawn(0)
-		T.explosion_spread(spread_power, direction)
-		T = get_step(src, turn(direction,90))
-		T.explosion_spread(side_spread_power, turn(direction,90))
-		T = get_step(src, turn(direction,-90))
-		T.explosion_spread(side_spread_power, turn(direction,90))
+	T.explosion_spread(spread_power, direction)
+	T = get_step(src, turn(direction,90))
+	T.explosion_spread(side_spread_power, turn(direction,90))
+	T = get_step(src, turn(direction,-90))
+	T.explosion_spread(side_spread_power, turn(direction,90))
 	if(prob(42) && !istype(T, /turf/space) && !T:density)
 		getFromPool(/obj/fire, T) //Mostly for ambience!
 
