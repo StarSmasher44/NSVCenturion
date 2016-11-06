@@ -59,11 +59,11 @@ var/global/disable_vents     = 0
 
 #define MOLES_PLASMA_VISIBLE	0.7 //Moles in a standard cell after which plasma is visible
 #define MIN_PLASMA_DAMAGE 1
-#define MAX_PLASMA_DAMAGE 12
+#define MAX_PLASMA_DAMAGE 10
 
 #define mouse_respawn_time 5 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
 
-#define BREATH_VOLUME 0.55	//liters in a normal breath
+#define BREATH_VOLUME 0.5	//liters in a normal breath
 #define BREATH_MOLES (ONE_ATMOSPHERE * BREATH_VOLUME /(T20C*R_IDEAL_GAS_EQUATION))
 #define BREATH_PERCENTAGE BREATH_VOLUME/CELL_VOLUME
 	//Amount of air to take a from a tile
@@ -106,7 +106,7 @@ var/global/disable_vents     = 0
 
 #define IS_SPACE_COLD 1
 #define PRESSURE_DAMAGE_COEFFICIENT 4 //The amount of pressure damage someone takes is equal to (pressure / HAZARD_HIGH_PRESSURE)*PRESSURE_DAMAGE_COEFFICIENT, with the maximum of MAX_PRESSURE_DAMAGE
-#define MAX_HIGH_PRESSURE_DAMAGE 8	//This used to be 20... I got this much random rage for some retarded decision by polymorph?! Polymorph now lies in a pool of blood with a katana jammed in his spleen. ~Errorage --PS: The katana did less than 20 damage to him :(
+#define MAX_HIGH_PRESSURE_DAMAGE 4	//This used to be 20... I got this much random rage for some retarded decision by polymorph?! Polymorph now lies in a pool of blood with a katana jammed in his spleen. ~Errorage --PS: The katana did less than 20 damage to him :(
 #define LOW_PRESSURE_DAMAGE 2 	//The amounb of damage someone takes when in a low pressure area (The pressure threshold is so low that it doesn't make sense to do any calculations, so it just applies this flat value).
 
 #define PRESSURE_SUIT_REDUCTION_COEFFICIENT 0.8 //This is how much (percentual) a suit with the flag STOPSPRESSUREDMG reduces pressure.
@@ -862,8 +862,9 @@ SEE_PIXELS	256
 // Second bit is persistence (save to char prefs).
 // Third bit is whether we polled for that role yet.
 #define ROLEPREF_ENABLE         1 // Enable role for this character.
-#define ROLEPREF_PERSIST        2 // Save preference.
+#define ROLEPREF_PERSIST        2 // Used to flag a pref as Always/Never
 #define ROLEPREF_POLLED         4 // Have we polled this guy?
+#define ROLEPREF_SAVE           8 // Flag the pref to be saved permanently.
 
 #define ROLEPREF_NEVER   ROLEPREF_PERSIST
 #define ROLEPREF_NO      0
@@ -871,8 +872,7 @@ SEE_PIXELS	256
 #define ROLEPREF_ALWAYS  (ROLEPREF_ENABLE|ROLEPREF_PERSIST)
 
 // Masks.
-#define ROLEPREF_SAVEMASK 1 // 0b00000001 - For saving shit.
-#define ROLEPREF_VALMASK  3 // 0b00000011 - For a lot of things.
+#define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
 #define ROLE_ALIEN      "alien"
@@ -1549,7 +1549,6 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_ELITESYNDICATE	4
 #define HOLOMAP_FILTER_VOX				5
 
-
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
 #define HOLOMAP_AREACOLOR_MEDICAL		"#35803099"
@@ -1566,6 +1565,5 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
-
 
 #define DEFAULT_BLOOD "#A10808"
