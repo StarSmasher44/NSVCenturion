@@ -1162,7 +1162,6 @@
 			environ = autoset(environ, 1)
 			if(cell.percent() > 75 && !areaMaster.poweralm && make_alerts)
 				areaMaster.poweralert(1, src)
->>>>>>> Fixing bugs: Faster than you can merge edition (#12050)
 
 		// now trickle-charge the cell
 

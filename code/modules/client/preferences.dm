@@ -350,10 +350,6 @@ var/const/MAX_SAVE_SLOTS = 8
 	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
   </div>
 </div>"}
-
-	if(config.allow_Metadata)
-		dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
-
 	return dat
 
 /datum/preferences/proc/getPrefLevelText(var/datum/job/job)
@@ -1621,7 +1617,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.f_style = f_style
 
 
-	character.skills = skills
+
 
 	// Destroy/cyborgize organs
 
