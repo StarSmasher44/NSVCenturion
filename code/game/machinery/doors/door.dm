@@ -377,6 +377,7 @@ var/list/all_doors = list()
 	playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 	if (density) //Why are we playing a denied animation on an OPEN DOOR
 		door_animate("deny")
+	sleep(5) // Prevent spamming it.
 
 /obj/machinery/door/morgue
 	icon = 'icons/obj/doors/morgue.dmi'

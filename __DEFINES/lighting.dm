@@ -1,10 +1,6 @@
 //Bay lighting engine shit, not in /code/modules/lighting because BYOND is being shit about it
-#define LIGHTING_INTERVAL       5 // frequency, in 1/10ths of a second, of the lighting process
-
 #ifndef LIGHTING_INSTANT_UPDATES
-#define LIGHTING_INTERVAL       5    // Frequency, in 1/10ths of a second, of the lighting process.
-#include "..\code\controllers\Processes\lighting.dm"
-#endif
+#define LIGHTING_INTERVAL       4    // Frequency, in 1/10ths of a second, of the lighting process.
 
 #define LIGHTING_FALLOFF        1 // type of falloff to use for lighting; 1 for circular, 2 for square
 #define LIGHTING_LAMBERTIAN     0 // use lambertian shading for light sources

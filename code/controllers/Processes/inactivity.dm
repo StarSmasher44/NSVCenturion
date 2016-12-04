@@ -10,7 +10,7 @@
 					log_access("AFK: [key_name(C)]")
 					to_chat(C, "<SPAN CLASS='warning'>You have been inactive for more than 10 minutes and have been disconnected.</SPAN>")
 					del(C)
-
-			scheck()
+	else
+		src.disable() // Not needed if we're not using
 
 #undef INACTIVITY_KICK

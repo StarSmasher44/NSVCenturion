@@ -10,6 +10,6 @@ var/global/list/active_diseases = list()
 	for(var/d in active_diseases)
 		if(d)
 			d:process()
-			scheck()
+			CHECK_TICK
 			continue
 		active_diseases -= d

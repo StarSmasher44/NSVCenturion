@@ -10,7 +10,7 @@ var/global/list/events = list()
 	for(var/e in events)
 		if(e)
 			e:process()
-			scheck()
+			CHECK_TICK
 			continue
 		events -= e
 

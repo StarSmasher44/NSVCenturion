@@ -68,14 +68,13 @@ proc/explosion_rec(turf/epicenter, power, flame_range)
 //			getFromPool(/obj/fire, T) //Mostly for ambience!
 //		spawn(0)
 		T.explosion_spread(power - epicenter.explosion_resistance, direction)
-		CHECK_TICK
 	//This step applies the ex_act effects for the explosion, as planned in the previous step.
 	for( var/datum/explosion_turf/ET in explosion_turfs )
 		if(ET.max_power <= 0)
 			continue
 		if(!ET.turf)
 			continue
-
+		CHECK_TICK
 		//Wow severity looks confusing to calculate... Fret not, I didn't leave you with any additional instructions or help. (just kidding, see the line under the calculation)
 		var/severity = 4 - round(max(min( 3, ((ET.max_power - ET.turf.explosion_resistance) / (max(3,(power/3)))) ) ,1), 1)
 								//sanity			effective power on tile				divided by either 3 or one third the total explosion power
@@ -89,7 +88,7 @@ proc/explosion_rec(turf/epicenter, power, flame_range)
 			ET.turf = locate(x,y,z)
 		for( var/atom/movable/A in ET.turf )
 			A.ex_act(severity)
-		CHECK_TICK
+			CHECK_TICK
 	explosion_in_progress = 0
 
 /turf
@@ -147,14 +146,14 @@ proc/explosion_rec(turf/epicenter, power, flame_range)
 		if(O.explosion_resistance)
 			spread_power -= O.explosion_resistance
 			side_spread_power -= O.explosion_resistance
-
 	var/turf/T = get_step(src, direction)
 	T.explosion_spread(spread_power, direction)
 	T = get_step(src, turn(direction,90))
 	T.explosion_spread(side_spread_power, turn(direction,90))
 	T = get_step(src, turn(direction,-90))
 	T.explosion_spread(side_spread_power, turn(direction,90))
-	if(prob(42) && !istype(T, /turf/space) && !T:density)
+	CHECK_TICK
+	if(prob(40) && !istype(T, /turf/space) && !T:density)
 		getFromPool(/obj/fire, T) //Mostly for ambience!
 
 	/*
