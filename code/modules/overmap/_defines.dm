@@ -1,5 +1,5 @@
 //Zlevel where overmap objects should be
-//#define OVERMAP_ZLEVEL 1
+#define OVERMAP_ZLEVEL 8
 //How far from the edge of overmap zlevel could randomly placed objects spawn
 #define OVERMAP_EDGE 7
 
@@ -32,6 +32,7 @@ proc/toggle_move_stars(var/TravelMark, direction)
 				for(var/atom/movable/AM in T)
 					if (!AM.anchored)
 						AM.throw_at(get_step(T,reverse_direction(direction)), 5, 1)
+			sleep(0)
 
 
 //list used to cache empty zlevels to avoid nedless map bloat

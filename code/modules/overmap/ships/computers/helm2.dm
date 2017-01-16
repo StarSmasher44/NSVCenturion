@@ -3,14 +3,13 @@
 	icon_state = "escape"
 	var/obj/overmap/ship/linked
 	var/autopilot = 0
-	var/manual_control = 0
 	var/list/known_sectors = list()
-	var/dx		//desitnation
+	var/list/known_locations = list()
+	var/dx		//destination
 	var/dy		//coordinates
 	var/id = 1001
 
 /obj/machinery/computer/helm/initialize()
-//	linked = map_sectors["[z]"]
 	if (linked)
 		if(!linked.nav_control)
 			linked.nav_control = src
@@ -18,14 +17,6 @@
 	else
 		testing("Helm console at level [z] was unable to find a corresponding overmap object.")
 
-//	for(var/level in map_sectors)
-//		var/obj/effect/map/sector/S = map_sectors["[level]"]
-//		if (istype(S) && S.always_known)
-//			var/datum/data/record/R = new()
-//			R.fields["name"] = S.name
-//			R.fields["x"] = S.x
-//			R.fields["y"] = S.y
-//			known_sectors += R
 
 /obj/machinery/computer/helm/process()
 	..()
@@ -43,21 +34,8 @@
 			linked.accelerate(get_dir(linked.loc, T))
 		else
 			linked.decelerate()
-
 		return
-
-/obj/machinery/computer/helm/relaymove(var/mob/user, direction)
-	if(manual_control && linked)
-		linked.relaymove(user,direction)
-		return 1
-
-/obj/machinery/computer/helm/check_eye(var/mob/user as mob)
-	if (!manual_control)
-		return -1
-	if (!get_dist(user, src) > 1 || user.blinded || !linked )
-		return -1
-	return 0
-
+/*
 /obj/machinery/computer/helm/attack_hand(var/mob/user as mob)
 	if(..())
 		user.unset_machine()
@@ -172,3 +150,4 @@
 		state = href_list["state"]
 	add_fingerprint(usr)
 	updateUsrDialog()
+*/

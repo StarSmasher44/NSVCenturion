@@ -17,8 +17,6 @@
 
 
 /obj/machinery/computer/helm/check_eye(var/mob/user as mob)
-//	if (!manual_control)
-//		return -1
 	if (!get_dist(user, src) > 1 || user.blinded || !linked )
 		return -1
 	return 0
@@ -36,8 +34,8 @@
 			user.reset_view(linked)
 
 	ui_interact(user)
-//	user.verbs += /turf/space/verb/MoveShipTo()
-
+	user.verbs += /turf/space/verb/MoveShipTo()
+/*
 /obj/machinery/computer/helm/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	if(!linked)
 		return
@@ -71,14 +69,17 @@
 //			stat(null, "Engine temperature:\t")
 //			if(destination)
 //				stat(null, "Destination:\t[dx], [dy]")
-
+*/
 /turf/space/proc/MoveShipTo()
 	set name = "Navigate To"
 	set desc = "Orders the Ship's AI to move to the selected destination."
-	set category = null
-	return
+	set category = "Ship"
 
+	if(src.z == OVERMAP_ZLEVEL) // Make sure it's the overmap.
+		if(isturf(src))
+			linked.targetLoc == src
 
+/*
 /obj/machinery/computer/helm/Topic(href, href_list)
 	if(..())
 		return 1
@@ -136,4 +137,4 @@
 //		state2 = href_list["state2"]
 	add_fingerprint(usr)
 	updateUsrDialog()
-
+*/

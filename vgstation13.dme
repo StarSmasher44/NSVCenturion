@@ -1577,7 +1577,7 @@
 #include "code\modules\overlays\mobs.dm"
 #include "code\modules\overmap\_defines.dm"
 #include "code\modules\overmap\ships\ship2.dm"
-#include "code\modules\overmap\ships\computers\helm2.dm"
+#include "code\modules\overmap\ships\computers\helm.dm"
 #include "code\modules\paperwork\clipboard.dm"
 #include "code\modules\paperwork\filingcabinet.dm"
 #include "code\modules\paperwork\folders.dm"
