@@ -148,7 +148,6 @@ var/list/admin_verbs_server = list(
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
 	/client/proc/debug_pooling,
-	/client/proc/getSchedulerContext,
 	/client/proc/cmd_admin_list_open_jobs,
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
@@ -187,9 +186,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/check_convertables,
 	/client/proc/check_spiral,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
-#ifdef PROFILE_MACHINES
-	/client/proc/cmd_admin_dump_macprofile,
-#endif
 	/client/proc/debugNatureMapGenerator,
 	/client/proc/callatomproc,
 	/client/proc/view_runtimes
@@ -205,7 +201,8 @@ var/list/admin_verbs_rejuv = list(
 	/client/proc/respawn_character
 	)
 var/list/admin_verbs_polling = list(
-	/client/proc/create_poll
+	/client/proc/create_poll,
+	/client/proc/remove_broken_polls
 	)
 //verbs which can be hidden - needs work
 var/list/admin_verbs_hideable = list(
@@ -1059,8 +1056,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 
 	var/to_choose_from = list("ADMINBUS (custom DMI upload)")
-	to_choose_from += blob_looks - "adminbus"
-	var/chosen = input("This will change the looks of every blob currently in the world.", "Blob Looks", blob_looks[1]) as null|anything in to_choose_from
+	to_choose_from += blob_looks_admin
+	var/chosen = input("This will change the looks of every blob currently in the world.", "Blob Looks", blob_looks_admin[1]) as null|anything in to_choose_from
 
 	if(!chosen)
 		return
@@ -1076,7 +1073,7 @@ var/list/admin_verbs_mod = list(
 		else
 			adminblob_beat = 'sound/effects/blob_pulse.ogg'
 
-		blob_looks["adminbus"] = adminblob_size
+		blob_looks_admin["adminbus"] = adminblob_size
 		chosen = "adminbus"
 	else
 		adminblob_icon = null
@@ -1284,4 +1281,3 @@ var/list/admin_verbs_mod = list(
 	else
 		alert(src, "An external server error has occurred. Please report this.")
 		return 0
-

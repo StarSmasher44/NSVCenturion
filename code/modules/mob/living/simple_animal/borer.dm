@@ -91,6 +91,19 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	var/static/list/name_prefixes = list("Primary","Secondary","Tertiary","Quaternary","Quinary","Senary","Septenary","Octonary","Nonary","Denary")
 	var/name_prefix_index = 1
+	held_items = list()
+
+/mob/living/simple_animal/borer/defected_borer
+	name = "special borer"
+	real_name = "special borer"
+	desc = "A slightly defected, yet incredibly happy little brainslug"
+	speak_emote = list("borks")
+	emote_hear = list("barks")
+	attacktext = "barks at"
+	friendly = "barks at"
+	icon_state = "bestborer"
+	icon_living = "bestborer"
+	icon_dead = "bestborer"
 
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)
@@ -315,7 +328,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	for(var/mob/M in player_list)
 		if(istype(M, /mob/new_player))
 			continue
-		if(istype(M,/mob/dead/observer)  && (M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS || get_turf(src) in view(M))))
+		if(istype(M,/mob/dead/observer)  && (M.client && M.client.prefs.toggles & CHAT_GHOSTEARS || (get_turf(src) in view(M))))
 			var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
 			if(M.client.holder)
 				controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
@@ -351,9 +364,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return host.eyecheck()
 	else
 		return ..()
-
-/mob/living/simple_animal/borer/start_pulling(var/atom/movable/AM)
-	to_chat(src, "<span class='warning'>You are too small to pull anything.</span>")
 
 // VERBS!
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)
@@ -516,7 +526,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	if(chem.name == BLOOD)
-		if(istype(host, /mob/living/carbon/human) && !(host.species.flags & NO_BLOOD))
+		if(istype(host, /mob/living/carbon/human) && !(host.species.anatomy_flags & NO_BLOOD))
 			host.vessel.add_reagent(chem.name, units)
 		else
 			to_chat(src, "<span class='notice'>Your host seems to be a species that doesn't use blood.<span>")

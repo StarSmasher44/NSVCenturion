@@ -1,16 +1,7 @@
-proc/random_hair_style(gender, species = "Human")
+/proc/random_hair_style(gender, species = "Human")
 	var/h_style = "Bald"
 
-	var/list/valid_hairstyles = list()
-	for(var/hairstyle in hair_styles_list)
-		var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-		if(gender == MALE && S.gender == FEMALE)
-			continue
-		if(gender == FEMALE && S.gender == MALE)
-			continue
-		if( !(species in S.species_allowed))
-			continue
-		valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
+	var/list/valid_hairstyles = valid_sprite_accessories(gender, species, hair_styles_list)
 
 	if(valid_hairstyles.len)
 		h_style = pick(valid_hairstyles)
@@ -37,20 +28,10 @@ proc/random_hair_style(gender, species = "Human")
 			return NORTHWEST
 	return 0
 
-proc/random_facial_hair_style(gender, species = "Human")
+/proc/random_facial_hair_style(gender, species = "Human")
 	var/f_style = "Shaved"
 
-	var/list/valid_facialhairstyles = list()
-	for(var/facialhairstyle in facial_hair_styles_list)
-		var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-		if(gender == MALE && S.gender == FEMALE)
-			continue
-		if(gender == FEMALE && S.gender == MALE)
-			continue
-		if( !(species in S.species_allowed))
-			continue
-
-		valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
+	var/list/valid_facialhairstyles = valid_sprite_accessories(gender, species, facial_hair_styles_list)
 
 	if(valid_facialhairstyles.len)
 		f_style = pick(valid_facialhairstyles)
@@ -84,7 +65,7 @@ proc/random_skin_tone(species = "Human")
 				. = rand(-185,34)
 		return min(max( .+rand(-25, 25), -185),34)
 	else if(species == "Vox")
-		. = rand(1,3)
+		. = rand(1,6)
 		return .
 	else
 		return 0
@@ -112,6 +93,12 @@ proc/skintone2racedescription(tone, species = "Human")
 				return "unknown"
 	else if(species == "Vox")
 		switch(tone)
+			if(6)
+				return "emerald"
+			if(5)
+				return "azure"
+			if(4)
+				return "light green"
 			if(2)
 				return "brown"
 			if(3)

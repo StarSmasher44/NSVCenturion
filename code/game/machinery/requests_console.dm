@@ -7,7 +7,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 /obj/machinery/requests_console
 	name = "requests console"
-	desc = "A console intended to send requests to diferent departments on the station."
+	desc = "A console intended to send requests to various departments on the station."
 	anchored = 1
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "req_comp0"
@@ -302,7 +302,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		if (sending)
 			var/pass = 0
 			for (var/obj/machinery/message_server/MS in message_servers)
-				if(!MS.active)
+				if(!MS.is_functioning())
 					continue
 				MS.send_rc_message(href_list["department"],department,log_msg,msgStamped,msgVerified,priority)
 				pass = 1

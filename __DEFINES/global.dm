@@ -11,7 +11,10 @@ var/round_end_info = ""
 var/global/list/deadmins = list()
 
 //List of vars that require DEBUG on top of VAREDIT to be able to edit
-var/list/lockedvars = list("vars", "client")
+var/list/lockedvars = list("vars", "client", "holder")
+
+//List of vars that you can NEVER edit through VV itself
+var/list/nevervars = list("step_x", "step_y")
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
@@ -348,5 +351,7 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 var/list/holoMiniMaps = list()
 var/list/centcommMiniMaps = list()
 var/list/extraMiniMaps = list()
+
+var/list/holomap_markers = list()
 
 var/holomaps_initialized = 0

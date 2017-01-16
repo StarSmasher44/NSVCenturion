@@ -20,6 +20,7 @@
 	var/list/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
+	var/pain_resistance = 0
 	var/sport = 1 //High sport helps you show off on a treadmill. Multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
@@ -302,7 +303,7 @@
 	if(holder && holder.my_atom)
 		var/mob/living/carbon/human/H = holder.my_atom
 		if(istype(H))
-			if(H.species && H.species.flags & NO_BLOOD)
+			if(H.species && H.species.anatomy_flags & NO_BLOOD)
 				return 0
 	return 1
 
@@ -366,9 +367,7 @@
 
 	//Put out fire
 	if(method == TOUCH)
-		M.adjust_fire_stacks(-(volume / 10))
-		if(M.fire_stacks <= 0)
-			M.ExtinguishMob()
+		M.ExtinguishMob()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
@@ -377,15 +376,11 @@
 	//Greys treat water like acid
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Grey")
+		if(isgrey(H))
 			if(method == TOUCH)
 
-				if(H.wear_mask)
-					to_chat(H, "<span class='warning'>Your mask protects you from the water!</span>")
-					return
-
-				if(H.head)
-					to_chat(H, "<span class='warning'>Your helmet protects you from the water!</span>")
+				if(H.check_body_part_coverage(EYES|MOUTH))
+					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
 					return
 
 				if(M.acidable())
@@ -435,6 +430,14 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
 		if(!cube.wrapped)
 			cube.Expand()
+	else if(istype(O,/obj/machinery/space_heater/campfire))
+		var/obj/machinery/space_heater/campfire/campfire = O
+		campfire.snuff()
+	else if(O.on_fire) // For extinguishing objects on fire
+		O.extinguish()
+	else if(O.molten) // Molten shit.
+		O.molten=0
+		O.solidify()
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	..()
@@ -731,6 +734,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.5
+	pain_resistance = 25
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M, var/alien)
 
@@ -806,7 +810,7 @@
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
 				H.mind.vampire.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
 		if(H.mind && H.mind.special_role == "VampThrall")
-			ticker.mode.remove_vampire_mind(H.mind, H.mind)
+			ticker.mode.remove_thrall(H.mind)
 			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 
@@ -1400,21 +1404,12 @@
 /datum/reagent/paracetamol
 	name = "Paracetamol"
 	id = PARACETAMOL
-	description = "Most probably know this as Tylenol, but this chemical is a mild, simple painkiller."
+	description = "Most commonly know this as Tylenol, but this chemical is a mild, simple painkiller."
 	reagent_state = LIQUID
 	color = "#C855DC"
+	pain_resistance = 60
 	overdose_dam = 0
 	overdose = 0
-
-/datum/reagent/paracetamol/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		H.shock_stage--
-		H.traumatic_shock--
 
 /datum/reagent/mutagen
 	name = "Unstable mutagen"
@@ -1454,6 +1449,18 @@
 	description = "A simple, yet effective painkiller."
 	reagent_state = LIQUID
 	color = "#C8A5DC"
+	pain_resistance = 80
+	custom_metabolism = 0.1
+
+/datum/reagent/tramadol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		if(C.pain_level < BASE_CARBON_PAIN_RESIST) //If we're already recovering from shock, let's speed the process up
+			C.pain_shock_stage = max(0, C.pain_shock_stage - 1)
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1461,6 +1468,26 @@
 	description = "An effective and very addictive painkiller."
 	reagent_state = LIQUID
 	color = "#C805DC"
+	custom_metabolism = 0.05
+
+/datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		C.pain_numb = max(5, C.pain_numb)
+		C.pain_shock_stage = max(0, C.pain_shock_stage - 3) //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
+		if(!M.sleeping && prob(2))
+			to_chat(M, pick("<span class='numb'>You feel like you're floating...</span>", \
+							"<span class='numb'>You feel a little lightheaded... but it's okay.</span>", \
+							"<span class='numb'>Your face itches a little bit... and it feels so good to scratch it...</span>", \
+							"<span class='numb'>Your whole body buzzes slightly, but it doesn't seem to bother you...</span>", \
+							"<span class='numb'>You feel a little high of energy, and it makes you smile...</span>", \
+							"<span class='numb'>You nod to yourself... it's nothing, it just feels good to nod a little...</span>", \
+							"<span class='numb'>Hello?... Is there anybody in there?...</span>", \
+							"<span class='numb'>You feel... comfortably numb.</span>"))
 
 /datum/reagent/virus_food
 	name = "Virus Food"
@@ -1487,9 +1514,21 @@
 /datum/reagent/vaporsalt
 	name = "Vapor Salts"
 	id = VAPORSALT
-	description = "A strange mineral found in alien plantlife that behaves strangely in the presence of certain gasses in liquid form."
+	description = "A strange mineral found in alien plantlife that has been observed to vaporize some liquids."
 	reagent_state = LIQUID
 	color = "#BDE5F2"
+
+
+/datum/reagent/vaporsalt/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(T.wet)
+		T.dry(TURF_WET_LUBE) //Cleans water or lube
+		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(T)
+		S.time_to_live = 10 //unusually short smoke
+		//We don't need to start up the system because we only want to smoke one tile.
 
 /datum/reagent/iron
 	name = "Iron"
@@ -2006,6 +2045,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.01
 	overdose = REAGENTS_OVERDOSE
+	pain_resistance = 40
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M)
 
@@ -2086,6 +2126,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose = REAGENTS_OVERDOSE
+	pain_resistance = 10
 
 /datum/reagent/alkysine/on_mob_life(var/mob/living/M)
 
@@ -2819,6 +2860,14 @@
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
 
+/datum/reagent/dipping_sauce
+	name = "Dipping Sauce"
+	id = DIPPING_SAUCE
+	description = "Adds extra, delicious texture to a snack."
+	reagent_state = SOLID
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	color = "#33cc33" //rgb: 51, 204, 51
+
 /datum/reagent/capsaicin
 	name = "Capsaicin Oil"
 	id = CAPSAICIN
@@ -3017,7 +3066,7 @@
 			M.adjustToxLoss(1)
 			M.Dizzy(5)
 			M.Jitter(5)
-			if(prob(5))
+			if(prob(5) && M.feels_pain())
 				to_chat(M, "<span class='warning'>Oh god, the pain!</span>")
 		if(25 to INFINITY)
 			if(ishuman(M)) //Does nothing to non-humans.
@@ -4589,21 +4638,19 @@
 	if(..())
 		return 1
 
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		H.nutrition += nutriment_factor
-		if(H.getOxyLoss() && prob(50))
-			H.adjustOxyLoss(-2)
-		if(H.getBruteLoss() && prob(60))
-			H.heal_organ_damage(2, 0)
-		if(H.getFireLoss() && prob(50))
-			H.heal_organ_damage(0, 2)
-		if(H.getToxLoss() && prob(50))
-			H.adjustToxLoss(-2)
-		if(H.dizziness != 0)
-			H.dizziness = max(0, H.dizziness - 15)
-		if(H.confused != 0)
-			H.confused = max(0, H.confused - 5)
+	M.nutrition += nutriment_factor
+	if(M.getOxyLoss() && prob(50))
+		M.adjustOxyLoss(-2)
+	if(M.getBruteLoss() && prob(60))
+		M.heal_organ_damage(2, 0)
+	if(M.getFireLoss() && prob(50))
+		M.heal_organ_damage(0, 2)
+	if(M.getToxLoss() && prob(50))
+		M.adjustToxLoss(-2)
+	if(M.dizziness != 0)
+		M.dizziness = max(0, M.dizziness - 15)
+	if(M.confused != 0)
+		M.confused = max(0, M.confused - 5)
 
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"
@@ -5003,7 +5050,7 @@
 	if(..())
 		return 1
 
-	empulse(get_turf(M), 1, 2, 0)
+	empulse(get_turf(M), 1, 2, 1)
 
 	return
 
@@ -5287,3 +5334,25 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Vox")
 			M.adjustToxLoss(-4 * REM) //chicken and gravy just go together
+
+/datum/reagent/blockizine
+	name = "Blockizine"
+	id = BLOCKIZINE
+	description = "Some type of material that preferentially binds to all possible chemical receptors in the body, but without any direct negative effects."
+	reagent_state = LIQUID
+	custom_metabolism = 0
+	color = "#B0B0B0"
+
+/datum/reagent/blockizine/on_mob_life(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
+	if(!data)
+		data = world.time+3000
+	if(world.time > data)
+		holder.del_reagent(BLOCKIZINE,volume) //needs to be del_reagent, because metabolism is 0
+		return
+
+	if(istype(H) && volume >= 25)
+		holder.isolate_reagent(BLOCKIZINE)
+		volume = holder.maximum_volume
+		holder.update_total()

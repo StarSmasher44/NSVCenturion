@@ -11,11 +11,24 @@
 
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
-	switch(input.len)
-		if(0) return nothing_text
-		if(1) return "[input[1]]"
-		if(2) return "[input[1]][and_text][input[2]]"
-		else  return "[jointext(input, comma_text, 1, -1)][final_comma_text][and_text][input[input.len]]"
+	var/total = input.len
+	if (!total)
+		return "[nothing_text]"
+	else if (total == 1)
+		return "[input[1]]"
+	else if (total == 2)
+		return "[input[1]][and_text][input[2]]"
+	else
+		var/output = ""
+		var/index = 1
+		while (index < total)
+			if (index == total - 1)
+				comma_text = final_comma_text
+
+			output += "[input[index]][comma_text]"
+			index++
+
+		return "[output][and_text][input[index]]"
 
 //Returns list element or null. Should prevent "index out of bounds" error.
 /proc/listgetindex(list/L, index)
@@ -27,6 +40,10 @@
 			return L[index]
 	return
 
+/proc/islist(list/L)
+	if(istype(L))
+		return 1
+	return 0
 
 //Return either pick(list) or null if list is not of type /list or is empty
 /proc/safepick(list/L)
@@ -155,6 +172,9 @@
 		i = 1
 	else
 		i++
+	if(i < 1 || i > L.len)
+		warning("[__FILE__]L[__LINE__]: [i] is outside of bounds for list, ([L.len])")
+		return
 	return L[i]
 
 // Returns the previous item in a list
@@ -165,7 +185,7 @@
 		i = L.len
 	else
 		i--
-	if(i < L.len || i > L.len)
+	if(i < 1 || i > L.len)
 		warning("[__FILE__]L[__LINE__]: [i] is outside of bounds for list, ([L.len])")
 		return
 	return L[i]
@@ -337,40 +357,13 @@
 			L.Swap(start++,end--)
 
 	return L
-/*
-//Checks for specific types in specifically structured (Assoc "type" = TRUE) lists ('typecaches')
-/proc/is_type_in_typecache(atom/A, list/L)
-	if(!L || !L.len || !A)
 
-		return 0
-	return L[A.type]
 
-//returns a new list with only atoms that are in typecache L
-/proc/typecache_filter_list(list/atoms, list/typecache)
-	. = list()
-	for (var/thing in atoms)
-		var/atom/A = thing
-		if (typecache[A.type])
-			. += A
-
-//Like typesof() or subtypesof(), but returns a typecache instead of a list
-/proc/typecacheof(path, ignore_root_path)
-	if(ispath(path))
-		var/list/types = ignore_root_path ? subtypesof(path) : typesof(path)
-		var/list/L = list()
-		for(var/T in types)
-			L[T] = TRUE
-		return L
-	else if(islist(path))
-		var/list/pathlist = path
-		var/list/L = list()
-		if(ignore_root_path)
-			for(var/P in pathlist)
-				for(var/T in subtypesof(P))
-					L[T] = TRUE
-		else
-			for(var/P in pathlist)
-				for(var/T in typesof(P))
-					L[T] = TRUE
-		return L
-*/
+//creates every subtype of prototype (excluding prototype) and adds it to list L.
+//if no list/L is provided, one is created.
+/proc/init_subtypes(prototype, list/L)
+	if(!istype(L))
+		L = list()
+	for(var/path in subtypesof(prototype))
+		L += new path()
+	return L

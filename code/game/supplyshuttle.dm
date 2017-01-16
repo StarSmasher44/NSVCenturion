@@ -70,7 +70,7 @@ var/list/mechtoys = list(
 		return prob(60)
 
 	var/obj/structure/bed/B = mover
-	if (istype(mover, /obj/structure/bed) && B.locked_atoms.len)//if it's a bed/chair and someone is locked_to, it will not pass
+	if (istype(mover, /obj/structure/bed) && B.is_locking(B.lock_type))//if it's a bed/chair and someone is buckled, it will not pass
 		return 0
 
 	else if(isliving(mover)) // You Shall Not Pass!
@@ -144,8 +144,9 @@ var/list/mechtoys = list(
 	var/comment = null
 
 /datum/controller/supply_shuttle
-	processing = 1
-	processing_interval = 300
+	var/processing = 1
+	var/processing_interval = 300
+	var/iteration = 0
 	//supply points have been replaced with MONEY MONEY MONEY - N3X
 	var/credits_per_slip = 2
 	var/credits_per_crate = 5

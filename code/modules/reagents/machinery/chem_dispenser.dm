@@ -52,7 +52,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 
 	RefreshParts()
-	dispensable_reagents = sortList(dispensable_reagents)
+	if(dispensable_reagents)
+		dispensable_reagents = sortList(dispensable_reagents)
 
 /obj/machinery/chem_dispenser/RefreshParts()
 	var/T = 0
@@ -242,11 +243,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		var/obj/item/weapon/reagent_containers/B = container
 		B.forceMove(loc)
 		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/mob/living/silicon/robot/R = container:holder:loc
-			if(R.module_state_1 == container || R.module_state_2 == container || R.module_state_3 == container)
-				container.forceMove(R)
-			else
-				container.forceMove(container:holder)
+			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = container
+			borgbeak.return_to_modules()
 		container = null
 		return 1
 
@@ -274,6 +272,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
+			return
+		if(D.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [D] is too big to fit.</span>")
 			return
 		else if(!panel_open)
 			if(!user.drop_item(D, src))

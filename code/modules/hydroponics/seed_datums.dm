@@ -605,7 +605,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 							else
 								H.adjustBruteLoss(5+carnivorous*5)
 							to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [seed_name]!</span>")
-							if(H.species && !(H.species.flags & NO_PAIN))
+							if(H.feels_pain())
 								success = 0
 						if(stinging)
 							if(chems && chems.len)
@@ -613,7 +613,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 									H.reagents.add_reagent(rid, Clamp(1, 5, potency/10))
 								to_chat(H, "<span class='danger'>You are stung by \the [seed_name]!</span>")
 								if(hematophage)
-									if(tray && H.species && !(H.species.flags & NO_BLOOD)) //the indentation gap doesn't stop from getting wider
+									if(tray && H.species && !(H.species.anatomy_flags & NO_BLOOD)) //the indentation gap doesn't stop from getting wider
 										var/drawing = min(15, H.vessel.get_reagent_amount(BLOOD))
 										H.vessel.remove_reagent(BLOOD, drawing)
 										tray.reagents.add_reagent(BLOOD, drawing)
@@ -621,7 +621,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
 			for(var/obj/item/I in M.held_items)
-				if(I.is_sharp())
+				if(I.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE))
 					success = 1
 					break
 

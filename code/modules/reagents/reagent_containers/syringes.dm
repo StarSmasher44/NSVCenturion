@@ -16,6 +16,7 @@
 	icon_state = "0"
 	amount_per_transfer_from_this = 5
 	sharpness = 1
+	sharpness_flags = SHARP_TIP
 	possible_transfer_amounts = null //list(5,10,15)
 	volume = 15
 	starting_materials = list(MAT_GLASS = 1000)
@@ -68,6 +69,9 @@
 /obj/item/weapon/reagent_containers/syringe/attack_paw(var/mob/user)
 	return attack_hand(user)
 
+/obj/item/weapon/reagent_containers/syringe/attack(mob/M as mob, mob/user as mob, def_zone)
+	return //Stop trying to drink from syringes!
+
 /obj/item/weapon/reagent_containers/syringe/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return
@@ -80,7 +84,7 @@
 		return
 
 	if (user.a_intent == I_HURT && ismob(target))
-		if((M_CLUMSY in user.mutations) && prob(50))
+		if(clumsy_check(user) && prob(50))
 			target = user
 
 		if (target != user && !can_stab) // You still can stab yourself if you're clumsy, honk

@@ -1,4 +1,4 @@
-var/global/datum/controller/gameticker/ticker
+var/datum/controller/gameticker/ticker
 
 #define GAME_STATE_PREGAME		1
 #define GAME_STATE_SETTING_UP	2
@@ -64,10 +64,7 @@ var/global/datum/controller/gameticker/ticker
 		"home_resonance.ogg",
 		))
 	login_music = fcopy_rsc(oursong)
-	// Wait for MC to get its shit together
-	while(!master_controller.initialized)
-		sleep(1) // Don't thrash the poor CPU
-		continue
+
 	do
 		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)
 		pregame_timeleft = world.timeofday + delay_timetotal
@@ -219,12 +216,7 @@ var/global/datum/controller/gameticker/ticker
 		send2adminirc("Round has started with no admins online.")
 		send2admindiscord("**Round has started with no admins online.**", TRUE)
 
-	/*
-	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE
-	master_controller.process()		//Start master_controller.process()
-	lighting_controller.process()	//Start processing DynamicAreaLighting updates
-	*/
-	processScheduler.start()
+	Master.RoundStart()
 
 	if(config.sql_enabled)
 		spawn(3000)
@@ -264,19 +256,18 @@ var/global/datum/controller/gameticker/ticker
 			M.locked_to = temp_buckle				//buckles the mob so it can't do anything
 			if(M.client)
 				M.client.screen += cinematic	//show every client the cinematic
-	else	//nuke kills everyone on z-level 1 to prevent "hurr-durr I survived"
+	else	//nuke kills everyone on the station to prevent "hurr-durr I survived"
 		for(var/mob/living/M in living_mob_list)
 			M.locked_to = temp_buckle
 			if(M.client)
 				M.client.screen += cinematic
 
-			switch(M.z)
-				if(0)	//inside a crate or something
-					var/turf/T = get_turf(M)
-					if(T && T.z==1)				//we don't use M.death(0) because it calls a for(/mob) loop and
-						M.nuke_act()
-				if(1)	//on a z-level 1 turf.
+			if(!(M.z))	//inside a crate or something
+				var/turf/T = get_turf(M)
+				if(T && T.z==map.zMainStation)	//we don't use M.death(0) because it calls a for(/mob) loop and
 					M.nuke_act()
+			else if(M.z == map.zMainStation) //on the station.
+				M.nuke_act()
 
 	//Now animate the cinematic
 	switch(station_missed)
@@ -324,11 +315,7 @@ var/global/datum/controller/gameticker/ticker
 					flick("station_explode_fade_red", cinematic)
 					world << sound('sound/effects/explosionfar.ogg')
 					cinematic.icon_state = "summary_selfdes"
-			for(var/mob/living/M in living_mob_list)
-				if(M)
-					var/turf/T = get_turf(M)
-					if(T && T.z == map.zMainStation)
-						M.death()//No mercy
+
 	//If its actually the end of the round, wait for it to end.
 	//Otherwise if its a verb it will continue on afterwards.
 	sleep(300)
@@ -704,3 +691,7 @@ var/global/datum/controller/gameticker/ticker
 		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
 
 	return text
+
+
+/world/proc/has_round_started()
+	return ticker && ticker.current_state >= GAME_STATE_PLAYING

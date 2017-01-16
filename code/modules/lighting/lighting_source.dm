@@ -232,6 +232,7 @@
 			C.affecting += src
 
 			if (!C.active)
+				effect_str[C] = 0
 				continue
 
 			APPLY_CORNER(C)
@@ -293,6 +294,7 @@
 	for (var/datum/lighting_corner/C in corners - effect_str) // New corners
 		C.affecting += src
 		if (!C.active)
+			effect_str[C] = 0
 			continue
 
 		APPLY_CORNER(C)

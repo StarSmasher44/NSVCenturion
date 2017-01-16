@@ -27,6 +27,8 @@ var/list/beam_master = list()
 	fire_sound = 'sound/weapons/Laser.ogg'
 	var/frequency = 1
 	var/wait = 0
+	var/beam_color= null
+
 
 /obj/item/projectile/beam/OnFired()	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(original)
@@ -129,34 +131,36 @@ var/list/beam_master = list()
 			update_pixel()
 
 			//If the icon has not been added yet
-			if( !("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]" in beam_master) )
+			if( !("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]" in beam_master))
 				var/image/I = image(icon,"[icon_state]_pixel",13,target_dir) //Generate it.
+				if(beam_color)
+					I.color = beam_color
 				I.transform = turn(I.transform, target_angle+45)
 				I.pixel_x = PixelX
 				I.pixel_y = PixelY
 				I.plane = EFFECTS_PLANE
 				I.layer = PROJECTILE_LAYER
-				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = I //And cache it!
+				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = I //And cache it!
 
 			//Finally add the overlay
 			if(src.loc && target_dir)
-				src.loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"]
+				src.loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"]
 
 				//Add the turf to a list in the beam master so they can be cleaned up easily.
 				if(reference in beam_master)
 					var/list/turf_master = beam_master[reference]
-					if("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]" in turf_master)
-						var/list/turfs = turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"]
+					if("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]" in turf_master)
+						var/list/turfs = turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"]
 						turfs += loc
 					else
-						turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = list(loc)
+						turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = list(loc)
 				else
 					var/list/turfs = list()
-					turfs["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = list(loc)
+					turfs["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = list(loc)
 					beam_master[reference] = turfs
 		else
 			//If the icon has not been added yet
-			if( !("[icon_state][target_dir]" in beam_master) )
+			if( !("[icon_state][target_dir]" in beam_master))
 				var/image/I = image(icon,icon_state,10,target_dir) //Generate it.
 				I.plane = EFFECTS_PLANE
 				I.layer = PROJECTILE_LAYER
@@ -285,10 +289,12 @@ var/list/beam_master = list()
 // Special laser the captains gun uses
 /obj/item/projectile/beam/captain
 	name = "captain laser"
+	icon_state = "laser_old"
 	damage = 40
 	linear_movement = 0
 
 /obj/item/projectile/beam/retro
+	icon_state = "laser_old"
 	linear_movement = 0
 
 /obj/item/projectile/beam/lightning
@@ -590,50 +596,40 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/emitter/singularity_pull()
 	return
 
-/obj/item/projectile/beam/lasertag/blue
+////////Laser Tag////////////////////
+/obj/item/projectile/beam/lasertag
 	name = "lasertag beam"
-	icon_state = "bluelaser"
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 0
 	damage_type = BURN
 	flag = "laser"
+	icon_state = "bluelaser"
+	var/list/enemy_vest_types = list(/obj/item/clothing/suit/redtag)
 
-	on_hit(var/atom/target, var/blocked = 0)
-		if(istype(target, /mob/living/carbon/human))
-			var/mob/living/carbon/human/M = target
-			if(istype(M.wear_suit, /obj/item/clothing/suit/redtag))
-				M.Knockdown(5)
-		return 1
+/obj/item/projectile/beam/lasertag/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living/carbon/human))
+		var/mob/living/carbon/human/M = target
+		if(is_type_in_list(M.wear_suit, enemy_vest_types))
+			if(!M.lying) //Kick a man while he's down, will ya
+				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
+				if(istype(taggun))
+					taggun.score()
+			M.Knockdown(5)
+	return 1
+
+/obj/item/projectile/beam/lasertag/blue
+	icon_state = "bluelaser"
+	enemy_vest_types = list(/obj/item/clothing/suit/redtag)
 
 /obj/item/projectile/beam/lasertag/red
-	name = "lasertag beam"
 	icon_state = "laser"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
-	damage = 0
-	damage_type = BURN
-	flag = "laser"
+	enemy_vest_types = list(/obj/item/clothing/suit/bluetag)
 
-	on_hit(var/atom/target, var/blocked = 0)
-		if(istype(target, /mob/living/carbon/human))
-			var/mob/living/carbon/human/M = target
-			if(istype(M.wear_suit, /obj/item/clothing/suit/bluetag))
-				M.Knockdown(5)
-		return 1
-
-/obj/item/projectile/beam/lasertag/omni//A laser tag bolt that stuns EVERYONE
-	name = "lasertag beam"
+/obj/item/projectile/beam/lasertag/omni //A laser tag ray that stuns EVERYONE
 	icon_state = "omnilaser"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
-	damage = 0
-	damage_type = BURN
-	flag = "laser"
+	enemy_vest_types = list(/obj/item/clothing/suit/redtag, /obj/item/clothing/suit/bluetag)
 
-	on_hit(var/atom/target, var/blocked = 0)
-		if(istype(target, /mob/living/carbon/human))
-			var/mob/living/carbon/human/M = target
-			if((istype(M.wear_suit, /obj/item/clothing/suit/bluetag))||(istype(M.wear_suit, /obj/item/clothing/suit/redtag)))
-				M.Knockdown(5)
-		return 1
+
 
 /obj/item/projectile/beam/bison
 	name = "heat ray"
@@ -882,9 +878,26 @@ var/list/beam_master = list()
 	else
 		return ..()
 
+/obj/item/projectile/beam/apply_projectile_color(var/color)
+	beam_color = color
+
 //Used by the pain mirror spell
 //Damage type and damage done varies
 /obj/item/projectile/beam/pain
 	name = "bolt of pain"
 	pass_flags = PASSALL //Go through everything
 	icon_state = "pain"
+
+/obj/item/projectile/beam/white
+	icon_state = "whitelaser"
+
+/obj/item/projectile/beam/rainbow/braindamage
+	damage = 5
+	icon_state = "whitelaser"
+
+/obj/item/projectile/beam/rainbow/braindamage/on_hit(var/atom/target, var/blocked = 0)
+	if(ishuman(target))
+		var/mob/living/carbon/human/victim = target
+		if(!(victim.mind && victim.mind.assigned_role == "Clown"))
+			victim.adjustBrainLoss(20)
+			victim.hallucination += 20

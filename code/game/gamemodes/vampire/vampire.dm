@@ -278,11 +278,6 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	to_chat(vampire.current, "<B>You must complete the following tasks:</B>")
 	vampire.current << sound('sound/effects/vampire_intro.ogg')
 
-	if (vampire.current.mind)
-		if (vampire.current.mind.assigned_role == "Clown")
-			to_chat(vampire.current, "<span class='sinister'>Your lust for blood has allowed you to overcome your clumsy nature allowing you to wield weapons without harming yourself.</span>")
-			vampire.current.mutations.Remove(M_CLUMSY)
-
 	var/obj_count = 1
 	for(var/datum/objective/objective in vampire.objectives)
 		to_chat(vampire.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
@@ -392,7 +387,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			to_chat(src, "<span class='warning'>Your fangs have disappeared!</span>")
 			src.mind.vampire.draining = null
 			return 0
-		if(H.species.flags & NO_BLOOD)
+		if(H.species.anatomy_flags & NO_BLOOD)
 			to_chat(src, "<span class='warning'>Not a drop of blood here.</span>")
 			src.mind.vampire.draining = null
 			return 0
@@ -599,19 +594,21 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 					//del(I)
 					vampire_mind.current.client.images -= I
 
-/datum/game_mode/proc/remove_vampire_mind(datum/mind/vampire_mind, datum/mind/head)
-	//var/list/removal
-	if(!istype(head))
-		head = vampire_mind //workaround for removing a thrall's control over the enthralled
-	var/ref = "\ref[head]"
+/datum/game_mode/proc/remove_thrall(datum/mind/enthralled_mind)
+	var/datum/mind/headvamp
+	if(enthralled_mind.objectives && enthralled_mind.objectives.len)
+		for(var/datum/objective/protect/P in enthralled_mind.objectives)
+			if(findtextEx(P.explanation_text,"You have been Enthralled by"))
+				headvamp = P.target //can't think of any better way to find them
+				enthralled_mind.objectives -= P
+	var/ref = "\ref[headvamp]"
 	if(ref in thralls)
-		thralls[ref] -= vampire_mind
-	enthralled -= vampire_mind
-	vampire_mind.special_role = null
-	update_vampire_icons_removed(vampire_mind)
-	vampire_mind.current.unsubLife(src)
-//	to_chat(world, "Removed [vampire_mind.current.name] from vampire shit")
-	to_chat(vampire_mind.current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</FONT></span>")
+		thralls[ref] -= enthralled_mind
+	enthralled -= enthralled_mind
+	enthralled_mind.special_role = null
+	update_vampire_icons_removed(enthralled_mind)
+	enthralled_mind.current.unsubLife(src)
+	to_chat(enthralled_mind.current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</FONT></span>")
 
 /mob/living/carbon/human/proc/check_sun()
 

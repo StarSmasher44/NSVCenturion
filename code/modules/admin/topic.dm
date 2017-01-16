@@ -39,11 +39,12 @@
 					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
 			if("9")
 				log_admin("[key_name(usr)] has spawned aliens.")
-				src.makeAliens()
+				if(!src.makeAliens())
+					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
 			if("10")
 				log_admin("[key_name(usr)] has spawned a death squad.")
 				if(!makeDeathsquad())
-					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available</span>")
+					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
 			if("11")
 				log_admin("[key_name(usr)] has spawned vox raiders.")
 				if(!src.makeVoxRaiders())
@@ -55,6 +56,7 @@
 		log_admin("[key_name(usr)] has notified [key_name(S)] of a change to their laws.")
 		message_admins("[usr.key] has notified [key_name(S)] of a change to their laws.")
 
+		S << sound('sound/machines/lawsync.ogg')
 		to_chat(S, "____________________________________")
 		to_chat(S, "<span style=\"color:red;font-weight:bold;\">LAW CHANGE NOTICE</span>")
 		if(S.laws)
@@ -421,6 +423,11 @@
 				new_mob = M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
 			if("shade")
 				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+			if("blob")
+				var/obj/effect/blob/core/core = new(loc = get_turf(M), new_overmind = M.client)
+				new_mob = core.overmind
+				if(delmob)
+					qdel(M)
 			if("ai")
 				new_mob = M.AIize(spawn_here = 1, del_mob = delmob)
 //		to_chat(world, "Made a [new_mob] [usr ? "usr still exists" : "usr does not exist"]")
@@ -2176,6 +2183,30 @@
 			M.Knockdown(20)
 			M.stuttering = 20
 
+	else if(href_list["Assplode"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+
+		var/mob/living/carbon/human/H = locate(href_list["Assplode"])
+		if(!ishuman(H))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
+			return
+
+		if(H.op_stage.butt != 4) // does the target have an ass
+			var/obj/item/clothing/head/butt/B = new(H.loc)
+			B.transfer_buttdentity(H)
+			H.op_stage.butt = 4 //No having two butts.
+			to_chat(H, "<span class='warning'>Your ass was just blown off by an unknown force!</span>")
+			log_admin("[key_name(H)] was buttblasted by [src.owner]")
+			message_admins("[key_name(H)] was buttblasted by [src.owner]")
+			playsound(get_turf(H), 'sound/effects/superfart.ogg', 50, 1)
+			H.apply_damage(40, BRUTE, LIMB_GROIN)
+			H.apply_damage(10, BURN, LIMB_GROIN)
+			H.Knockdown(8)
+			H.Stun(8)
+		else
+			to_chat(usr, "This target has already lost their butt in some unfortunate circumstance.")
+
 	else if (href_list["PrayerReply"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2841,7 +2872,7 @@
 				feedback_add_details("admin_secrets_fun_used","PB")
 				message_admins("[key_name_admin(usr)] has allowed a prison break", 1)
 				prison_break()
-			if("lightout")
+			if("lightsout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","LO")
 				message_admins("[key_name_admin(usr)] has broke a lot of lights", 1)
@@ -2969,8 +3000,7 @@
 				for(var/obj/item/W in world)
 					if(istype(W, /obj/item/clothing) || istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/weapon/disk) || istype(W, /obj/item/weapon/tank))
 						continue
-					W.icon = 'icons/obj/gun.dmi'
-					W.icon_state = "revolver"
+					W.icon = 'icons/obj/fakegun.dmi'
 					W.item_state = "gun"
 				message_admins("[key_name_admin(usr)] made every item look like a gun")
 			if("experimentalguns")
@@ -2994,6 +3024,9 @@
 					W.icon_state = "schoolgirl"
 					W.item_state = "w_suit"
 					W._color = "schoolgirl"
+					if(ismob(W.loc))
+						var/mob/M = W.loc
+						M.update_inv_w_uniform()
 				message_admins("[key_name_admin(usr)] activated Japanese Animes mode")
 				world << sound('sound/AI/animes.ogg')
 			if("eagles")//SCRAW

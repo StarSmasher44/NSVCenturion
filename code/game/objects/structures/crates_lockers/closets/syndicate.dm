@@ -1,5 +1,5 @@
 /obj/structure/closet/syndicate
-	name = "armoury closet"
+	name = "armory closet"
 	desc = "Why is this here?"
 	icon_state = "syndicate"
 	icon_closed = "syndicate"
@@ -12,15 +12,16 @@
 /obj/structure/closet/syndicate/personal/New()
 	..()
 	sleep(2)
-	new /obj/item/weapon/tank/jetpack/oxygen(src)
+	new /obj/item/weapon/tank/jetpack/oxygen/nukeops(src)
 	new /obj/item/clothing/mask/gas/syndicate(src)
 	new /obj/item/clothing/under/syndicate(src)
 	new /obj/item/clothing/head/helmet/space/rig/syndi(src)
 	new /obj/item/clothing/suit/space/rig/syndi(src)
 	new /obj/item/weapon/crowbar/red(src)
 	new /obj/item/weapon/cell/high(src)
-	new /obj/item/weapon/card/id/syndicate(src)
+	new /obj/item/device/pda/syndicate/door(src)
 	new /obj/item/device/multitool(src)
+	new /obj/item/weapon/pinpointer/nukeop(src)
 	new /obj/item/weapon/shield/energy(src)
 	new /obj/item/clothing/shoes/magboots/syndie(src)
 
@@ -44,11 +45,6 @@
 	new /obj/item/weapon/gun/energy/gun(src)
 	new /obj/item/weapon/gun/energy/gun(src)
 	new /obj/item/weapon/gun/energy/gun(src)
-	new /obj/item/weapon/pinpointer/nukeop(src)
-	new /obj/item/weapon/pinpointer/nukeop(src)
-	new /obj/item/weapon/pinpointer/nukeop(src)
-	new /obj/item/weapon/pinpointer/nukeop(src)
-	new /obj/item/weapon/pinpointer/nukeop(src)
 	new /obj/item/device/pda/syndicate(src)
 	var/obj/item/device/radio/uplink/U = new(src)
 	U.hidden_uplink.uses = 80
@@ -141,7 +137,7 @@
 		return
 
 /obj/structure/closet/vox_raiders
-	name = "vox armoury closet"
+	name = "vox armory closet"
 	desc = "Polly wants a gun."
 	icon_state = "syndicate"
 	icon_closed = "syndicate"
@@ -158,7 +154,7 @@
 
 
 /obj/structure/closet/vox_raiders/trader
-	name = "vox armoury closet"
+	name = "vox armory closet"
 	desc = "Polly wants a gun."
 	icon_state = "syndicate"
 	icon_closed = "syndicate"
@@ -166,9 +162,8 @@
 
 	New()
 		sleep(2)
-		new /obj/item/clothing/head/helmet/space/vox/civ/trader(src)
+		new /obj/map/spawner/space/vox/trader/spacesuit(src)
 		new /obj/item/clothing/mask/breath/vox(src)
 		new /obj/item/clothing/shoes/magboots/vox(src)
-		new /obj/item/clothing/suit/space/vox/civ/trader(src)
 		new /obj/item/clothing/under/vox/vox_casual(src)
 		new /obj/item/weapon/tank/jetpack/nitrogen(src)

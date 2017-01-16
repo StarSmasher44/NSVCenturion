@@ -35,8 +35,6 @@ var/global/disable_vents     = 0
 #define PIPING_LAYER_P_Y		-5*PIXEL_MULTIPLIER //same, but negative because they form a diagonal
 #define PIPING_LAYER_LCHANGE	0.05 //how much the layer var changes per increment
 
-#define PI 3.1415
-
 #define R_IDEAL_GAS_EQUATION	8.314 //kPa*L/(K*mol)
 #define ONE_ATMOSPHERE		101.325	//kPa
 #define MARS_ATMOSPHERE		0.6 //kPa
@@ -82,7 +80,7 @@ var/global/disable_vents     = 0
 #define BODYTEMP_AUTORECOVERY_DIVISOR 0.5 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
 #define BODYTEMP_AUTORECOVERY_MAXIMUM 2.0 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
 
-#define BODYTEMP_COLD_DIVISOR 100 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
+#define BODYTEMP_COLD_DIVISOR 200 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
 
 #define PRESSUREFACTOR_NO_LINEAR 1.5  // Where growth of the pressure factor stops being linear
 #define COLD_PRESSUREFACTOR_MAX (PRESSUREFACTOR_NO_LINEAR)/((-1/PRESSUREFACTOR_NO_LINEAR)+1)    // The highest that heat loss can be multiplied by due to pressure. Depends on where non linear starts.
@@ -138,7 +136,6 @@ var/global/disable_vents     = 0
 
 // Factor of how fast mob nutrition decreases
 #define HUNGER_FACTOR 0.15  // Please remember when editing this that it will also affect hypothermia.
-
 
 #define MINIMUM_AIR_RATIO_TO_SUSPEND 0.05
 	//Minimum ratio of air that must move to/from a tile to suspend group processing
@@ -263,40 +260,47 @@ var/MAX_EXPLOSION_RANGE = 14
 //FLAGS BITMASK
 
 //Item flags!
-#define PROXMOVE		1	//Will the code check us when we move or when something moves near us?
+#define PROXMOVE	1	// Will the code check us when we move or when something moves near us? Note that if the item doesn't have this flag, HasProximity() will never execute for it.
+#define FPRINT		2	// takes a fingerprint
+#define ON_BORDER	4	// item has priority to check when entering or leaving
+#define INVULNERABLE 8
+#define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
+#define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
 
-#define SLOWDOWN_WHEN_CARRIED 2 //Apply slowdown when carried in hands, instead of only when worn
+#define TWOHANDABLE	64
+#define MUSTTWOHAND	128
+#define SLOWDOWN_WHEN_CARRIED 256 //Apply slowdown when carried in hands, instead of only when worn
 
-#define NOBLUDGEON  4  // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
+#define NOBLOODY	512	// used to items if they don't want to get a blood overlay
 
-#define MASKINTERNALS	8	// mask allows internals
-//#define SUITSPACE		8	// suit protects against space
+#define NO_ATTACK_MSG 	1024 // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
+#define NO_THROW_MSG 	2048 // produce no "X has thrown Y" message when somebody throws this item
+#define NO_STORAGE_MSG 	4096 // produce no "X puts the Y into the backpack" message when somebody moves this item in their inventory
 
-#define TWOHANDABLE		32
-#define MUSTTWOHAND		64
+#define OPENCONTAINER	8192  // is an open container for chemistry purposes
+#define	NOREACT 		16384 // Reagents don't react inside this container.
 
-#define FPRINT		256		// takes a fingerprint
-#define ON_BORDER	512		// item has priority to check when entering or leaving
-#define NOBLOODY	2048	// used to items if they don't want to get a blood overlay
-#define HEAR		16
-#define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it.
-
-#define NOSLIP		1024 		//prevents from slipping on wet floors, in space etc
-
-#define OPENCONTAINER	4096	// is an open container for chemistry purposes
-
-#define BLOCK_GAS_SMOKE_EFFECT 8192	// blocks the effect that chemical clouds would have on a mob --glasses, mask and helmets ONLY! (NOTE: flag shared with ONESIZEFITSALL)
-#define ONESIZEFITSALL 8192
-#define PLASMAGUARD 16384			//Does not get contaminated by plasma.
-
-#define	NOREACT		16384 			//Reagents dont' react inside this container.
-
-#define BLOCK_BREATHING 32768		//When worn, prevents breathing!
-
-#define INVULNERABLE 128
+#define TIMELESS		32768 // Immune to time manipulation.
 
 #define ALL ~0
 #define NONE 0
+
+
+//sharpness flags
+#define SHARP_TIP 		1 // Has a pointy-stabby end, such as a syringe or a knife tip.
+#define SHARP_BLADE		2 // Has a blade long and thin enough to slice something with.
+#define SERRATED_BLADE	4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
+#define CHOPWOOD		8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
+#define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
+#define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+
+//clothing flags
+#define MASKINTERNALS		1 // mask allows internals
+#define NOSLIP				2 //prevents from slipping on wet floors, in space etc
+#define BLOCK_GAS_SMOKE_EFFECT 4 //blocks the effect that chemical clouds would have on a mob
+#define ONESIZEFITSALL		8
+#define PLASMAGUARD 		16 //Does not get contaminated by plasma.
+#define BLOCK_BREATHING 	32 //When worn, prevents breathing!
 
 //flags for pass_flags
 #define PASSTABLE	1
@@ -473,6 +477,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_CLAWS			10	// Deal extra damage with punches (but without gloves), can butcher animals without tools
 #define M_BEAK			11	// Can buther animals without tools
 #define M_TALONS		12  // Bonus kick damage
+#define M_STONE_SKIN	13  // hard skin
+
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
 //#define SCREAM		14 	// (Not implemented) supersonic screaming (25%)
@@ -562,6 +568,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define POWEROFF	4		// tbd
 #define MAINT		8			// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
+#define FORCEDISABLE 32 //forced to be off, such as by a random event
 
 //bitflags for door switches.
 #define OPEN	1
@@ -949,29 +956,28 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	"CREED"
 	)
 
-//Species flags.
-#define NO_BLOOD 1
-#define NO_BREATHE 2
-#define NO_SCAN 4
-#define NO_PAIN 8
+//Generic species flags.
+#define NO_BREATHE 1
+#define NO_SCAN 2
+#define NO_PAIN 4
+#define IS_SLOW 8
+#define IS_PLANT 16
+#define IS_WHITELISTED 32
+#define RAD_ABSORB 64
+#define REQUIRE_LIGHT 128
+#define HYPOTHERMIA_IMMUNE 256
+#define PLASMA_IMMUNE 512
 
-#define HAS_SKIN_TONE 16
-#define HAS_LIPS 32
-#define HAS_UNDERWEAR 64
-#define HAS_TAIL 128
-
-#define IS_SLOW 256
-#define IS_PLANT 512
-#define IS_WHITELISTED 1024
-
-#define RAD_ABSORB 2048
-#define REQUIRE_LIGHT 4096
-
-#define CAN_BE_FAT 8192 // /vg/
-
-#define IS_BULKY 16384 //can't wear exosuits, gloves, masks, or hardsuits
-
-#define NO_SKIN 32768
+//Species anatomical flags.
+#define HAS_SKIN_TONE 1
+#define HAS_LIPS 2
+#define HAS_UNDERWEAR 4
+#define HAS_TAIL 8
+#define CAN_BE_FAT 16
+#define IS_BULKY 32 //can't wear exosuits, gloves, masks, or hardsuits
+#define NO_SKIN 64
+#define NO_BLOOD 128
+#define HAS_SWEAT_GLANDS 256
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1278,6 +1284,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define Sp_RECHARGE	1
 #define Sp_CHARGES	2
 #define Sp_HOLDVAR	4
+#define Sp_GRADUAL	8
 
 //spell range
 #define SELFCAST -1
@@ -1358,6 +1365,7 @@ var/proccalls = 1
 #define ORE_PROCESSING_ALLOY 2
 
 //SOUND CHANNELS
+#define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
@@ -1543,11 +1551,13 @@ var/proccalls = 1
 #define DEFAULT FONT SIZE 4
 
 //Holomap filters
-#define HOLOMAP_FILTER_DEATHSQUAD		1
-#define HOLOMAP_FILTER_ERT				2
-#define HOLOMAP_FILTER_NUKEOPS			3
-#define HOLOMAP_FILTER_ELITESYNDICATE	4
-#define HOLOMAP_FILTER_VOX				5
+#define HOLOMAP_FILTER_DEATHSQUAD				1
+#define HOLOMAP_FILTER_ERT						2
+#define HOLOMAP_FILTER_NUKEOPS					4
+#define HOLOMAP_FILTER_ELITESYNDICATE			8
+#define HOLOMAP_FILTER_VOX						16
+#define HOLOMAP_FILTER_STATIONMAP				32
+#define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
@@ -1560,10 +1570,16 @@ var/proccalls = 1
 #define HOLOMAP_AREACOLOR_ESCAPE		"#FF0000CC"
 
 #define HOLOMAP_EXTRA_STATIONMAP				"stationmapformatted"
+#define HOLOMAP_EXTRA_STATIONMAP_STRATEGIC		"stationmapstrategic"
 #define HOLOMAP_EXTRA_STATIONMAPAREAS			"stationareas"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH		"stationmapsmallnorth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
+
+#define HOLOMAP_MARKER_SMES				"smes"
+#define HOLOMAP_MARKER_DISK				"diskspawn"
+#define HOLOMAP_MARKER_SKIPJACK			"skipjack"
+#define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
 
 #define DEFAULT_BLOOD "#A10808"

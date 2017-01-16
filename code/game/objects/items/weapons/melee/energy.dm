@@ -1,6 +1,8 @@
 /obj/item/weapon/melee/energy
 	var/active = 0
 	sharpness = 1.5 //very very sharp
+	var/sharpness_on = 1.5 //so badmins can VV this!
+	sharpness_flags = SHARP_BLADE | HOT_EDGE
 	heat_production = 3500
 
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
@@ -22,8 +24,9 @@
 	name = "energy axe"
 	desc = "An energised battle axe."
 	icon_state = "axe0"
-	force = 40.0
-	throwforce = 25.0
+	force = 40
+	var/active_force = 150
+	throwforce = 25
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_MEDIUM
@@ -33,9 +36,16 @@
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
-		return (BRUTELOSS|FIRELOSS)
+/obj/item/weapon/melee/energy/axe/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
+	return (BRUTELOSS|FIRELOSS)
+
+/obj/item/weapon/melee/energy/axe/rusty
+	name = "rusty energy axe"
+	desc = "A rusted energised battle axe."
+	force = 3
+	active_force = 30
+	throwforce = 5
 
 /obj/item/weapon/melee/energy/sword
 	name = "energy sword"
@@ -43,8 +53,9 @@
 	icon_state = "sword0"
 	var/base_state = "sword"
 	var/active_state = ""
-	force = 3.0
-	throwforce = 5.0
+	sharpness_flags = 0 //starts inactive
+	force = 3
+	throwforce = 5
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL
@@ -58,7 +69,8 @@
 	active = 1
 	force = 30
 	w_class = W_CLASS_LARGE
-	sharpness = 1.5
+	sharpness = sharpness_on
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
 	hitsound = "sound/weapons/blade1.ogg"
 	update_icon()
 
@@ -76,7 +88,7 @@
 	update_icon()
 
 /obj/item/weapon/melee/energy/sword/attack_self(mob/living/user as mob)
-	if ((M_CLUMSY in user.mutations) && prob(50) && active) //only an on blade can cut
+	if (clumsy_check(user) && prob(50) && active) //only an on blade can cut
 		to_chat(user, "<span class='danger'>You accidentally cut yourself with [src].</span>")
 		user.take_organ_damage(5,5)
 		return
@@ -95,7 +107,8 @@
 	if (active)
 		force = 30
 		w_class = W_CLASS_LARGE
-		sharpness = 1.5
+		sharpness = sharpness_on
+		sharpness_flags = initial(sharpness_flags)
 		hitsound = "sound/weapons/blade1.ogg"
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 		to_chat(user, "<span class='notice'> [src] is now active.</span>")
@@ -103,6 +116,7 @@
 		force = 3
 		w_class = W_CLASS_SMALL
 		sharpness = 0
+		sharpness_flags = 0
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 		hitsound = "sound/weapons/empty.ogg"
 		to_chat(user, "<span class='notice'> [src] can now be concealed.</span>")
@@ -130,8 +144,8 @@
 	base_state = "bsword0"
 	active_state = "bsword1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	force = 3.0
-	throwforce = 5.0
+	force = 3
+	throwforce = 5
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL
@@ -139,16 +153,6 @@
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-
-/obj/item/weapon/melee/energy/sword/bsword/IsShield()
-	if(active)
-		return 1
-	return 0
-
-/obj/item/weapon/melee/energy/sword/bsword/attack_self(mob/living/user as mob)
-	toggleActive(user)
-	add_fingerprint(user)
-	return
 
 /obj/item/weapon/melee/energy/sword/bsword/update_icon()
 	if(active)
@@ -167,6 +171,9 @@
 		qdel(W)
 		qdel(src)
 
+/obj/item/weapon/melee/energy/sword/bsword/clumsy_check(mob/living/user)
+	return 0
+
 /obj/item/weapon/melee/energy/sword/pirate
 	name = "energy cutlass"
 	desc = "Arrrr matey."
@@ -177,4 +184,3 @@
 	..()
 	_color = null
 	update_icon()
-

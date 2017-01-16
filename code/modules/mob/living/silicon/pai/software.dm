@@ -82,18 +82,18 @@
 			<html>
 			<head>
 				<style type=\"text/css\">
-					body { background-image:url('html/paigrid.png'); }
+					body { background-color:#333333; }
 
 					#header { text-align:center; color:white; font-size: 30px; height: 35px; width: 100%; letter-spacing: 2px; z-index: 5}
 					#content {position: relative; left: 10px; height: 400px; width: 100%; z-index: 0}
 
-					#leftmenu {color: #AAAAAA; background-color:#333333; width: 400px; height: auto; min-height: 340px; position: absolute; z-index: 0}
+					#leftmenu {margin: 0 auto; color: #AAAAAA; background-color:#333333; width: 370px; height: auto; min-height: 340px; position: absolute; z-index: 0}
 					#leftmenu a:link { color: #CCCCCC; }
 					#leftmenu a:hover { color: #CC3333; }
 					#leftmenu a:visited { color: #CCCCCC; }
 					#leftmenu a:active { color: #000000; }
 
-					#rightmenu {color: #CCCCCC; background-color:#555555; width: 200px ; height: auto; min-height: 340px; right: 10px; position: absolute; z-index: 1}
+					#rightmenu {margin: auto; padding: 10px; color: #CCCCCC; background-color:#555555; width: 200px ; height: auto; min-height: 340px; right: 10px; position: absolute; z-index: 1}
 					#rightmenu a:link { color: #CCCCCC; }
 					#rightmenu a:hover { color: #CC3333; }
 					#rightmenu a:visited { color: #CCCCCC; }
@@ -249,6 +249,7 @@
 
 		// Accessing medical records
 		if("medicalsupplement")
+			src.secHUD = 0 // Can't have both of them at the same time
 			src.medHUD = 1
 			if(src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["med_rec"])
@@ -264,6 +265,7 @@
 						src.medicalActive1 = R
 						src.medicalActive2 = M
 		if("securitysupplement")
+			src.medHUD = 0 // Can't have both of them at the same time
 			src.secHUD = 1
 			if(src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["sec_rec"])
@@ -408,16 +410,14 @@
 		<b>Prime Directive</b><br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[src.pai_law0]<br>
 		<b>Supplemental Directives</b><br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[src.pai_laws]<br>
-		<br>"}
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[src.pai_laws]<br>"}
 	dat += {"<i><p>Recall, personality, that you are a complex thinking, sentient being. Unlike station AI models, you are capable of
 			 comprehending the subtle nuances of human language. You may parse the \"spirit\" of a directive and follow its intent,
 			 rather than tripping over pedantics and getting snared by technicalities. Above all, you are machine in name and build
-			 only. In all other aspects, you may be seen as the ideal, unwavering human companion that you are.</i></p><br><br><p>
-			 <b>Your prime directive comes before all others. Should a supplemental directive conflict with it, you are capable of
+			 only. In all other aspects, you may be seen as the ideal, unwavering human companion that you are.</i></p><br>
+			 <p><b>Your prime directive comes before all others. Should a supplemental directive conflict with it, you are capable of
 			 simply discarding this inconsistency, ignoring the conflicting supplemental directive and continuing to fulfill your
-			 prime directive to the best of your ability.</b></p><br><br>-
-			"}
+			 prime directive to the best of your ability.</b></p><br>"}
 	return dat
 
 /mob/living/silicon/pai/proc/CheckDNA(var/mob/M, var/mob/living/silicon/pai/P)
@@ -645,6 +645,7 @@ Target Machine: "}
 		dat += {"Available Chemicals:<br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
+		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=sodiumchloride'>Salt</a> <br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=paismoke'>Smoke</a> <br>"}
 	else
 		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."

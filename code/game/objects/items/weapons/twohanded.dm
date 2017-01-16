@@ -65,6 +65,7 @@
 	desc = "Truly, the weapon of a madman. Who would think to fight fire with an axe?"
 	w_class = W_CLASS_LARGE
 	sharpness = 1.2
+	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	force = 10
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
@@ -128,7 +129,7 @@
 
 /obj/item/weapon/dualsaber/attack(target as mob, mob/living/user as mob)
 	..()
-	if((M_CLUMSY in user.mutations) && (wielded) &&prob(40))
+	if(clumsy_check(user) && (wielded) &&prob(40))
 		to_chat(user, "<span class='warning'>You twirl around a bit before losing your balance and impaling yourself on the [src].</span>")
 		user.take_organ_damage(20,25)
 		return
@@ -194,6 +195,8 @@
 			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
+/obj/item/weapon/dualsaber/bananabunch/clumsy_check(mob/living/user)
+	return 0
 
 /*
  * High-Frequency Blade
@@ -208,6 +211,7 @@
 	throw_speed = 5
 	throw_range = 10
 	sharpness = 2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_COMBAT + "=5"
@@ -236,6 +240,8 @@
 	name = "spear"
 	desc = "A haphazardly-constructed yet still deadly weapon of ancient design."
 	force = 10
+	sharpness = 0.8
+	sharpness_flags = SHARP_TIP | INSULATED_EDGE
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BACK
 	throwforce = 15

@@ -78,7 +78,7 @@ proc/move_research_shuttle()
 	name = "Research Shuttle Console"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "shuttle"
-	req_access = list(access_research)
+	req_access = list(access_science)
 	circuit = "/obj/item/weapon/circuitboard/research_shuttle"
 	var/location = 0 //0 = station, 1 = research base
 	machine_flags = EMAGGABLE | SCREWTOGGLE
@@ -111,7 +111,7 @@ proc/move_research_shuttle()
 				to_chat(usr, "<span class='notice'>The nuclear disk is too precious for Nanotrasen to send it to an Asteroid.</span>")
 				return
 		if (!research_shuttle_moving)
-			to_chat(usr, "<span class='notice'>Shuttle recieved message and will be sent shortly.</span>")
+			to_chat(usr, "<span class='notice'>Shuttle received message and will be sent shortly.</span>")
 			move_research_shuttle()
 		else
 			to_chat(usr, "<span class='notice'>Shuttle is already moving.</span>")

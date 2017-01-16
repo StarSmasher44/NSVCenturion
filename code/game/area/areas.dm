@@ -14,6 +14,7 @@ var/area/space_area
 	plane = BASE_PLANE
 	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	var/base_turf_type = null
+	var/shuttle_can_crush = TRUE
 
 /area/New()
 	area_turfs = list()
@@ -417,19 +418,15 @@ var/area/space_area
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src
-	if(!ismob(Obj))
-		return
+
+	for(var/mob/mob_in_obj in Obj.contents)
+		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))
 
 	var/mob/M = Obj
 
-	// /vg/ - EVENTS!
-	CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea))
-
-	if(isnull(M.client))
-		return
-
-	if(M.client.prefs.toggles & SOUND_AMBIENCE)
-		if(isnull(M.areaMaster.media_source) && !M.client.ambience_playing)
+	if(M && istype(M))
+		CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea)) // /vg/ - EVENTS!
+		if(M.client && (M.client.prefs.toggles & SOUND_AMBIENCE) && isnull(M.areaMaster.media_source) && !M.client.ambience_playing)
 			M.client.ambience_playing = 1
 			var/sound = 'sound/ambience/shipambience.ogg'
 
@@ -499,7 +496,7 @@ var/area/space_area
 		for(var/mob/living/carbon/human/H in A)
 			if(istype(get_turf(H), /turf/space)) //You can't fall on space
 				continue
-			if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags & NOSLIP))
+			if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.clothing_flags & NOSLIP))
 				continue
 			if(H.locked_to) //Locked to something, anything
 				continue
@@ -511,13 +508,14 @@ var/area/space_area
 	areaapc = apctoset
 
 /area/proc/remove_apc(var/obj/machinery/power/apc/apctoremove)
+	poweralert(1, apctoremove) //CANCEL THE POWER ALERT PLEASE
 	if(areaapc == apctoremove)
 		areaapc = null
 
 /area/proc/get_turfs()
 	var/list/L = list()
 	for(var/turf/T in contents)
-		L |= T
+		L += T
 
 	return L
 

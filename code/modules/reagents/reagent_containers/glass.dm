@@ -15,8 +15,6 @@
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER
 
-	var/label_text = ""
-
 	//This is absolutely terrible
 	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
 	var/list/can_be_placed_into = list(
@@ -84,6 +82,9 @@
 	if (is_type_in_list(target, can_be_placed_into))
 		return
 
+	if(ishuman(target)) //Splashing handled in attack now
+		return
+
 	var/transfer_result = transfer(target, user, splashable_units = -1) // Potentially splash with everything inside
 
 	if((transfer_result > 10) && (isturf(target) || istype(target, /obj/machinery/portable_atmospherics/hydroponics)))	//if we're splashing a decent amount of reagent on the floor
@@ -91,21 +92,10 @@
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
-		var/tmp_label = sanitize(input(user, "Enter a label for [src.name]","Label",src.label_text))
-		if (!Adjacent(user) || user.stat)
-			return
-		if(length(tmp_label) > 10)
-			to_chat(user, "<span class='warning'>The label can be at most 10 characters long.</span>")
-		else
-			to_chat(user, "<span class='notice'>You set the label to \"[tmp_label]\".</span>")
-			src.label_text = tmp_label
-			src.update_name_label()
+		set_tiny_label(user)
 
-/obj/item/weapon/reagent_containers/glass/proc/update_name_label()
-	if(src.label_text == "")
-		src.name = src.base_name
-	else
-		src.name = "[src.base_name] ([src.label_text])"
+/obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
+	return 1
 
 /obj/item/weapon/reagent_containers/glass/beaker
 	name = "beaker"
@@ -226,6 +216,13 @@
 	..()
 	holder = _holder
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/proc/return_to_modules()
+	var/mob/living/silicon/robot/R = holder.loc
+	if(R.module_state_1 == src || R.module_state_2 == src || R.module_state_3 == src)
+		forceMove(R)
+	else
+		forceMove(holder)
+
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
@@ -245,7 +242,7 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace
 	name = "bluespace beaker"
-	desc = "A newly-developed high-capacity beaker, courtesy of bluespace research. Can hold up to 200 units."
+	desc = "A newly-developed high-capacity beaker that uses advances in bluespace research. Can hold up to 200 units."
 	icon_state = "beakerbluespace"
 	starting_materials = list(MAT_GLASS = 2000)
 	volume = 200
@@ -256,7 +253,7 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
-	desc = "A prototype ultra-capacity beaker, courtesy of bluespace research. Can hold up to 300 units."
+	desc = "A prototype ultra-capacity beaker that uses advances in bluespace research. Can hold up to 300 units."
 	icon_state = "beakerbluespacelarge"
 	starting_materials = list(MAT_GLASS = 5000)
 	volume = 300
@@ -302,8 +299,8 @@
 	w_type = RECYK_METAL
 	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
-	possible_transfer_amounts = list(10,20,30,50,70)
-	volume = 70
+	possible_transfer_amounts = list(10,20,25,30,50,100,150)
+	volume = 150
 	flags = FPRINT | OPENCONTAINER
 	slot_flags = SLOT_HEAD
 

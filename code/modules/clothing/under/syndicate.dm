@@ -1,6 +1,6 @@
 /obj/item/clothing/under/syndicate
 	name = "tactical turtleneck"
-	desc = "It's some non-descript, slightly suspicious looking, civilian clothing."
+	desc = "A non-descript, slightly suspicious piece of civilian clothing."
 	icon_state = "syndicate"
 	item_state = "bl_suit"
 	_color = "syndicate"
@@ -15,6 +15,14 @@
 
 /obj/item/clothing/under/syndicate/combat
 	name = "combat turtleneck"
+
+/obj/item/clothing/under/syndicate/holomap
+	name = "tactical holosuit"
+	desc = "It's been fitted with some holographic localization devices. A measure the Syndicate judged necessary to improve teamwork among operatives."
+
+/obj/item/clothing/under/syndicate/holomap/New()
+	..()
+	attach_accessory(new/obj/item/clothing/accessory/holomap_chip/operative(src))
 
 /obj/item/clothing/under/syndicate/tacticool
 	name = "\improper Tacticool turtleneck"

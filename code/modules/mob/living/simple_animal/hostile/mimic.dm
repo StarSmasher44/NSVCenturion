@@ -5,7 +5,7 @@
 /mob/living/simple_animal/hostile/mimic
 	name = "crate"
 	desc = "A rectangular steel crate."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "crate"
 	icon_living = "crate"
 
@@ -40,6 +40,7 @@
 
 	var/atom/copied_object = /obj/structure/closet/crate
 	var/angry = 0
+	held_items = list()
 
 /mob/living/simple_animal/hostile/mimic/New()
 	.=..()

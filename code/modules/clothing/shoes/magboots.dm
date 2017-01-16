@@ -5,7 +5,7 @@
 	var/base_state = "magboots"
 	var/magpulse = 0
 	var/mag_slow = 2
-//	flags = NOSLIP //disabled by default
+//	clothing_flags = NOSLIP //disabled by default
 	action_button_name = "Toggle Magboots"
 	species_fit = list(VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
@@ -51,13 +51,13 @@
 	if(usr.isUnconscious())
 		return
 	if(src.magpulse)
-		src.flags &= ~NOSLIP
+		src.clothing_flags &= ~NOSLIP
 		src.slowdown = SHOES_SLOWDOWN
 		src.magpulse = 0
 		icon_state = "[base_state]0"
 		to_chat(usr, "You disable the mag-pulse traction system.")
 	else
-		src.flags |= NOSLIP
+		src.clothing_flags |= NOSLIP
 		src.slowdown = mag_slow
 		src.magpulse = 1
 		icon_state = "[base_state]1"
@@ -72,7 +72,7 @@
 /obj/item/clothing/shoes/magboots/examine(mob/user)
 	..()
 	var/state = "disabled"
-	if(src.flags&NOSLIP)
+	if(src.clothing_flags&NOSLIP)
 		state = "enabled"
 	to_chat(user, "<span class='info'>Its mag-pulse traction system appears to be [state].</span>")
 
@@ -102,7 +102,7 @@
 //Syndicate
 /obj/item/clothing/shoes/magboots/syndie
 	name = "blood-red magboots"
-	desc = "Reverse-engineered magnetic boots that have a heavy magnetic pull. Property of Gorlex Marauders."
+	desc = "Reverse-engineered red magnetic boots that have a heavy magnetic pull. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
 	species_fit = list(VOX_SHAPED)

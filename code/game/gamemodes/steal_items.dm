@@ -21,6 +21,14 @@
 		var/obj/item/weapon/storage/S=O
 		L += S.return_inv()
 
+	else if(istype(O,/obj/item/clothing/accessory/storage))
+		var/obj/item/clothing/accessory/storage/S=O
+		L += S.hold.return_inv()
+
+	else if(istype(O,/obj/item/clothing/suit/storage))
+		var/obj/item/clothing/suit/storage/S=O
+		L += S.hold.return_inv()
+
 	else if(istype(O,/obj/item/weapon/gift))
 		var/obj/item/weapon/gift/G = O
 		L += G.gift
@@ -30,9 +38,8 @@
 	else if(istype(O,/obj/item/delivery))
 		var/obj/item/delivery/D = O
 		for(var/atom/movable/wrapped in D) //Under normal circumstances, there will be only one thing in it, but not all circumstances are normal
-			L += wrapped
-			if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(wrapped)
+			L += get_contents(wrapped)
+
 	return L
 
 /datum/theft_objective/proc/check_completion(datum/mind/owner)
@@ -67,31 +74,27 @@
 /datum/theft_objective/traitor/hand_tele
 	name = "a hand teleporter"
 	typepath = /obj/item/weapon/hand_tele
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
+
+/datum/theft_objective/traitor/cap_hardsuit
+	name = "the captain's full-body armor" //technically only the bodypiece, which is the hardest one to conceal anyways
+	typepath = /obj/item/clothing/suit/armor/captain
 	protected_jobs = list("Captain")
 
-/datum/theft_objective/traitor/rcd
-	name = "an RCD"
-	typepath = /obj/item/device/rcd/matter/engineering
-	protected_jobs = list("Chief Engineer")
-
-/datum/theft_objective/traitor/rpd
-	name = "an RPD"
-	typepath = /obj/item/device/rcd/rpd
-	protected_jobs = list("Chief Engineer", "Atmospherics Technician")
-
-/datum/theft_objective/traitor/jetpack
-	name = "a jetpack"
-	typepath = /obj/item/weapon/tank/jetpack
+/datum/theft_objective/traitor/cap_stamp
+	name = "the captain's rubber stamp"
+	typepath = /obj/item/weapon/stamp/captain
+	protected_jobs = list("Captain")
 
 /datum/theft_objective/traitor/cap_jumpsuit
 	name = "the captain's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/captain
-	protected_jobs = list("Captain")
+	protected_jobs = list("Captain", "Head of Personnel")
 
 /datum/theft_objective/traitor/ai
 	name = "a functional AI"
 	typepath = /obj/item/device/aicard
-
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel", "Chief Engineer")
 
 /datum/theft_objective/traitor/magboots
 	name = "a pair of advanced magboots"
@@ -116,31 +119,32 @@
 /datum/theft_objective/traitor/corgi
 	name = "a piece of corgi meat"
 	typepath = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
+	protected_jobs = list("Captain", "Head of Personnel") //Really HoP? Your own dog?
 
 /datum/theft_objective/traitor/rd_jumpsuit
 	name = "the research director's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/research_director
-	protected_jobs = list("Research Director")
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
 /datum/theft_objective/traitor/ce_jumpsuit
 	name = "the chief engineer's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/chief_engineer
-	protected_jobs = list("Chief Engineer")
+	protected_jobs = list("Captain", "Chief Engineer", "Head of Personnel")
 
 /datum/theft_objective/traitor/cmo_jumpsuit
 	name = "the chief medical officer's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/chief_medical_officer
-	protected_jobs = list("Chief Medical Officer")
+	protected_jobs = list("Captain", "Chief Medical Officer", "Head of Personnel")
 
 /datum/theft_objective/traitor/hos_jumpsuit
 	name = "the head of security's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/head_of_security
-	protected_jobs = list("Head of Security")
+	protected_jobs = list("Captain", "Head of Security", "Head of Personnel")
 
 /datum/theft_objective/traitor/hop_jumpsuit
 	name = "the head of personnel's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/head_of_personnel
-	protected_jobs = list("Head of Personnel")
+	protected_jobs = list("Captain", "Head of Personnel")
 
 /datum/theft_objective/traitor/hypospray
 	name = "a hypospray"
@@ -155,7 +159,28 @@
 /datum/theft_objective/traitor/ablative
 	name = "an ablative armor vest"
 	typepath = /obj/item/clothing/suit/armor/laserproof
-	protected_jobs = list("Head of Security", "Warden")
+	protected_jobs = list("Captain", "Head of Security", "Warden")
+
+/datum/theft_objective/traitor/telebaton
+	name = "a telescopic baton"
+	typepath = /obj/item/weapon/melee/telebaton
+	protected_jobs = list("Captain", "Head of Security")
+
+/datum/theft_objective/traitor/planningframe
+	name = "the law planning frame"
+	typepath = /obj/item/weapon/planning_frame
+	protected_jobs = list("Captain", "Research Director", "Chief Engineer", "Head of Personnel")
+
+/datum/theft_objective/traitor/belt
+	name = "the chief engineer's advanced toolbelt"
+	typepath = /obj/item/weapon/storage/belt/utility/chief
+	protected_jobs = list("Captain", "Chief Engineer")
+
+/datum/theft_objective/traitor/ttv
+	name = "a tank transfer valve"
+	typepath = /obj/item/device/transfer_valve
+	protected_jobs = list("Research Director", "Scientist")
+
 
 /datum/theft_objective/number
 	var/min=0
@@ -189,9 +214,11 @@
 		var/found_amount = 0
 		for(var/obj/I in all_items) //Check for items
 			if(istype(I, typepath))
+
 				//Stealing the cheap autoinjector doesn't count
 				if(istype(I, /obj/item/weapon/reagent_containers/hypospray/autoinjector))
 					continue
+
 				if(istype(I,/obj/item/device/aicard))
 					var/obj/item/device/aicard/C = I
 					if(!C.contents.len)
@@ -218,6 +245,7 @@
 	typepath = /obj/item/weapon/tank
 	min=28
 	max=28
+	protected_jobs = list("Research Director", "Scientist")
 
 /datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/I)
 	return I:air_contents:toxins

@@ -36,7 +36,7 @@ var/shuttle_call/shuttle_calls[0]
 // The communications computer
 /obj/machinery/computer/communications
 	name = "Communications Console"
-	desc = "This can be used for various important functions. Still under developement."
+	desc = "A console that is used for various important Command functions."
 	icon_state = "comm"
 	req_access = list(access_heads)
 	circuit = "/obj/item/weapon/circuitboard/communications"
@@ -203,7 +203,15 @@ var/shuttle_call/shuttle_calls[0]
 			var/response = alert(usr,"Are you sure you want to request a response team?", "ERT Request", "Yes", "No")
 			if(response != "Yes")
 				return
-			trigger_armed_response_team(1)
+			var/ert_reason = stripped_input(usr, "Please input the reason for calling an Emergency Response Team. This may be all the information they get before arriving at the station.", "Response Team Justification")
+			if(!ert_reason)
+				to_chat(usr, "<span class='warning'>You are required to give a reason to call an ERT.</span>")
+				return
+			if(!Adjacent(usr) || usr.incapacitated())
+				return
+			trigger_armed_response_team(1,ert_reason)
+			log_game("[key_name(usr)] has called an ERT with reason: [ert_reason]")
+			message_admins("[key_name_admin(usr)] has called an ERT with reason: [ert_reason]")
 			setMenuState(usr,COMM_SCREEN_MAIN)
 			return
 

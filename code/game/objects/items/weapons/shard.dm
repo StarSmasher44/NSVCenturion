@@ -7,11 +7,13 @@
 	icon = 'icons/obj/shards.dmi'
 	icon_state = "large"
 	sharpness = 0.8
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	desc = "Could probably be used as ... a throwing weapon?"
 	w_class = W_CLASS_TINY
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 5.0
 	throwforce = 15.0
+	
 	item_state = "shard-glassnew"
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
@@ -19,6 +21,9 @@
 	siemens_coefficient = 0 //no conduct
 	attack_verb = list("stabs", "slashes", "slices", "cuts")
 	var/glass = /obj/item/stack/sheet/glass/glass
+	shrapnel_amount = 3
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small"
+	shrapnel_size = 2
 
 /obj/item/weapon/shard/New()
 
@@ -45,6 +50,7 @@
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
 	glass = /obj/item/stack/sheet/glass/plasmaglass
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small/plasma"
 
 /obj/item/weapon/shard/plasma/New()
 	..()
@@ -98,28 +104,29 @@
 			return
 	return ..()
 
-/obj/item/weapon/shard/Crossed(AM as mob|obj)
-	if(isliving(AM))
-		var/mob/living/M = AM
-		if(M.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
+/obj/item/weapon/shard/Crossed(mob/living/AM)
+	if(istype(AM))
+		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1) //Make noise
 			return //Stop here
-		if(M.flying) //We don't check for lying because it's intended to hurt
+		if(AM.flying) //We don't check for lying yet because it's intended to hurt
 			return
 		else //Stepping on the glass
-			to_chat(M, "<span class='danger'>You step in the broken glass!</span>")
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(!isgolem(H))
-					if(!H.check_body_part_coverage(FEET))
-						var/datum/organ/external/affecting = H.get_organ(pick(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT))
-						if(affecting.status & (ORGAN_ROBOT|ORGAN_PEG))
-							return
+			if(ishuman(AM))
+				var/mob/living/carbon/human/H = AM
+				var/danger = FALSE
 
-						if(!(H.species && (H.species.flags & NO_PAIN)))
+				if(!H.mutations.Find(M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+					var/datum/organ/external/affecting = H.get_organ(pick(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT))
+					if(affecting.is_organic())
+						danger = TRUE
+
+						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
 						if(affecting.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()
+
+				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in the broken glass!</span>")
 	..()

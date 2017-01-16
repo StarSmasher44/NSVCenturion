@@ -145,6 +145,9 @@
 		if (panel_open)
 			to_chat(user, "You can't load a beaker while the maintenance panel is open.")
 			return 0
+		if (O.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [O] is too big to fit.</span>")
+			return 0
 		else
 			if(!user.drop_item(O, src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
@@ -276,20 +279,20 @@
 		return
 	beaker.forceMove(src.loc)
 	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-		var/mob/living/silicon/robot/R = beaker:holder:loc
-		if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-			beaker.forceMove(R)
-		else
-			beaker.forceMove(beaker:holder)
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
+		borgbeak.return_to_modules()
 	beaker = null
 	update_icon()
 
-/obj/machinery/reagentgrinder/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()) && !inuse)
-		if(holdingitems.len)
-			grind()
-		else
-			detach()
+/obj/machinery/reagentgrinder/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && beaker && !(stat & (NOPOWER|BROKEN) && user.dexterity_check()) && !inuse)
+		detach()
+		return
+	return ..()
+
+/obj/machinery/reagentgrinder/CtrlClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && !inuse && holdingitems.len && anchored)
+		grind() //Checks for beaker and power/broken internally
 		return
 	return ..()
 

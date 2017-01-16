@@ -22,10 +22,9 @@
 
 
 /mob/new_player/proc/new_player_panel_proc()
-	var/output = "<div align='center'><B>New Player Options</B>"
+	var/output = "<div align='center'>"
 
-	output += {"<hr>
-		<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
+	output += {"<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
 		if(!ready)
 			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
@@ -34,11 +33,10 @@
 
 	else
 		ready = 0 // prevent setup character issues
-		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br><br>
+		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br>
 			<p><a href='byond://?src=\ref[src];late_join=1'>Join Game!</A></p>"}
 
 	output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
-
 	if(!IsGuestKey(src.key))
 		establish_db_connection()
 
@@ -60,7 +58,10 @@
 
 	output += "</div>"
 
-	src << browse(output,"window=playersetup;size=210x240;can_close=0")
+	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
+	popup.set_content(output)
+	popup.set_window_options("focus=0;can_close=0;can_minimize=1;can_maximize=0;can_resize=1;titlebar=1;")
+	popup.open()
 	return
 
 /mob/new_player/Stat()
@@ -76,7 +77,7 @@
 		else
 			stat("Game Mode:", "[master_mode]")
 
-		if(master_controller.initialized)
+		if(SSticker.initialized)
 			if((ticker.current_state == GAME_STATE_PREGAME) && going)
 				stat("Time To Start:", (round(ticker.pregame_timeleft - world.timeofday) / 10)) //rounding because people freak out at decimals i guess
 			if((ticker.current_state == GAME_STATE_PREGAME) && !going)
@@ -84,7 +85,7 @@
 		else
 			stat("Time To Start:", "LOADING...")
 
-		if(master_controller.initialized && ticker.current_state == GAME_STATE_PREGAME)
+		if(SSticker.initialized && ticker.current_state == GAME_STATE_PREGAME)
 			stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
 			totalPlayers = 0
 			totalPlayersReady = 0
@@ -275,6 +276,9 @@
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
+	if(job.species_whitelist.len)
+		if(!job.species_whitelist.Find(client.prefs.species))
+			return 0
 	// assistant limits
 	if(config.assistantlimit)
 		if(job.title == "Assistant")
@@ -458,7 +462,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.disabilities |= NEARSIGHTED
 
 	chosen_species = all_species[client.prefs.species]
-	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.flags & CAN_BE_FAT) )
+	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
 		new_character.mutations += M_OBESITY
 		new_character.overeatduration = 600

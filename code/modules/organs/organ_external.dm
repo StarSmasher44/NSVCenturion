@@ -268,7 +268,7 @@
 
 	//Possibly trigger an internal wound, too.
 	var/local_damage = brute_dam + burn_dam + damage
-	if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && is_organic() && !(owner.species && owner.species.flags & NO_BLOOD))
+	if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && is_organic() && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
 		var/internal_bleeding = 0
 		for(var/datum/wound/Wound in wounds)
 			if(Wound.internal)
@@ -489,19 +489,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 //Updating wounds. Handles wound natural healing, internal bleedings and infections
 /datum/organ/external/proc/update_wounds()
 
-
 	if(!is_organic()) //Non-organic limbs don't heal or get worse
 		return
 
 	for(var/datum/wound/W in wounds)
-		//Wounds can disappear after 10 minutes at the earliest
-		if(W.damage <= 0 && W.created + 10 * 10 * 60 <= world.time)
-			wounds -= W
-			continue
-			//Let the GC handle the deletion of the wound
-
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
-		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.flags & NO_BLOOD))
+		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
 			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
@@ -513,7 +506,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 			//overdose of bicaridine begins healing IB
 			if(owner.reagents.get_reagent_amount(BICARIDINE) >= 30)
-				W.damage = max(0, W.damage - 0.2)
+				W.heal_damage(0.2, TRUE)
 
 		// slow healing
 		var/heal_amt = 0
@@ -539,6 +532,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 			W.germ_level = 0
 			W.disinfected = 1
 
+		if(W.damage <= 0)
+			//Since we're a HIGH ARRPEE codebase and we want LOTS OF FLAVORR we like to keep all the completely healed wounds sticking around for 10 minutes minimum, so they show up as bruises and scars in examine.
+			if(W.internal || W.created + 10 MINUTES <= world.time) //The exception to this is internal wounds, which are more of a special status and not really a wound at all in practice.
+				wounds -= W
+				continue //Let the GC handle the deletion of the wound
+
 	//Sync the organ's damage with its wounds
 	src.update_damages()
 	if(update_icon())
@@ -557,7 +556,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		else if(W.damage_type == BURN)
 			burn_dam += W.damage
 
-		if(is_organic() && W.bleeding() && !(owner.species.flags & NO_BLOOD))
+		if(is_organic() && W.bleeding() && !(owner.species.anatomy_flags & NO_BLOOD))
 			W.bleed_timer--
 			if(!owner.reagents.has_reagent(CLOTTING_AGENT))
 				status |= ORGAN_BLEEDING
@@ -565,7 +564,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		clamped |= W.clamped
 		number_wounds += W.amount
 
-	if(open && !clamped && is_organic() && !(owner.species.flags & NO_BLOOD)) //Things tend to bleed if they are CUT OPEN
+	if(open && !clamped && is_organic() && !(owner.species.anatomy_flags & NO_BLOOD)) //Things tend to bleed if they are CUT OPEN
 		if(!owner.reagents.has_reagent(CLOTTING_AGENT))
 			status |= ORGAN_BLEEDING
 
@@ -615,7 +614,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 //Recursive setting of all child organs to amputated
 /datum/organ/external/proc/setAmputatedTree()
 	for(var/datum/organ/external/O in children)
-		O.amputated = amputated
+		O.amputated = 1
 		O.setAmputatedTree()
 
 //Handles dismemberment
@@ -633,9 +632,21 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
 
+		//No limb, no damage
+		brute_dam = 0
+		burn_dam = 0
+		perma_injury = 0
+		for(var/datum/wound/W in wounds)
+			wounds -= W
+			number_wounds -= W.amount
+			returnToPool(W)
+
 		//If any organs are attached to this, destroy them
 		for(var/datum/organ/external/O in children)
 			O.droplimb(1)
+
+		//If your whole leg is missing, then yes, your foot is considered as "cleanly amputated".
+		setAmputatedTree()
 
 		var/obj/item/weapon/organ/organ //Dropped limb object
 		if(spawn_limb)
@@ -763,9 +774,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	"<span class='danger'>Something feels like it shattered in your [display_name]!</span>", \
 	"<span class='danger'>You hear a sickening crack.</span>")
 
-	if(owner.species && !(owner.species.flags & NO_PAIN))
+	if(owner.feels_pain())
 		owner.emote("scream", , , 1)
 
+	playsound(owner.loc, "fracture", 100, 1, -2)
 	status |= ORGAN_BROKEN
 	broken_description = pick("broken", "fracture", "hairline fracture")
 	perma_injury = brute_dam
@@ -911,7 +923,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(is_broken() && !istype(c_hand,/obj/item/tk_grab))
 		owner.drop_item(c_hand)
 		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
-		owner.emote("me", 1, "[(owner.species && owner.species.flags & NO_PAIN) ? "" : emote_scream ] drops what they were holding in their [hand_name]!")
+		owner.emote("me", 1, "[owner.feels_pain() ? emote_scream : ""] drops what they were holding in their [hand_name]!")
 	if(is_malfunctioning())
 		// owner.u_equip(c_hand, 1)
 		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
@@ -1276,7 +1288,7 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	if(base)
 		//Changing limb's skin tone to match owner
 		if(H)
-			if(!H.species || H.species.flags & HAS_SKIN_TONE)
+			if(!H.species || H.species.anatomy_flags & HAS_SKIN_TONE)
 				if(H.s_tone >= 0)
 					base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
 				else

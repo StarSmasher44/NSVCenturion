@@ -27,6 +27,9 @@
 /mob/living/silicon/GetAccess()
 	return get_all_accesses()
 
+/mob/living/silicon/feels_pain()
+	return FALSE
+
 /mob/living/silicon/proc/cancelAlarm()
 	return
 
@@ -130,10 +133,10 @@
 	switch(severity)
 		if(1)
 			src.take_organ_damage(20)
-			Stun(rand(5,10))
+			Stun(rand(10,12))
 		if(2)
 			src.take_organ_damage(10)
-			Stun(rand(1,5))
+			Stun(rand(5,7))
 	flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 	to_chat(src, "<span class='danger'>*BZZZT*</span>")
 	to_chat(src, "<span class='warning'>Warning: Electromagnetic pulse detected.</span>")

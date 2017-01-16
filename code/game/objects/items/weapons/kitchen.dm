@@ -26,6 +26,9 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("attacks", "stabs", "pokes")
+	shrapnel_amount = 1
+	shrapnel_size = 2
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel"
 
 /obj/item/weapon/kitchen/utensil/New()
 	. = ..()
@@ -56,6 +59,7 @@
 	name = "fork"
 	desc = "Pointy."
 	icon_state = "fork"
+	sharpness_flags = SHARP_TIP
 	sharpness = 0.6
 	var/loaded_food_name
 	var/image/loaded_food
@@ -93,7 +97,7 @@
 				feed_to(user, M)
 				return
 	else
-		if((M_CLUMSY in user.mutations) && prob(50))
+		if(clumsy_check(user) && prob(50))
 			return eyestab(user,user)
 		else
 			return eyestab(M, user)
@@ -156,6 +160,7 @@
 	force = 10.0
 	throwforce = 10.0
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
@@ -165,7 +170,7 @@
 	return (BRUTELOSS)
 
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
-	if ((M_CLUMSY in user.mutations) && prob(50))
+	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You accidentally cut yourself with the [src].</span>")
 		user.take_organ_damage(20)
 		return
@@ -202,6 +207,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	shrapnel_amount = 0
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -246,6 +252,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.2
+	sharpness_flags = SHARP_BLADE
 	force = 15.0
 	w_class = W_CLASS_SMALL
 	throwforce = 8.0
@@ -289,7 +296,7 @@
 	attack_verb = list("bashes", "batters", "bludgeons", "thrashes", "whacks") //I think the rollingpin attackby will end up ignoring this anyway.
 
 /obj/item/weapon/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)
-	if ((M_CLUMSY in user.mutations) && prob(50))
+	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
 		user.Paralyse(2)
@@ -361,7 +368,7 @@
 	// Drop all the things. All of them.
 	send_items_flying()
 
-	if((M_CLUMSY in user.mutations) && prob(50))              //What if he's a clown?
+	if(clumsy_check(user) && prob(50))              //What if he's a clown?
 		to_chat(M, "<span class='warning'>You accidentally slam yourself with the [src]!</span>")
 		M.Knockdown(1)
 		user.take_organ_damage(2)

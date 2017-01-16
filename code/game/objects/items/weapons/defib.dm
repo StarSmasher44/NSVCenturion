@@ -4,7 +4,7 @@
 
 /obj/item/weapon/melee/defibrillator
 	name = "emergency defibrillator"
-	desc = "Used to restore fibrilating patients, and somehow bring them back from the dead too."
+	desc = "Used to restore fibrillating patients."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "defib_full"
 	item_state = "defib"
@@ -47,7 +47,7 @@
 
 /obj/item/weapon/melee/defibrillator/attack_self(mob/user)
 	if(charges || ready)
-		if((M_CLUMSY in user.mutations) && prob(50) && charges)
+		if(clumsy_check(user) && prob(50) && charges)
 			to_chat(user, "<span class='warning'>You touch the paddles together, shorting the device.</span>")
 			sparks.start()
 			playsound(get_turf(src),'sound/items/defib.ogg',50,1)

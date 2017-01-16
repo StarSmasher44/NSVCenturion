@@ -60,7 +60,7 @@
 				if(M.poisonsacs)
 					M.poisonsacs.forceMove(loc)
 					M.poisonsacs = null
-					M.desc = "An excellent [src]!"
+					M.desc = "An excellent [M.name]!"
 					M.reagents.del_reagent(TOXIN)
 					M.reagents.del_reagent(CARPOTOXIN)
 				what.forceMove(loc)
@@ -244,5 +244,11 @@
 	src.visible_message("<span class='notice'>[src] is done.</span>", \
 		"You hear [src] stop")
 
+/obj/machinery/processor/attack_ghost(mob/user as mob)
+	user.examination(src)
+
 /obj/machinery/processor/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+	if(user.incapacitated())
+		return
+
 	attackby(O,user)

@@ -15,10 +15,11 @@
 	universal_understand = 1
 
 /mob/living/carbon/brain/New()
-		var/datum/reagents/R = new/datum/reagents(1000)
-		reagents = R
-		R.my_atom = src
-		..()
+	var/datum/reagents/R = new/datum/reagents(1000)
+	reagents = R
+	R.my_atom = src
+	..()
+	verbs -= /mob/living/carbon/verb/mob_sleep
 
 /mob/living/carbon/brain/Destroy()
 	if(key)				//If there is a mob connected to this thing. Have to check key twice to avoid false death reporting.
@@ -65,3 +66,6 @@
 
 /mob/living/carbon/brain/teleport_to(var/atom/A)
 	container.forceMove(get_turf(A))
+
+/mob/living/carbon/brain/proc/brain_dead_chat()
+	return !(container && (istype(container, /obj/item/device/mmi)))

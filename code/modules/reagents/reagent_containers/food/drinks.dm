@@ -250,34 +250,12 @@
 	else
 		to_chat(user, "<span class='info'>\The [src] is full!</span>")
 
-/obj/item/weapon/reagent_containers/food/drinks/proc/imbibe(mob/user) //Drink the liquid within
-
-
-	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].[lit ? " It's hot!" : ""]</span>")
-	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
-
+/obj/item/weapon/reagent_containers/food/drinks/imbibe(mob/user) //Drink the liquid within
 	if(lit)
 		user.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT//only the first gulp will be hot.
 		lit = 0
 
-	if(isrobot(user))
-		reagents.remove_any(gulp_size)
-		return 1
-	if(reagents.total_volume)
-		if (ishuman(user))
-			var/mob/living/carbon/human/H = user
-			if(H.species.chem_flags & NO_DRINK)
-				reagents.reaction(get_turf(H), TOUCH)
-				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-				reagents.remove_any(gulp_size)
-				return 0
-
-		reagents.reaction(user, INGEST)
-		spawn(5)
-			reagents.trans_to(user, gulp_size)
-
-	update_brightness()
-	return 1
+	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/New()
 	..()
@@ -311,6 +289,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/milk
 	name = "space milk"
 	desc = "It's milk. White and nutritious goodness!"
+	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "milk"
 	vending_cat = "dairy products"
 /obj/item/weapon/reagent_containers/food/drinks/milk/New()
@@ -322,7 +301,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/flour
 	name = "flour sack"
 	desc = "A big bag of flour. Good for baking!"
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "flour"
 /obj/item/weapon/reagent_containers/food/drinks/flour/New()
 	..()
@@ -333,6 +312,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/soymilk
 	name = "soy milk"
 	desc = "It's soy milk. White and nutritious goodness!"
+	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "soymilk"
 	vending_cat = "dairy products"//it's not a dairy product but oh come on who cares
 /obj/item/weapon/reagent_containers/food/drinks/soymilk/New()
@@ -916,6 +896,7 @@
 	throw_speed = 3
 	throw_range = 5
 	sharpness = 0.8 //same as glass shards
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	w_class = W_CLASS_TINY
 	item_state = "beer"
 	attack_verb = list("stabs", "slashes", "attacks")
@@ -1211,7 +1192,7 @@
 	if(istype(I, /obj/item/weapon/reagent_containers/glass/rag) && molotov == -1)  //check if it is a molotovable drink - just beer and ale for now - other bottles require different rag overlay positions - if you can figure this out then go for it
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>")
 		qdel(I)
-		I = null
+		I = null //??
 		molotov = 1
 		flags ^= OPENCONTAINER
 		name = "incendiary cocktail"
@@ -1219,6 +1200,7 @@
 		desc = "A rag stuffed into a bottle."
 		update_icon()
 		slot_flags = SLOT_BELT
+		return 1
 	else if(I.is_hot())
 		light(user,I)
 		update_brightness(user)

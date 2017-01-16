@@ -990,22 +990,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
 		if("emergency response team")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/centcom_officer(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
-
-			var/obj/item/weapon/card/id/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.icon_state = "centcom"
-			W.access = get_all_accesses()
-			W.access += get_all_centcom_access()
-			W.assignment = "Emergency Response Team"
-			W.registered_name = M.real_name
-			M.equip_to_slot_or_del(W, slot_wear_id)
+			M.equip_strike_team()
 
 		if("special ops officer")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate/combat(M), slot_w_uniform)
@@ -1305,29 +1290,6 @@ Pressure: [env.return_pressure()]"}
 	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 
 #ifdef PROFILE_MACHINES
-/client/proc/cmd_admin_dump_macprofile()
-	set category = "Debug"
-	set name = "Dump Machine and Object Profiling"
-
-	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
-	var/F =file("data/logs/profiling/[date_string]_machine_profiling.csv")
-	fdel(F)
-	F << "type,nanoseconds"
-	for(var/typepath in machine_profiling)
-		var/ns = machine_profiling[typepath]
-		F << "[typepath],[ns]"
-
-	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
-	var/FF = file("data/logs/profiling/[date_string]_object_profiling.csv")
-	fdel(FF)
-	FF << "type,nanoseconds"
-	for(var/typepath in object_profiling)
-		var/ns = object_profiling[typepath]
-		FF << "[typepath],[ns]"
-
-	to_chat(usr, "<span class='notice'>Dumped to [FF].</span>")
-
-
 /client/proc/cmd_admin_dump_machine_type_list()
 	set category = "Debug"
 	set name = "Dump Machine type list"

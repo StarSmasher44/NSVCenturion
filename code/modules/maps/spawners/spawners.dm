@@ -814,6 +814,27 @@
 	chance = 5
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
 
+/obj/map/spawner/space/vox/trader/spacesuit // for the vox outpost trader closets to spawn a random hardsuit. Each hardsuit has the same stats which are ofcourse very poor armor.
+ 	name = "trader spacesuit spawner"
+ 	icon_state = "space_supply"
+
+/obj/map/spawner/space/vox/trader/spacesuit/perform_spawn()
+	var/i = rand(1, 4) // 1 in 4 chance of spawning a single of listed below
+	switch (i)
+		if (1)
+			new /obj/item/clothing/suit/space/vox/civ/trader(src.loc) // standard brownsuit and helmet
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader(src.loc)
+
+		if (2)
+			new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src.loc) // carapace
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src.loc)
+		if (3)
+			new /obj/item/clothing/suit/space/vox/civ/trader/medic(src.loc) // aqua coloured hardsuit
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src.loc)
+		if (4)
+			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/map/spawner/mobs/carp
@@ -856,13 +877,26 @@
 		/mob/living/simple_animal/hostile/giant_spider/nurse,
 		/mob/living/simple_animal/hostile/giant_spider/hunter,
 		)
-
+/obj/map/spawner/mobs/wolf
+	name = "wolf spawner"
+	icon_state = "mob_wolf"
+	amount = 7
+	to_spawn = list(
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf/alpha,
+		/mob/living/simple_animal/hostile/wolf/alpha,
+		)
 /obj/map/spawner/mobs/humanoid/wiz
 	name = "wizard spawner"
 	icon_state = "mob_wiz"
 	amount = 2
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
+
+
 
 
 // Robutts /////////////////////////////////////////////////////
@@ -1000,3 +1034,184 @@
 		/obj/item/weapon/storage/firstaid/regular,
 		/obj/item/weapon/storage/box/handcuffs,
 		)
+
+
+// Safe /////////////////////////////////////////////////////
+//Does not come with a safe.
+/obj/map/spawner/safe/any
+	name = "safe any spawner "
+	icon_state = "safe"
+	to_spawn = list(
+		/obj/item/weapon/storage/pill_bottle/creatine,
+		/obj/item/weapon/storage/pill_bottle/nanobot,
+		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/weapon/storage/firstaid/adv,
+		/obj/item/weapon/gun/syringe/rapidsyringe,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
+		/obj/item/weapon/shield/energy,
+		/obj/item/weapon/reagent_containers/glass/bottle/random,
+		/obj/item/weapon/dnainjector/nofail/randompower,
+		/obj/item/weapon/gun/projectile/russian,
+		/obj/item/weapon/bikehorn,
+		/obj/item/weapon/storage/box/emps,
+		/obj/item/weapon/card/id/captains_spare,
+		/obj/item/clothing/accessory/medal,
+		/obj/item/clothing/accessory/medal/conduct,
+		/obj/item/clothing/accessory/medal/bronze_heart,
+		/obj/item/clothing/accessory/medal/nobel_science,
+		/obj/item/clothing/accessory/medal/silver,
+		/obj/item/clothing/accessory/medal/silver/valor,
+		/obj/item/clothing/accessory/medal/silver/security,
+		/obj/item/clothing/accessory/medal/gold,
+		/obj/item/clothing/accessory/medal/gold/captain,
+		/obj/item/clothing/accessory/medal/gold/heroism,
+		/obj/item/clothing/accessory/storage/webbing,
+		/obj/item/clothing/suit/armor/laserproof,
+		/obj/item/clothing/accessory/holster,
+		/obj/item/clothing/glasses/scanner/night,
+		/obj/item/clothing/head/collectable/petehat,
+		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+		/obj/item/clothing/under/chameleon,
+		/obj/item/clothing/gloves/anchor_arms,
+		/obj/item/complete/rig/soviet,
+		/obj/item/complete/rig/nazi,
+		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
+		/obj/item/weapon/reagent_containers/food/snacks/roburger,
+		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
+		/obj/item/weapon/reagent_containers/food/snacks/yellowcake,
+		/obj/item/weapon/reagent_containers/food/snacks/muffin/bluespace,
+		/obj/item/weapon/reagent_containers/food/snacks/potentham,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
+		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
+		/obj/item/mounted/frame/painting,
+		/obj/item/voucher/free_item
+)
+
+/obj/map/spawner/safe/medical
+	name = "safe medical spawner"
+	icon_state = "safe"
+	to_spawn = list(/obj/item/weapon/storage/pill_bottle/creatine,
+	/obj/item/weapon/storage/pill_bottle/nanobot,
+	/obj/item/weapon/storage/firstaid/adv,
+	/obj/item/weapon/reagent_containers/glass/bottle/random,
+	/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
+	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+	/obj/item/weapon/dnainjector/nofail/randompower,
+	/obj/item/weapon/gun/syringe/rapidsyringe,
+	/obj/item/voucher/free_item
+)
+
+
+/obj/map/spawner/safe/food
+	name = "safe food spawner"
+	icon_state = "safe"
+	to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
+	/obj/item/voucher/free_item,
+	/obj/item/voucher/free_item/hot_drink,
+	/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
+	/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
+	/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
+	/obj/item/weapon/reagent_containers/food/snacks/roburger,
+	/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
+	/obj/item/weapon/reagent_containers/food/snacks/yellowcake,
+	/obj/item/weapon/reagent_containers/food/snacks/muffin/bluespace,
+	/obj/item/weapon/reagent_containers/food/snacks/potentham
+)
+
+/obj/map/spawner/safe/weapon
+	name = "safe weapon spawner"
+	icon_state = "safe"
+	to_spawn = list(/obj/item/weapon/shield/energy,
+	/obj/item/weapon/gun/energy/gun/nuclear,
+	/obj/item/weapon/gun/projectile/mateba,
+	/obj/item/weapon/gun/projectile/deagle/gold,
+	/obj/item/weapon/bikehorn,
+	/obj/item/weapon/storage/box/emps,
+	/obj/item/weapon/gun/projectile/automatic/mini_uzi,
+	/obj/item/weapon/melee/energy/axe/rusty,
+	/obj/item/voucher/free_item,
+	/obj/item/weapon/gun/projectile/russian,
+	/obj/item/weapon/gun/mahoguny,
+	/obj/item/weapon/gun/stickybomb,
+	/obj/item/weapon/gun/siren
+)
+
+/obj/map/spawner/safe/clothing
+	name = "safe clothing spawner"
+	icon_state = "safe"
+	to_spawn = list(/obj/item/weapon/shield/energy,
+	/obj/item/clothing/accessory/storage/webbing,
+	/obj/item/clothing/under/sexyclown,
+	/obj/item/clothing/suit/armor/laserproof,
+	/obj/item/voucher/free_item,
+	/obj/item/clothing/accessory/holster,
+	/obj/item/clothing/head/helmet/siren,
+	/obj/item/clothing/glasses/scanner/night,
+	/obj/item/clothing/head/collectable/petehat,
+	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+	/obj/item/clothing/under/chameleon,
+	/obj/item/clothing/gloves/anchor_arms,
+	/obj/item/complete/rig/soviet,
+	/obj/item/complete/rig/nazi,
+	/obj/item/complete/outfit/dredd
+)
+
+/obj/map/spawner/safe/medal
+	name = "safe medal spawner"
+	icon_state = "safe"
+	to_spawn = list(/obj/item/clothing/accessory/medal,
+	/obj/item/clothing/accessory/medal/conduct,
+	/obj/item/clothing/accessory/medal/bronze_heart,
+	/obj/item/clothing/accessory/medal/nobel_science,
+	/obj/item/clothing/accessory/medal/silver,
+	/obj/item/clothing/accessory/medal/silver/valor,
+	/obj/item/clothing/accessory/medal/silver/security,
+	/obj/item/clothing/accessory/medal/gold,
+	/obj/item/clothing/accessory/medal/gold/captain,
+	/obj/item/clothing/accessory/medal/gold/heroism
+)
+//Food spawners////////////////////////////////////
+/obj/map/spawner/food/voxfood //spawns food for the vox raiders
+	name = "vox food spawner"
+	icon_state = "food"
+	amount = 7
+	jiggle = 5
+	to_spawn = list (/obj/item/weapon/reagent_containers/food/snacks/hoboburger,
+	/obj/item/weapon/reagent_containers/food/snacks/hoboburger,
+	/obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/porktenderloin,
+	/obj/item/weapon/reagent_containers/food/snacks/voxstew,
+	/obj/item/weapon/reagent_containers/food/snacks/woodapplejam,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork,
+	/obj/item/weapon/reagent_containers/food/snacks/sundayroast,
+	/obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit,
+	/obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit,
+	/obj/item/weapon/reagent_containers/food/snacks/garlicbread,
+	/obj/item/weapon/reagent_containers/food/snacks/garlicbread,
+	/obj/item/weapon/reagent_containers/food/snacks/mushnslush,
+	/obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon
+)
+
+
