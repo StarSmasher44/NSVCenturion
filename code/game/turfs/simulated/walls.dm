@@ -24,7 +24,6 @@
 	soot_type = null
 
 	explosion_block = 1
-	cliff_icon_state = "metal"
 
 /turf/simulated/wall/examine(mob/user)
 	..()

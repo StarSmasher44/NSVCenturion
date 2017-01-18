@@ -57,6 +57,7 @@
 	affecting_turfs = list()
 
 	update()
+	AddToList()
 
 	return ..()
 
@@ -91,14 +92,15 @@
 #define effect_update(BYOND)            \
 	if (!needs_update)                  \
 	{                                   \
-		AddToList()                     \
+		lighting_update_lights += src;  \
+		needs_update = TRUE;            \
 	}
 #endif
 
 // This proc adds the lighting to the proper list, as I couldn't get it to work on a define
 /datum/light_source/proc/AddToList()
 	if(slowupdate)
-		lighting_update_lights_static += src;
+		lighting_update_static += src;
 		needs_update = TRUE;
 	else
 		lighting_update_lights += src;

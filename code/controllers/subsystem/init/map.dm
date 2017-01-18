@@ -28,5 +28,6 @@ var/datum/subsystem/map/SSmap
 
 	for(var/i = 0, i < max_secret_rooms, i++)
 		make_mining_asteroid_secret()
+		CHECK_TICK
 
 	..()

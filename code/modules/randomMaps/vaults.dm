@@ -6,8 +6,8 @@
 //2. add the map's name to the vault_map_names list
 //3. the game will handle the rest
 
-#define MINIMUM_VAULT_AMOUNT 5 //Amount of guaranteed vault spawns
-#define MAXIMUM_VAULT_AMOUNT 15
+#define MINIMUM_VAULT_AMOUNT 3 //Amount of guaranteed vault spawns
+#define MAXIMUM_VAULT_AMOUNT 8
 
 #define MAX_VAULT_WIDTH  80 //Vaults bigger than that have a slight chance of overlapping with other vaults
 #define MAX_VAULT_HEIGHT 80

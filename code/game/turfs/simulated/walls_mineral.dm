@@ -5,7 +5,6 @@
 	explosion_block = 1
 	var/last_event = 0
 	var/active = null
-	cliff_icon_state = ""
 
 /turf/simulated/wall/mineral/wood
 	name = "wooden wall"

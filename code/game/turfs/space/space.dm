@@ -13,7 +13,6 @@
 	dynamic_lighting = 0
 	luminosity = 1
 	can_border_transition = 1
-	draw_cliff = TRUE
 
 /turf/space/New()
 	if(loc)
